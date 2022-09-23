@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" http-equiv="Content-Security-Policy"
+    content="default-src 'self'; img-src https://* file://* data:; child-src 'none';">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="node_modules/tabulator-tables/dist/css/tabulator_bootstrap4.min.css"/>
+    
+    <title>Server handle</title>
+    <link rel="stylesheet" href="style/style.css" />
+  </head>
+  <body>
+
+
+    <!--graf -->
+
+
+    <div id="graf">
+      <h1>Graf hodnot</h1>
+      <canvas id="myChart"></canvas>
+      <button type="button" id="load_d">Load_d</button>
+      <button type="button" id="resetZoom">Reset zoom</button>
+
+      <script src="node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="./podpr/graphs.js"></script>
+    </div>
+    
+    <!--json handle -->
+
+    <div id="jsonpar">
+      <h1>Server update</h1>
+        <div class='parent'>
+          <div class='child'>
+            <h2>Update server or Add new server</h2>
+            <table class="main_T">
+              <tr>
+                <th id="cc">Server name for update</th>
+                <th>Name / New name</th>
+                <th>Address</th> 
+                <th>Color</th>
+                <th>Period</th>
+                <th>Worker</th>
+                <th>Coordinates</th>
+                <th></th>
+              </tr>
+              <tr>
+                  <td id="cc"><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$"><br><br><button id = "loadnewserv">Find</button></td>
+                <form id="sform">
+                  <td><input type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required></td>
+                  <td><input type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1/www.example.com" required></td> 
+                  <td><input type = "color" id = "s_color" required></td>
+                  <td><input type = "text" id = "s_period" pattern="([1-99]+h+[0-59]+m+[0-59]+s)|([1-59]+m+[0-59]+s)|([1-59]+s)|([1-59]+m)|([1-59]+h)" placeholder="-h-m-s or -m-s or -s or -m" required></td>
+                  <td><input type = "text" id = "s_worker" placeholder="worker"required>
+                    <select class="select" multiple>
+                      <option value="1">default</option>
+                      <option value="2">def1</option>
+                      <option value="3">def2</option>
+                      <option value="4">def3</option>
+                      <option value="5">def4</option>
+                    </select>
+                  <td>
+                    <input type = "text" id = "s_latitude" placeholder="Latitude"><br><br>
+                    <input type = "text" id = "s_longitude" placeholder="Longitude">
+                  </td>
+                  <td><button type = "button" id = "upsave">Update/add</button><br><br><button type = "button" id = "delsave">Delete</button><br><br><button type = "button" id = "runing">Pause/Start</button></td>
+                  
+                </form>
+              </tr>
+            </table>
+              <button type="button" id="btn6">load json from file get path</button>
+              <button type="button" id="dellall_html">dell all results</button>
+          </div>
+        </div>
+        <h1>Servers specs</h1>
+          <div id="example-table"></div>
+      
+      
+      
+      <script src="node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+      
+      <script src="./podpr/jsonhandle.js"></script>
+    </div>
+
+    <div id="maps">
+      <div id="map"></div>
+      <button type="button" id="llll">click</button>
+      <script src="node_modules/leaflet/dist/leaflet.js"></script>
+      <script src="./podpr/maps.js"></script>
+    </div>
+
+   <script src="./renderer.js"></script>   <!-- spustí skript -->
+  </body>
+</html>

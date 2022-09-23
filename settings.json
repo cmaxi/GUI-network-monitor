@@ -1,0 +1,10 @@
+{
+    "serversFile":"./data/servers.json",
+    "httpLoad":"http://127.0.0.1:8000/M_CE",
+    "httpAdd":"http://127.0.0.1:8000/M_CE2",
+    "httpDell":"http://127.0.0.1:8000/M_CE3",
+    "httpDellAll":"http://127.0.0.1:8000/M_CE4",
+    "httpUpdate":"http://127.0.0.1:8000/M_CE5",
+    "httpPause":"http://127.0.0.1:8000/M_CE6",
+    "httpTasks":"http://127.0.0.1:8000/getWorkerTasks"
+}
