@@ -1,7 +1,7 @@
 //finish map
 locations = []
 markers = []
-/*
+
 window.api.receive_cmd("fromMain_showhide", (show) => {
   window.api.send("toMain_jslo")
   window.api.receive("fromMain_jslo", (data) => {
@@ -24,7 +24,7 @@ window.api.receive_cmd("fromMain_showhide", (show) => {
     
   })
 });
-*/
+
 
 var map = L.map('map').setView([50.087465, 14.421254],3);
 
@@ -128,4 +128,5 @@ map.on('zoomend', function() {
       .addTo(map);
   }
   console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
+  console.log("neco")
 });
