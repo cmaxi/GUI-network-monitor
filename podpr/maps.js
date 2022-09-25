@@ -128,4 +128,5 @@ map.on('zoomend', function() {
       .addTo(map);
   }
   console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
+  console.log("neco")
 });
