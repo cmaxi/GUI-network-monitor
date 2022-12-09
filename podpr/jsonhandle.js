@@ -1,42 +1,49 @@
 const list_servers = document.getElementById('server_names')
 var tasks_raw_data = "" //raw data
-//not used
-function chose_data(row,line) //bere data jednotlivá data z JSON a vrátí je podle polohy v tabulce
-{
-  var return_part_val
-  switch(line) {
-    case 0:
-      return_part_val = tasks_raw_data[row].name
-      break;
-    case 1:
-      return_part_val = tasks_raw_data[row].address
-      break;
-    case 2:
-      return_part_val = tasks_raw_data[row].color
-      break;
-    case 3:
-      return_part_val = tasks_raw_data[row].period
-      break;
-    case 4:
-      return_part_val = tasks_raw_data[row].coordinates
-      break;
-    case 5:
-      return_part_val = tasks_raw_data[row].runing
-      break;
-    case 6:
-      return_part_val = tasks_raw_data[row].worker
-      break;
-  }
-  return return_part_val
-}
 
-//define data array
-  //Build Tabulator
+function getName(d){
+  return d.name
+}
+var rowMenu = [
+  {
+      label:"<i class='fas fa-user'></i> Pause/Start",
+      action:function(e, row){
+        pausStart(getName(row.getData()))
+      }
+  },
+  {
+    separator:true,
+  },  
+  {
+      label:"<i class='fas fa-trash'></i> Dellete",
+      action:function(e, row){
+        dellAdress(getName(row.getData()))
+      }
+  },
+  /*
+  {
+      label:"Admin Functions",
+      menu:[
+          {
+              label:"<i class='fas fa-trash'></i> Delete Row",
+              action:function(e, row){
+                  row.delete();
+              }
+          },
+          {
+              label:"<i class='fas fa-ban'></i> Disabled Option",
+              disabled:true,
+          },
+      ]
+  }*/
+]
+
 var table = new Tabulator("#example-table", {
   height:400,
   columnDefaults:{
     resizable:true,
   },
+  rowContextMenu: rowMenu, //add context menu to rows
   columns:[
   {title:"Name", field:"name", width:110},
   {title:"Address", field:"address", width:185},
@@ -59,7 +66,7 @@ table.on("rowClick", function(e, column){
 
 function getlog(){
   window.api.receive("http_logs", (data) => {
-    console.log(data[0],data[1])
+    console.log('\x1B[34m %s %s', data[0], data[1]);
   });
 }
 
@@ -164,78 +171,77 @@ function correctData(count){
 
 update.addEventListener('click', async () => {  //update/save 
 
-
   if (correctData(5)){
-    strll = {"name":s_name.value,"address":s_address.value,"color":s_color.value,"period":s_period.value,"coordinates":[s_lat.value, s_long.value],"worker":s_work.value}
-  l_na = []
-  l_ad = []
-  canc = false
-  will_update_byName = false
-  will_update_byAddress = false
-  tt = tasks_raw_data
+    strll = {"name":s_name.value,"address":s_address.value,"color":s_color.value,"period":s_period.value,"coordinates":[parseFloat(s_lat.value), parseFloat(s_long.value)],"worker":s_work.value}
+    l_na = []
+    l_ad = []
+    canc = false
+    will_update_byName = false
+    will_update_byAddress = false
+    tt = tasks_raw_data
 
-  tt.forEach(element => {
-    l_na.push(element.name)
-    l_ad.push(element.address)
-  });
-  nn = s_name.value, addr = s_address.value
-  if (l_na.indexOf(nn)==l_ad.indexOf(addr)&&l_na.indexOf(nn)!=-1){//jm je addr je
-    txt = "Update 1 " + nn
-    will_update_byName = true
-  }
-  else if (l_na.indexOf(nn) == l_ad.indexOf(addr) && l_na.indexOf(nn) == -1){//jm addr nejsou
-    txt = "Add "+nn
-  }
-  else if (l_na.indexOf(nn) != -1 && l_ad.indexOf(addr) == -1){//jm je addr neni
-    txt = "Update 2 "+nn
-    will_update_byName = true
-  }
-  else if (l_na.indexOf(nn) == -1 && l_ad.indexOf(addr) != -1){//jm neni addr je
-    txt = "Update 3 "+nn
-    will_update_byAddress = true
-  }
-  else if (l_na.indexOf(nn) == -1 && l_ad.indexOf(addr) == -1){
-    txt = "Already used address "+addr+" and name "+nn
-    canc = true
-  }
+    tt.forEach(element => {
+      l_na.push(element.name)
+      l_ad.push(element.address)
+    });
+    nn = s_name.value, addr = s_address.value
+    if (l_na.indexOf(nn)==l_ad.indexOf(addr)&&l_na.indexOf(nn)!=-1){//jm je addr je
+      txt = "Update 1 " + nn
+      will_update_byName = true
+    }
+    else if (l_na.indexOf(nn) == l_ad.indexOf(addr) && l_na.indexOf(nn) == -1){//jm addr nejsou
+      txt = "Add "+nn
+    }
+    else if (l_na.indexOf(nn) != -1 && l_ad.indexOf(addr) == -1){//jm je addr neni
+      txt = "Update 2 "+nn
+      will_update_byName = true
+    }
+    else if (l_na.indexOf(nn) == -1 && l_ad.indexOf(addr) != -1){//jm neni addr je
+      txt = "Update 3 "+nn
+      will_update_byAddress = true
+    }
+    else if (l_na.indexOf(nn) == -1 && l_ad.indexOf(addr) == -1){
+      txt = "Already used address "+addr+" and name "+nn
+      canc = true
+    }
 
 
-  if (confirm(txt) == true && canc == false) {
-    
-    send={params: {'address':s_address.value, 'task':'ping', 'time':s_period.value, 'worker':s_work.value}}
-    if(will_update_byName){
-      send.params.oldAddress = tasks_raw_data[l_na.indexOf(nn)].address
-      strll.runing = tasks_raw_data[l_na.indexOf(nn)].runing
-      tasks_raw_data[l_na.indexOf(nn)] = strll
-      if (strll.runing){
-        window.api.html_req("update_html_req",send)
+    if (confirm(txt) == true && canc == false) {
+      
+      send={params: {'address':s_address.value, 'task':'ping', 'time':s_period.value, 'worker':s_work.value}}
+      if(will_update_byName){
+        send.params.oldAddress = tasks_raw_data[l_na.indexOf(nn)].address
+        strll.runing = tasks_raw_data[l_na.indexOf(nn)].runing
+        tasks_raw_data[l_na.indexOf(nn)] = strll
+        if (strll.runing){
+          window.api.html_req("update_html_req",send)
+        }
       }
-    }
-    else if(will_update_byAddress){
-      send.params.oldAddress = tasks_raw_data[l_ad.indexOf(addr)].address
-      strll.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
-      tasks_raw_data[l_ad.indexOf(addr)] = strll
-      if (strll.runing){
-        window.api.html_req("update_html_req",send)
+      else if(will_update_byAddress){
+        send.params.oldAddress = tasks_raw_data[l_ad.indexOf(addr)].address
+        strll.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
+        tasks_raw_data[l_ad.indexOf(addr)] = strll
+        if (strll.runing){
+          window.api.html_req("update_html_req",send)
+        }
       }
-    }
-    else
-    {
-      strll.runing = true
-      tasks_raw_data.push(strll)
-      window.api.html_req("add_html_req",send)
-    }
-    window.api.send("toMain_jssa", JSON.stringify(tasks_raw_data))
-    clear()
-    getlog()
-    load_server_json()
-  } else {console.log("You canceled!");}
+      else
+      {
+        strll.runing = true
+        tasks_raw_data.push(strll)
+        window.api.html_req("add_html_req",send)
+      }
+      window.api.send("toMain_jssa", JSON.stringify(tasks_raw_data))
+      clear()
+      getlog()
+      load_server_json()
+    } else {console.log("You canceled!");}
     
   }
   
 })
+function dellAdress(Dname){
 
-dell.addEventListener('click', async () => {
   l_na = []
   l_ad = []
   canc = false
@@ -244,18 +250,18 @@ dell.addEventListener('click', async () => {
     l_na.push(element.name)
     l_ad.push(element.address)
   });
-  nn = s_name.value, addr = s_address.value
+
   var i = 0
   var found = false
     tasks_raw_data.forEach(element => {
-      if(element.name == s_name.value){
-        txt = "delete: " + s_name.value
+      if(element.name == Dname){
+        txt = "delete: " + Dname
         found = true
         if (confirm(txt) == true) {
           tasks_raw_data.splice(i,1)
           window.api.send("toMain_jssa", JSON.stringify(tasks_raw_data))
           load_server_json()
-          send = l_ad[l_na.indexOf(nn)]
+          send = l_ad[l_na.indexOf(Dname)]
           window.api.html_req("dell_html_req",{params:{'address':send}})
           clear()
           getlog()
@@ -265,8 +271,12 @@ dell.addEventListener('click', async () => {
       }
       i++
     });
-    txt = s_name.value + " not found!"
+    txt = Dname + " not found!"
     if(found == false){alert(txt)}
+
+}
+dell.addEventListener('click', async () => {
+  dellAdress(s_name.value)
 })
 
 function clear(){
@@ -279,15 +289,12 @@ function clear(){
 }
 //,,,
 
-const paus = document.getElementById('runing')
-
-paus.addEventListener('click', async () => {
-  if (correctData(1)){
-    found = false
+function pausStart(name){
+  found = false
     tasks_raw_data.forEach(element => {
-      if(element.name == s_name.value){
+      if(element.name == name){
         found = true
-        element.runing == true ? txt = "Pause: " + s_name.value: txt = "Start: " + s_name.value 
+        element.runing == true ? txt = "Pause: " + name: txt = "Start: " + name
         if (confirm(txt) == true) {
           poss = tasks_raw_data.indexOf(element)
           tasks_raw_data[poss].runing == false ? tasks_raw_data[poss].runing = true : tasks_raw_data[poss].runing = false
@@ -304,14 +311,20 @@ paus.addEventListener('click', async () => {
           console.log("You canceled!");
         }
       }
-      
-        
     });
     if (!found){
       alert("Not found")
     }
+}
+
+const paus = document.getElementById('runing')
+
+paus.addEventListener('click', async () => {
+  if (correctData(1)){
+    pausStart(s_name.value)
   }
 })
+
 
 const dellallserv = document.getElementById('dellall_html')
 
@@ -319,12 +332,5 @@ dellallserv.addEventListener('click', async () => {
   window.api.html_req("dellall_html_req")
   getlog()
 })
-
-
-
-
-
-
-
 
 

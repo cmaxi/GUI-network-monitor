@@ -6,10 +6,18 @@ const axios = require('axios').default;
 
 
 let mainWindow
-var settings
-  fs.readFile("./settings.json", (err, jsonString) => {
-    settings = JSON.parse(jsonString)
-  })
+let child
+
+var httpReqestAddr
+var servOffFile
+var graphsSet
+
+fs.readFile("./settings.json", (err, jsonString) => {
+  var sett = JSON.parse(jsonString)
+  httpReqestAddr = sett.httpReq
+  servOffFile = sett.serversOfflineFile
+  graphsSet = sett.graphs
+})
   
 
 
@@ -50,6 +58,15 @@ function createWindow () {
       contextIsolation : true,
       preload: path.join(__dirname, 'preload.js')}
   })
+/*
+  child = new BrowserWindow({parent: win,width:400,height:300,frame:false})
+    child.loadURL(url.format({
+        pathname:path.join(__dirname,'login.html'),
+        protocol:'file',
+        slashes:true
+    }))*/
+
+
   //vzhled menu
   const isMac = process.platform === 'darwin'
   const menu = [
@@ -169,29 +186,34 @@ function createWindow () {
 }
 //načítání aplikace a poté spuštění funkcí které si volá render proces
 app.whenReady().then(() => {
+  ipcMain.on("toMain_sett", (event, args) => {
+    mainWindow.webContents.send("fromMain_sett", graphsSet);//posílá nastavení pro podprogramy
+  })
   
 //načte json pro úpravu dat nebo vytvoří soubor json
   ipcMain.on("toMain_jslo", (event, args) => {
     serv = ""
-    fs.readFile(settings.serversFile, (err, jsonString) => {
+    fs.readFile(servOffFile, (err, jsonString) => {
       if (err) {
-        fs.writeFileSync(settings.serversFile, "[]", (err) => {  //wrive file sync čeká na uložení pak dělá další program 
+        fs.writeFileSync(servOffFile, "[]", (err) => {  //wrive file sync čeká na uložení pak dělá další program 
           if (!err) {
-            fs.readFile(settings.serversFile, (err, jsonString)=>{serv = jsonString})
+            fs.readFile(servOffFile, (err, jsonString)=>{serv = jsonString})
           }
         })
       }else{serv=jsonString}
       mainWindow.webContents.send("fromMain_jslo", JSON.parse(serv));
     });
   });
+
+
 //ukládá data do json
   ipcMain.on('toMain_jssa', (event, textforsave2) => {
-    fs.writeFileSync(settings.serversFile, textforsave2, (err) => {  //wrive file sync čeká na uložení pak dělá další program 
+    fs.writeFileSync(servOffFile, textforsave2, (err) => {  //wrive file sync čeká na uložení pak dělá další program 
       if (!err) {console.log("written");}
       else{console.log(err)}
     })
-
   })
+
   function getHttp(http_address,sender,sendval,action){
     post_log = ""
     axios.get(http_address, sendval)
@@ -200,21 +222,36 @@ app.whenReady().then(() => {
       post_log = [action + " " + response.statusText, response.status]
     })
     .catch(function (error) {
-      console.log(error.response.status);
-      post_log = [action + " " + error.response.data, error.response.status]
+      console.log("Nepřipojeno")
+      if (error.code == 'ECONNREFUSED'){
+        post_log = ["Not connected network error", ""]
+      }
+      else{
+        console.log(error.response.status);
+        post_log = [action + " " + error.response.data, error.response.status]
+      }
     })
-    .then(function () {
+    .then(function (){
+      console.log(post_log)
       mainWindow.webContents.send("http_logs", post_log)
-    });  
+    })
     
   }
 
   ipcMain.handle("load_html_req", async (event, reqVar)=>{
-    getHttp(settings.httpLoad,"html_req","","Load graph data")
+    getHttp(httpReqestAddr.httpLoad,"html_req","","Load graph data")
+  })
+
+  ipcMain.handle("load_html_req_from_time", async (event, reqVar)=>{
+    getHttp(httpReqestAddr.httpLoadFrom,"html_req_from_time",reqVar,"Load graph data from")
   })
 
   ipcMain.handle("load_html_req_status", async (event, reqVar)=>{
-    getHttp(settings.httpTasks,"html_req_status",reqVar,"Load tasks data")
+    getHttp(httpReqestAddr.httpTasks,"html_req_status",reqVar,"Load tasks data")
+  })
+
+  ipcMain.handle("load_html_ResponseSumary", async (event, reqVar)=>{
+    getHttp(httpReqestAddr.httpResponseSum,"http_responseSumary",reqVar,"Load Response sumary")
   })
 
 
@@ -225,7 +262,12 @@ app.whenReady().then(() => {
       post_log = [action + " " + response.statusText, response.status]
     })
     .catch(function (error) {
-      post_log = [action + " " + error.response.data, error.response.status]
+      if (error.code == 'ECONNREFUSED'){
+        post_log = ["Not connected network error", ""]
+      }
+      else{
+        post_log = [action + " " + error.response.data, error.response.status]
+      }
     })
     .then(function () {
       mainWindow.webContents.send("http_logs", post_log)
@@ -233,22 +275,22 @@ app.whenReady().then(() => {
   }
 
   ipcMain.handle("add_html_req", async (event, requVar)=>{
-    postHttp(settings.httpAdd, requVar, "Adding")
+    postHttp(httpReqestAddr.httpAdd, requVar, "Adding")
   })
 
   ipcMain.handle("dell_html_req", async (event, reqVar)=>{
-    postHttp(settings.httpDell,reqVar, "Delete")
+    postHttp(httpReqestAddr.httpDell,reqVar, "Delete")
   })
   
   ipcMain.handle("dellall_html_req", ()=>{
-    postHttp(settings.httpDellAll, "", "Delete all")
+    postHttp(httpReqestAddr.httpDellAll, "", "Delete all")
 
   })
   ipcMain.handle("update_html_req", async (event, reqVar)=>{
-    postHttp(settings.httpUpdate,reqVar,"Update")
+    postHttp(httpReqestAddr.httpUpdate,reqVar,"Update")
   })
   ipcMain.handle("pause_html_req", async (event, reqVar)=>{
-    postHttp(settings.httpPause,reqVar,"Pause")
+    postHttp(httpReqestAddr.httpPause,reqVar,"Pause")
   })
 
 

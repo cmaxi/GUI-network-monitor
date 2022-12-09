@@ -13,21 +13,23 @@
   <body>
 
 
-    <!--graf -->
-
-
-    <div id="graf">
-      <h1>Graf hodnot</h1>
-      <canvas id="myChart"></canvas>
-      <button type="button" id="load_d">Load_d</button>
-      <button type="button" id="resetZoom">Reset zoom</button>
-
-      <script src="node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="./podpr/graphs.js"></script>
+    <div id="mySidenav" class="sidenav">
+      <a href="#" class="closebtn" id="closebtn">&times;</a>
+      <a href="#" id="s0" class="swapPage">Graphs</a>
+      <button class="dropdown-btn">Dropdown 
+        <i class="fa fa-caret-down">></i>
+      </button>
+      <div class="dropdown-container">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+      <a href="#" id="s1" class="swapPage">Data update</a>
+      <a></a>
+      <a href="#" id="s2" class="swapPage">Map not work propperly</a>
     </div>
-    
+    <span id="openNav">&#9776; open</span>
+
     <!--json handle -->
 
     <div id="jsonpar">
@@ -54,13 +56,6 @@
                   <td><input type = "color" id = "s_color" required></td>
                   <td><input type = "text" id = "s_period" pattern="([1-99]+h+[0-59]+m+[0-59]+s)|([1-59]+m+[0-59]+s)|([1-59]+s)|([1-59]+m)|([1-59]+h)" placeholder="-h-m-s or -m-s or -s or -m" required></td>
                   <td><input type = "text" id = "s_worker" placeholder="worker"required>
-                    <select class="select" multiple>
-                      <option value="1">default</option>
-                      <option value="2">def1</option>
-                      <option value="3">def2</option>
-                      <option value="4">def3</option>
-                      <option value="5">def4</option>
-                    </select>
                   <td>
                     <input type = "text" id = "s_latitude" placeholder="Latitude"><br><br>
                     <input type = "text" id = "s_longitude" placeholder="Longitude">
@@ -77,19 +72,46 @@
         <h1>Servers specs</h1>
           <div id="example-table"></div>
       
-      
-      
       <script src="node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
-      
       <script src="./podpr/jsonhandle.js"></script>
     </div>
 
+    <!--graf -->
+
+
+    <div id="graf">
+      <h1>Graf hodnot</h1>
+      <b id="timer"></b>
+      <b id="timer">Set reload time [s]:</b>
+      <input type = "number" id = "timerMax">
+      <b id="timer">Set graf area length:</b>
+      <input type = "number" id = "lenMax">
+      <button type="button" id="load_d">Reload all data.</button>
+      <canvas id="myChart"></canvas>
+      <button type="button" id="left_m">Shift to Left</button>
+      <button type="button" id="resetZoom">Reset zoom</button>
+      <button type="button" id="right_m">Shift to Right</button>
+      <h1>Graf Chybovosti</h1>
+      <canvas id="myBarChart"></canvas>
+      <h1>Graf Průměrných rychlostí odezvy</h1>
+      <canvas id="myPolarChart"></canvas>
+      <h1>Graf Poměrů počtů naměřených hodnot</h1>
+      <canvas id="myDoughnutChart"></canvas>
+
+      <script src="node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="./podpr/graphs.js"></script>
+    </div>
+
+    <!-- map -->
     <div id="maps">
       <div id="map"></div>
       <button type="button" id="llll">click</button>
-      <script src="node_modules/leaflet/dist/leaflet.js"></script>
-      <script src="./podpr/maps.js"></script>
     </div>
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="./podpr/maps.js"></script>
+
 
    <script src="./renderer.js"></script>   <!-- spustí skript -->
   </body>

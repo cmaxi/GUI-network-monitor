@@ -7,8 +7,8 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "MC",
+  "keywords": ["Electron", "GUI", "Network application"],
+  "author": "Martin Cé",
   "license": "ISC",
   "devDependencies": {
     "electron": "^20.1.0"

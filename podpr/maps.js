@@ -1,39 +1,19 @@
-//finish map
-locations = []
-markers = []
 
-window.api.receive_cmd("fromMain_showhide", (show) => {
-  window.api.send("toMain_jslo")
-  window.api.receive("fromMain_jslo", (data) => {
-    tasks_raw_data = data
-    tasks_raw_data.forEach(element => {
-      locations.push([element.name, element.coordinates[0], element.coordinates[1]])
-    });
-    if(markers.length != 0 && show != 2){
-      for (var i = 0; i < locations.length; i++) {
-        //markers[i].remove()
-      }
-    }
-    else{
-      for (var i = 0; i < locations.length; i++) {
-        markers[i] = L.marker([locations[i][1]+laM, locations[i][2]+leM])
-          .bindPopup(locations[i][0])
-          .addTo(map);
-      }
-    }
-    
-  })
-});
-
-
-var map = L.map('map').setView([50.087465, 14.421254],3);
+var map = L.map('map')
+  .setView([50.087465, 14.421254],3)
 
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 10,
     minZoom:2,
     attribution: '© OpenStreetMap',
+    zoomAnimation: false,
 }).addTo(map);
+
+var zoomControl = L.control.zoom({
+  position: "topleft"
+});
+zoomControl.addTo(map);
 
 var southWest = L.latLng(-89.98155760646617, -180),
 northEast = L.latLng(89.99346179538875, 180);
@@ -42,6 +22,51 @@ var bounds = L.latLngBounds(southWest, northEast);
 map.setMaxBounds(bounds);
 map.on('drag', function() {
     map.panInsideBounds(bounds, { animate: false });
+});
+
+
+
+
+locations = []
+markers = []
+
+window.api.receive_cmd("fromMain_showhide", (show) => {
+  window.api.send("toMain_jslo")
+  window.api.receive("fromMain_jslo", (data) => {
+    locations = []
+    tasks_raw_data = data
+    tasks_raw_data.forEach(element => {
+      locations.push([element.name, element.coordinates[0], element.coordinates[1]])
+    });
+    if(markers.length != 0){
+      markers.forEach(element => {
+        element.remove()
+      });
+
+      for (var i = 0; i < locations.length; i++) {
+        markers[i] = L.marker([locations[i][1]+laM, locations[i][2]+leM])
+          .bindPopup(locations[i][0])
+          .addTo(map);
+      }
+    }
+    else if(markers.length == 0 && show == 2){
+      for (var i = 0; i < locations.length; i++) {
+        markers[i] = L.marker([locations[i][1]+laM, locations[i][2]+leM], {riseOnHover: true})
+          .bindPopup(locations[i][0])
+          .addTo(map);
+        
+          /*var circleCenter = [40.72, -74.00];
+          var circleOptions = {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0
+         }
+         var circle = L.circle(circleCenter, 50000, circleOptions);
+         circle.addTo(map);*/
+      }
+    }
+    
+  })
 });
 
 var popup = L.popup();
@@ -61,29 +86,14 @@ function onMapClick(e) {
 
 map.on('click', onMapClick);
 
-
-
-/*
-var locations = [
-  ["Praha", 50.0474392619376, 14.477233886718752],
-  ["New York", 40.62020704520565, -73.87481689453126],
-  ["Ushuaia", -54.806933, -68.307325],
-  ["Reykjavik", 64.145981, -21.942237],
-  ["Diomede",65.758468,-168.951828],
-  ["Sydney",-33.873452,151.208838],
-  ["Adak",51.873613,-176.639032],
-  ["Osaka",34.719678,135.571712],
-];*/
-
-
-
 map.on('zoomstart', function() {
-  for (var i = 0; i < locations.length; i++) {
-    markers[i].remove()
-  }
+  
 })
 
 map.on('zoomend', function() {
+  markers.forEach(element => {
+    element.remove()
+  });
   switch(map.getZoom()) {
     case 2:
       la = +5.12, le = -10.24//pro proklik
@@ -127,5 +137,5 @@ map.on('zoomend', function() {
       .bindPopup(locations[i][0])
       .addTo(map);
   }
-  console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
+  //console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
 });
