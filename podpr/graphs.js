@@ -283,7 +283,7 @@ window.api.receive("fromMain_sett", (sett) => {
 
   lastTime = 0
   t = refreshTime
-  
+
   const timer = document.getElementById('timer')
   setInterval(function(){ // renew every sec
     if (t==1){
@@ -334,6 +334,7 @@ function dataForGraphs(dataAdd){//write to line graph and get data for other gra
         time>lastTime ? lastTime=lR:lastTime;
 
         if (myChart.data.labels.length>lenLimit){
+          myChart.data.labelTimestamp.shift()
           myChart.data.labels.shift()
           shifted++
         }
@@ -440,6 +441,7 @@ function loadAllDataNew(){
   hmsPrews = 0
   myChart.data.labels = []
   myChart.data.datasets = []
+  myChart.data.labelTimestamp = []
 
   var B_failed = []
   var B_passed = []
