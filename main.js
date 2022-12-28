@@ -184,6 +184,8 @@ function createWindow () {
   mainWindow.loadFile('index.html')         //načte html soubor
   mainWindow.webContents.openDevTools()   //otevře vývojářské nástroje při spuštění
 }
+
+
 //načítání aplikace a poté spuštění funkcí které si volá render proces
 app.whenReady().then(() => {
   ipcMain.on("toMain_sett", (event, args) => {
@@ -289,6 +291,7 @@ app.whenReady().then(() => {
   ipcMain.handle("update_html_req", async (event, reqVar)=>{
     postHttp(httpReqestAddr.httpUpdate,reqVar,"Update")
   })
+  
   ipcMain.handle("pause_html_req", async (event, reqVar)=>{
     postHttp(httpReqestAddr.httpPause,reqVar,"Pause")
   })

@@ -492,8 +492,6 @@ function loadAllDataNew(){
         
         dataForGraphs(allResp.data)
 
-        console.log(myChart.data)
-
         setAndUpdate(B_failed, B_passed, P_color, P_data, D_color, D_data, true, averageData)
         
 

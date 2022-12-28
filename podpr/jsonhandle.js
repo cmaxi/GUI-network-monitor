@@ -318,7 +318,6 @@ function pausStart(name){
 }
 
 const paus = document.getElementById('runing')
-
 paus.addEventListener('click', async () => {
   if (correctData(1)){
     pausStart(s_name.value)
@@ -327,7 +326,6 @@ paus.addEventListener('click', async () => {
 
 
 const dellallserv = document.getElementById('dellall_html')
-
 dellallserv.addEventListener('click', async () => {
   window.api.html_req("dellall_html_req")
   getlog()
