@@ -15,7 +15,7 @@ var rowMenu = [
     separator:true,
   },  
   {
-      label:"<i class='fas fa-trash'></i> Dellete",
+      label:"<i class='fas fa-trash'></i> Delete",
       action:function(e, row){
         dellAdress(getName(row.getData()))
       }
@@ -123,7 +123,6 @@ const form_for_server_upadddel = document.getElementById('sform')
 //buttons for server operations
 const loadnewserv = document.getElementById('loadnewserv')
 const update = document.getElementById('upsave')
-const dell = document.getElementById('delsave')
 const pause = document.getElementById('pause')
 
 
@@ -275,9 +274,6 @@ function dellAdress(Dname){
     if(found == false){alert(txt)}
 
 }
-dell.addEventListener('click', async () => {
-  dellAdress(s_name.value)
-})
 
 function clear(){
   s_name.value = ""

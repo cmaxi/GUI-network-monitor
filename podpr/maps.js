@@ -1,6 +1,4 @@
-
-var map = L.map('map')
-  .setView([50.087465, 14.421254],3)
+var map = L.map('map').setView([50.087465, 14.421254],3)
 
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -10,29 +8,25 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     zoomAnimation: false,
 }).addTo(map);
 
-var zoomControl = L.control.zoom({
-  position: "topleft"
-});
-zoomControl.addTo(map);
-
-var southWest = L.latLng(-89.98155760646617, -180),
-northEast = L.latLng(89.99346179538875, 180);
-var bounds = L.latLngBounds(southWest, northEast);
-
-map.setMaxBounds(bounds);
-map.on('drag', function() {
-    map.panInsideBounds(bounds, { animate: false });
-});
 
 
 
-
+afterLoad()
 locations = []
 markers = []
-
-window.api.receive_cmd("fromMain_showhide", (show) => {
-  window.api.send("toMain_jslo")
+function afterLoad(){
   window.api.receive("fromMain_jslo", (data) => {
+
+    var southWest = L.latLng(-89.98155760646617, -180),
+    northEast = L.latLng(89.99346179538875, 180);
+    var bounds = L.latLngBounds(southWest, northEast);
+
+    map.setMaxBounds(bounds);
+    map.on('drag', function() {
+        map.panInsideBounds(bounds, { animate: false });
+    });
+
+
     locations = []
     tasks_raw_data = data
     tasks_raw_data.forEach(element => {
@@ -49,7 +43,7 @@ window.api.receive_cmd("fromMain_showhide", (show) => {
           .addTo(map);
       }
     }
-    else if(markers.length == 0 && show == 2){
+    else if(markers.length == 0){
       for (var i = 0; i < locations.length; i++) {
         markers[i] = L.marker([locations[i][1]+laM, locations[i][2]+leM], {riseOnHover: true})
           .bindPopup(locations[i][0])
@@ -60,14 +54,14 @@ window.api.receive_cmd("fromMain_showhide", (show) => {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0
-         }
-         var circle = L.circle(circleCenter, 50000, circleOptions);
-         circle.addTo(map);*/
+          }
+          var circle = L.circle(circleCenter, 50000, circleOptions);
+          circle.addTo(map);*/
       }
     }
     
   })
-});
+}
 
 var popup = L.popup();
 //počáteční zoom je na 3

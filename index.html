@@ -15,20 +15,21 @@
 
     <div id="mySidenav" class="sidenav">
       <a href="#" class="closebtn" id="closebtn">&times;</a>
-      <a href="#" id="s0" class="swapPage">Graphs</a>
-      <button class="dropdown-btn">Dropdown 
+     <!--<a href="#" id="s0" class="swapPage">Graphs</a>--> 
+     <a href="#" id="s1" class="swapPage">Data update</a> 
+     <button class="dropdown-btn">Graphs 
         <i class="fa fa-caret-down">></i>
       </button>
       <div class="dropdown-container">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+        <a href="#" id="s3" class="swapPage">Graph responses</a>
+        <a href="#" id="s4" class="swapPage">Graph errors</a>
+        <a href="#" id="s5" class="swapPage">Graoh average</a>
       </div>
-      <a href="#" id="s1" class="swapPage">Data update</a>
+      
       <a></a>
-      <a href="#" id="s2" class="swapPage">Map not work propperly</a>
+      <a href="#" id="s2" class="swapPage">Map</a>
     </div>
-    <span id="openNav">&#9776; open</span>
+    <span id="openNav">&#9776;</span>
 
     <!--json handle -->
 
@@ -39,7 +40,7 @@
             <h2>Update server or Add new server</h2>
             <table class="main_T">
               <tr>
-                <th id="cc">Server name for update</th>
+                <th id="cc">Find server</th>
                 <th>Name / New name</th>
                 <th>Address</th> 
                 <th>Color</th>
@@ -60,13 +61,14 @@
                     <input type = "text" id = "s_latitude" placeholder="Latitude"><br><br>
                     <input type = "text" id = "s_longitude" placeholder="Longitude">
                   </td>
-                  <td><button type = "button" id = "upsave">Update/add</button><br><br><button type = "button" id = "delsave">Delete</button><br><br><button type = "button" id = "runing">Pause/Start</button></td>
                   
                 </form>
               </tr>
             </table>
-              <button type="button" id="btn6">load json from file get path</button>
-              <button type="button" id="dellall_html">dell all results</button>
+              <button type = "button" id = "upsave">Update Add task</button>
+              <button type = "button" id = "runing">Pause/Start task</button>
+              <button type="button" id="btn6">path empty</button>
+              <button type="button" id="dellall_html">dell all results on server</button>
           </div>
         </div>
         <h1>Servers specs</h1>
@@ -76,28 +78,44 @@
       <script src="./podpr/jsonhandle.js"></script>
     </div>
 
-    <!--graf -->
+
+
+    <div id="spacer"></div>
+    <!--grafy -->
 
 
     <div id="graf">
-      <h1>Graf hodnot</h1>
+      <br>
       <b id="timer"></b>
       <b id="timer">Set reload time [s]:</b>
       <input type = "number" id = "timerMax">
       <b id="timer">Set graf area length:</b>
       <input type = "number" id = "lenMax">
       <button type="button" id="load_d">Reload all data.</button>
-      <canvas id="myChart"></canvas>
-      <button type="button" id="left_m">Shift to Left</button>
-      <button type="button" id="resetZoom">Reset zoom</button>
-      <button type="button" id="right_m">Shift to Right</button>
-      <h1>Graf Chybovosti</h1>
-      <canvas id="myBarChart"></canvas>
-      <h1>Graf Průměrných rychlostí odezvy</h1>
-      <canvas id="myPolarChart"></canvas>
-      <h1>Graf Poměrů počtů naměřených hodnot</h1>
-      <canvas id="myDoughnutChart"></canvas>
+      
 
+      <div id="gResp0">
+        <h1>Graf</h1>
+        <canvas id="myChart"></canvas>
+        <button type="button" id="left_m">Shift to Left</button>
+        <button type="button" id="resetZoom">Reset zoom</button>
+        <button type="button" id="right_m">Shift to Right</button>
+      </div>
+        <div id="gResp1">
+          <h1>Graf Chybovosti</h1>
+          <canvas id="myBarChart"></canvas>
+        </div>
+        <div id="gResp">
+          <div id="gRespCH1">
+            <h1>průměry rychlostí odezvy</h1>
+            <canvas id="myPolarChart"></canvas>
+          </div>
+          <div id="gRespCH2">
+            <h1>počet naměřených hodnot</h1>
+            <canvas id="myDoughnutChart"></canvas>
+          </div>
+        </div>
+      <br><br>
       <script src="node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
       <script src="node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
       <script src="node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
@@ -106,9 +124,10 @@
 
     <!-- map -->
     <div id="maps">
+      <br><br>
       <div id="map"></div>
-      <button type="button" id="llll">click</button>
-    </div>
+        <button type="button" id="llll">click</button>
+      </div>
     <script src="node_modules/leaflet/dist/leaflet.js"></script>
     <script src="./podpr/maps.js"></script>
 

@@ -2,13 +2,23 @@
 const graph = document.getElementById('graf')
 const jsonpar = document.getElementById('jsonpar')
 const maps = document.getElementById('maps')
-const windows = [graph, jsonpar, maps]  //div sectors by id
+
+const graph0 = document.getElementById('gResp0')
+const graph1 = document.getElementById('gResp1')
+const graph2 = document.getElementById('gResp')
+const spacer = document.getElementById('spacer')
+
+const windows = [graph, jsonpar, maps, graph0, graph1, graph2, spacer]  //div sectors by id
 
 function sh(sh){
   for (let i = 0; i < windows.length; i++) { 
     windows[i].style.display = "none";
   }
   windows[sh].style.display = "block";
+  if (sh>=3 || sh<=5 && sh!=1 && sh!=2)
+  {
+    windows[0].style.display = "block";
+  }
 }
 
 sh(1)

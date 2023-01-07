@@ -461,7 +461,7 @@ function loadAllDataNew(){
     window.api.receive("http_logs", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
-    window.api.send("toMain_jslo")//načítá data z jsono o serverech
+    window.api.send("toMain_jslo")//načítá data z jsonu o serverech
     window.api.receive("fromMain_jslo", (taskSpecs) => {
       window.api.html_req("load_html_ResponseSumary", {params:{'worker':"default"}})//načtení prměrů všech úkolů
       window.api.receive("http_responseSumary", (averageData) => {
