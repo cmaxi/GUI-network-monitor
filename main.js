@@ -3,6 +3,8 @@ const path = require('path')
 var fs = require('fs')
 const axios = require('axios').default;
 
+const Tabulator = require('tabulator-tables');
+
 
 
 let mainWindow

@@ -4,8 +4,13 @@
     <meta charset="UTF-8" http-equiv="Content-Security-Policy"
     content="default-src 'self'; img-src https://* file://* data:; child-src 'none';">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" crossorigin=""/>
+    
     <link rel="stylesheet" href="node_modules/tabulator-tables/dist/css/tabulator_bootstrap4.min.css"/>
+    
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" crossorigin=""/>
+    <!---->
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    
     
     <title>Server handle</title>
     <link rel="stylesheet" href="style/style.css" />
@@ -73,8 +78,12 @@
         </div>
         <h1>Servers specs</h1>
           <div id="example-table"></div>
-      
-      <script src="node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+        
+        <script src="node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+      <!--
+
+      -->
+
       <script src="./podpr/jsonhandle.js"></script>
     </div>
 
@@ -128,7 +137,7 @@
       <div id="map"></div>
         <button type="button" id="llll">click</button>
       </div>
-    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    
     <script src="./podpr/maps.js"></script>
 
 

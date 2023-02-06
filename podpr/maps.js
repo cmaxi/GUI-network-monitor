@@ -2,13 +2,20 @@ var map = L.map('map').setView([50.087465, 14.421254],3)
 
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 10,
+    maxZoom: 5,
     minZoom:2,
     attribution: '© OpenStreetMap',
     zoomAnimation: false,
 }).addTo(map);
 
+var southWest = L.latLng(-89.98155760646617, -180),
+northEast = L.latLng(89.99346179538875, 180);
+var bounds = L.latLngBounds(southWest, northEast);
 
+map.setMaxBounds(bounds);
+map.on('drag', function() {
+    map.panInsideBounds(bounds, { animate: false });
+});
 
 
 afterLoad()
@@ -17,18 +24,7 @@ markers = []
 function afterLoad(){
   window.api.receive("fromMain_jslo", (data) => {
 
-    var southWest = L.latLng(-89.98155760646617, -180),
-    northEast = L.latLng(89.99346179538875, 180);
-    var bounds = L.latLngBounds(southWest, northEast);
-
-    map.setMaxBounds(bounds);
-    map.on('drag', function() {
-        map.panInsideBounds(bounds, { animate: false });
-    });
-
-
     locations = []
-    tasks_raw_data = data
     tasks_raw_data.forEach(element => {
       locations.push([element.name, element.coordinates[0], element.coordinates[1]])
     });
@@ -63,11 +59,15 @@ function afterLoad(){
   })
 }
 
+
+
+
+
 var popup = L.popup();
 //počáteční zoom je na 3
 la = +3.8, le = -5.8
 laM = -2.4, leM = +3.4
-
+/*
 function onMapClick(e) {
   ll={"lat":e.latlng.lat + la,"lng":e.latlng.lng + le}
   console.log(ll, map.getZoom())
@@ -80,9 +80,11 @@ function onMapClick(e) {
 
 map.on('click', onMapClick);
 
-map.on('zoomstart', function() {
+map.on('', function() {
   
-})
+})*/
+
+
 
 map.on('zoomend', function() {
   markers.forEach(element => {
@@ -105,6 +107,8 @@ map.on('zoomend', function() {
       la = +0.64, le = -1.28//pro proklik
       laM = -0.6, leM = +0.9
       break;
+
+
     case 6:
       la = +0.32, le = -0.64//pro proklik
       laM = -0.28, leM = +0.43
@@ -131,5 +135,6 @@ map.on('zoomend', function() {
       .bindPopup(locations[i][0])
       .addTo(map);
   }
-  //console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
+  console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
 });
+
