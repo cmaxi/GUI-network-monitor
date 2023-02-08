@@ -108,7 +108,7 @@
 
     #map { 
         height: 800px;
-        max-width: 1300px;
+        width: 1100px;
     }
     
     .tabulator-col-sorter{width: 10px;}

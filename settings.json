@@ -1,15 +1,16 @@
 {
     "serversOfflineFile":"./data/servers.json",
     "httpReq":{
-        "httpLoad":"http://127.0.0.1:8000/getAllResponses",
-        "httpAdd":"http://127.0.0.1:8000/createTask",
-        "httpDell":"http://127.0.0.1:8000/deleteTask",
-        "httpDellAll":"http://127.0.0.1:8000/deleteAllResponses",
-        "httpUpdate":"http://127.0.0.1:8000/updateTask",
-        "httpPause":"http://127.0.0.1:8000/pauseTask",
-        "httpTasks":"http://127.0.0.1:8000/getWorkerTasks",
-        "httpResponseSum":"http://127.0.0.1:8000/getResponseSummary",
-        "httpLoadFrom":"http://127.0.0.1:8000/getAllResponsesFrom"
+        "http":"http://127.0.0.1:8000",
+        "httpLoad":"/getAllResponses",
+        "httpAdd":"/createTask",
+        "httpDell":"/deleteTask",
+        "httpDellAll":"/deleteAllResponses",
+        "httpUpdate":"/updateTask",
+        "httpPause":"/pauseTask",
+        "httpTasks":"/getWorkerTasks",
+        "httpResponseSum":"/getResponseSummary",
+        "httpLoadFrom":"/getAllResponsesFrom"
     },
     "graphs":{
         "graphValueCount":300,

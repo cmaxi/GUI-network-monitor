@@ -10,30 +10,30 @@ contextBridge.exposeInMainWorld("api", {
     send: (channel, data) => {  //render to main activate fnc in main with data from face
         /*
             function:
-                "toMain_jslo"
-                "toMain_jssa"
-                "toMain_sett"
+                "toMainJsonLoad" - load data from local json file
+                "toMainJsonSave" - save updated local json file
+                "toMainSettings" - load saved settings
         */
         // whitelist channels
-        let validChannels = ["toMain_jslo","toMain_jssa", "toMain_sett"];
+        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
             console.log("%c  -" + channel +  " send", 'color:green')//transfer log
         }
         else {console.log("%c  -" + channel + " is not in whitelist of send", 'color:red')}
     },
-    receive: (channel, func) => {//main to render and face listen for it if it is important for it send just onece
+    receive: (channel, func) => {//main to render and face listen for it if it is important for. It send just onece
         /*
             function:
-                "fromMain_jslo"
-                "html_req"
-                "http_logs"
-                "html_req_status"
-                "http_responseSumary"
-                "html_req_from_time"
-                "fromMain_sett"
+                "fromMainJsonLoad" - loaded data from json task properties
+                "fromMainRequestLoadAll" - requested data -all responses
+                "fromMainRequestLog" - requested data -log from transfer
+                "fromMainRequestTaskProperties" - requested data -properties of tasks
+                "fromMainRequestTaskAverage" - requested data -average of tasks
+                "fromMainRequestLoadFromTime" - requested data -responses from time
+                "fromMainSettings" - requested data -loaded data from json settings
         */
-        let validChannels = ["fromMain_jslo","html_req", "http_logs", "html_req_status","http_responseSumary", "html_req_from_time", "fromMain_sett"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestLog", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
@@ -44,30 +44,30 @@ contextBridge.exposeInMainWorld("api", {
     receive_cmd: (channel, func) => {//main to render and face listen for it if it is important for it seted for walue and stay on it
         /*
             function:
-                "fromMain_showhide"
+                "fromMainhowHideSwitch" - switch betwen windows
         */
         // whitelist channels
-        let validChannels = ["fromMain_showhide"];
+        let validChannels = ["fromMainhowHideSwitch"];
         console.log("%c  -" + channel + " recieve_cmd", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             ipcRenderer.on(channel, (event, ...args) => func(...args));
         }
         else {console.log("%c  -" + channel + " is not in whitelist of recieve_cmd", 'color:red')}
     },
-    html_req: async(channel, reqValues)=>{
+    httpRequest: async(channel, reqValues)=>{
         /*
             function:
-                "load_html_req" - 
-                "add_html_req"
-                "dell_html_req"
-                "dellall_html_req"
-                "update_html_req"
-                "pause_html_req"
-                "load_html_req_status"
-                "load_html_ResponseSumary"
-                "load_html_req_from_time"
+                "requestLoadAll" - request -all responses
+                "requestAddTask" - request -add task
+                "requestDelTask" - request -delete task
+                "requestClearAllDatabase" - request -delete all database data
+                "requestUpdateTask" - request -update tsk properties
+                "requestPauseStartTask" - request -pause or start task depends on actual case
+                "requestTasksProperties" - request -properties from server
+                "requestTasksAverage" - request -average times
+                "requestLoadAllFromTime" - request -responses from time
         */
-        let validChannels = ["load_html_req","add_html_req","dell_html_req","dellall_html_req","update_html_req","pause_html_req","load_html_req_status","load_html_ResponseSumary", "load_html_req_from_time"];
+        let validChannels = ["requestLoadAll","requestAddTask","requestDelTask","requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime"];
         console.log("%c  -" + channel + " html request send", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             await ipcRenderer.invoke(channel,reqValues)

@@ -1,9 +1,10 @@
 /* ----------------------------------------- Lin chart ----------------------------------------- */
-
-var config = {
+const Lchart = document.getElementById('myChart')
+const labelsL = [""];
+const configL = {
   type: 'line',
   data: {
-    labels: [""],
+    labels: labelsL,
     "labelTimestamp":[],
     datasets: [
       {
@@ -91,11 +92,11 @@ var config = {
   },
 };//config grafu
 
-const chart = document.getElementById('myChart')
-var myChart = new Chart(chart, config);
+
+var myChart = new Chart(Lchart, configL);
 
 
-
+//butons
 const load_d = document.getElementById('load_d') 
 load_d.addEventListener('click', async () => {
   loadAllDataNew()
@@ -123,6 +124,7 @@ rm.addEventListener('click', ()=>{
 
 const Bchart = document.getElementById('myBarChart')
 const labelsB = [""];
+
 const dataB = {
   labels: labelsB,
   datasets: [
@@ -138,6 +140,7 @@ const dataB = {
     }
   ]
 };
+
 const configB = {
   type: 'bar',
   data: dataB,
@@ -160,6 +163,7 @@ const configB = {
     }
   },
 };
+
 var myBarChart = new Chart(Bchart, configB);
 
 
@@ -239,7 +243,7 @@ var myDoughnutChart = new Chart(Dchart, configD);
 
 
 /* ----------------------------------------- init loading ----------------------------------------- */ 
-
+//nastavení délky vykreslovaných dat
 var input = document.getElementById("timerMax");
 input.addEventListener("keypress", function(event) {
   // If the user presses the "Enter" key on the keyboard
@@ -270,15 +274,15 @@ input2.addEventListener("keypress", function(event) {
   }
 });
 
-window.api.send("toMain_sett")//načítá všechna data všechny časy
-window.api.receive("fromMain_sett", (sett) => {
+window.api.send("toMainSettings")//načítá nastavení a všechna data
+window.api.receive("fromMainSettings", (sett) => {
   refreshTime = sett.secsForGraphUpdate
   lenLimit = sett.graphValueCount
   
   input.value = refreshTime
   input2.value = lenLimit
   
-  loadAllDataNew()
+  loadAllDataNew()  // načtení všech dat
 
 
   lastTime = 0
@@ -307,6 +311,7 @@ window.api.receive("fromMain_sett", (sett) => {
 
 
 function timeConv(time){
+  time>lastTime ? lastTime=time:null;
   time = new Date(time)
   var returnedTime = {"YMD":(time.getFullYear()+'-'+(time.getMonth()+1)+'-'+time.getDate())
   ,"hms":(time.getHours()+':'+time.getMinutes()+':'+time.getSeconds())}
@@ -331,6 +336,8 @@ function dataForGraphs(dataAdd){//write to line graph and get data for other gra
           YMDprews = time.YMD
         }
         myChart.data.labelTimestamp.push(Math.round(da.time/1000))
+        
+        
         time>lastTime ? lastTime=lR:lastTime;
 
         if (myChart.data.labels.length>lenLimit){
@@ -456,16 +463,16 @@ function loadAllDataNew(){
   var D_color = []
 
 
-  window.api.html_req("load_html_req")//načítá všechna data všechny časy
-  window.api.receive("html_req", (allResp) => {
-    window.api.receive("http_logs", (data) => {
+  window.api.httpRequest("requestLoadAll")//načítá všechna data všechny časy
+  window.api.receive("fromMainRequestLoadAll", (allResp) => {
+    window.api.receive("fromMainRequestLog", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
-    window.api.send("toMain_jslo")//načítá data z jsonu o serverech
-    window.api.receive("fromMain_jslo", (taskSpecs) => {
-      window.api.html_req("load_html_ResponseSumary", {params:{'worker':"default"}})//načtení prměrů všech úkolů
-      window.api.receive("http_responseSumary", (averageData) => {
-        window.api.receive("http_logs", (data) => {
+    window.api.send("toMainJsonLoad")//načítá data z jsonu o serverech
+    window.api.receive("fromMainJsonLoad", (taskSpecs) => {
+      window.api.httpRequest("requestTasksAverage", {params:{'worker':"default"}})//načtení prměrů všech úkolů
+      window.api.receive("fromMainRequestTaskAverage", (averageData) => {
+        window.api.receive("fromMainRequestLog", (data) => {
           console.log('\x1B[34m %s %s', data[0], data[1]);
         });
         taskSpecs.forEach(element => {
@@ -473,6 +480,7 @@ function loadAllDataNew(){
             posAvr = averageData.data.findIndex(function(item, i){return item.address == element.address})
             lR = averageData.data[posAvr].last_response
             lR>lastTime ? lastTime=lR:lastTime;
+            
             myChart.data.datasets.push({
               "address":element.address,
               "failed":0,
@@ -513,14 +521,14 @@ function loadDataFrom(dtf){
   var D_data = []
   var D_color = []
   
-  window.api.html_req("load_html_req_from_time", {params:{'timeFrom':dtf}})//načítá data od posledního času a přepisuje (TODO) časy
-  window.api.receive("html_req_from_time", (allRespFrom) => {
-    window.api.receive("http_logs", (data) => {
+  window.api.httpRequest("requestLoadAllFromTime", {params:{'timeFrom':dtf}})//načítá data od posledního času a přepisuje (TODO) časy
+  window.api.receive("fromMainRequestLoadFromTime", (allRespFrom) => {
+    window.api.receive("fromMainRequestLog", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
-    window.api.html_req("load_html_ResponseSumary", {params:{'worker':"default"}})//načtení prmůěrů všech úkolů
-    window.api.receive("http_responseSumary", (averageData) => {
-      window.api.receive("http_logs", (data) => {
+    window.api.httpRequest("requestTasksAverage", {params:{'worker':"default"}})//načtení prmůěrů všech úkolů
+    window.api.receive("fromMainRequestTaskAverage", (averageData) => {
+      window.api.receive("fromMainRequestLog", (data) => {
         console.log('\x1B[34m %s %s', data[0], data[1]);
       });
 

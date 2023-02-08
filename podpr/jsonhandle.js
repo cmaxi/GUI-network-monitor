@@ -67,19 +67,19 @@ table.on("rowClick", function(e, column){
 
 
 function getlog(){
-  window.api.receive("http_logs", (data) => {
+  window.api.receive("fromMainRequestLog", (data) => {
     console.log('\x1B[34m %s %s', data[0], data[1]);
   });
 }
 
 
 function load_server_json(){
-    window.api.send("toMain_jslo")
-    window.api.receive("fromMain_jslo", (data) => {
+    window.api.send("toMainJsonLoad")
+    window.api.receive("fromMainJsonLoad", (data) => {
     tasks_raw_data = data  
     send = { params: {worker:"default"}}
-    window.api.html_req("load_html_req_status",send)
-      window.api.receive("html_req_status", (data) => {
+    window.api.httpRequest("requestTasksProperties",send)
+      window.api.receive("fromMainRequestTaskProperties", (data) => {
         runingAddress = []
         data.forEach(element => {
           runingAddress.push(element.address)
@@ -99,7 +99,7 @@ function load_server_json(){
             tasks_raw_data.push(strll)
           }
         });
-        window.api.send("toMain_jssa", JSON.stringify(tasks_raw_data))
+        window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
       });
     getlog()
     setTimeout(function() {
@@ -215,7 +215,7 @@ update.addEventListener('click', async () => {  //update/save
         strll.runing = tasks_raw_data[l_na.indexOf(nn)].runing
         tasks_raw_data[l_na.indexOf(nn)] = strll
         if (strll.runing){
-          window.api.html_req("update_html_req",send)
+          window.api.httpRequest("requestUpdateTask",send)
         }
       }
       else if(will_update_byAddress){
@@ -223,16 +223,16 @@ update.addEventListener('click', async () => {  //update/save
         strll.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
         tasks_raw_data[l_ad.indexOf(addr)] = strll
         if (strll.runing){
-          window.api.html_req("update_html_req",send)
+          window.api.httpRequest("requestUpdateTask",send)
         }
       }
       else
       {
         strll.runing = true
         tasks_raw_data.push(strll)
-        window.api.html_req("add_html_req",send)
+        window.api.httpRequest("requestAddTask",send)
       }
-      window.api.send("toMain_jssa", JSON.stringify(tasks_raw_data))
+      window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
       clear()
       getlog()
       load_server_json()
@@ -260,10 +260,10 @@ function dellAdress(Dname){
         found = true
         if (confirm(txt) == true) {
           tasks_raw_data.splice(i,1)
-          window.api.send("toMain_jssa", JSON.stringify(tasks_raw_data))
+          window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
           load_server_json()
           send = l_ad[l_na.indexOf(Dname)]
-          window.api.html_req("dell_html_req",{params:{'address':send}})
+          window.api.httpRequest("requestDelTask",{params:{'address':send}})
           clear()
           getlog()
         } else {
@@ -297,12 +297,12 @@ function pausStart(name){
           poss = tasks_raw_data.indexOf(element)
           tasks_raw_data[poss].runing == false ? tasks_raw_data[poss].runing = true : tasks_raw_data[poss].runing = false
 
-          window.api.send("toMain_jssa", JSON.stringify(tasks_raw_data))
+          window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
           load_server_json()
           n_task = tasks_raw_data[tasks_raw_data.indexOf(element)]
           send={params: {'address':n_task.address, 'task':'ping', 'time':n_task.period, 'runing':n_task.runing, 'worker':n_task.worker}}
             console.log(send)
-          window.api.html_req("pause_html_req",send)
+          window.api.httpRequest("requestPauseStartTask",send)
           clear()
           getlog()
         } else {
@@ -325,7 +325,7 @@ paus.addEventListener('click', async () => {
 
 const dellallserv = document.getElementById('dellall_html')
 dellallserv.addEventListener('click', async () => {
-  window.api.html_req("dellall_html_req")
+  window.api.httpRequest("requestClearAllDatabase")
   getlog()
 })
 

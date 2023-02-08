@@ -24,7 +24,7 @@ function sh(sh){
 sh(1)
 
 
-window.api.receive_cmd("fromMain_showhide", (show) => {
+window.api.receive_cmd("fromMainhowHideSwitch", (show) => {
   sh(show);
 });
 

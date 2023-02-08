@@ -22,7 +22,7 @@ afterLoad()
 locations = []
 markers = []
 function afterLoad(){
-  window.api.receive("fromMain_jslo", (data) => {
+  window.api.receive("fromMainJsonLoad", (data) => {
 
     locations = []
     tasks_raw_data.forEach(element => {
@@ -108,7 +108,7 @@ map.on('zoomend', function() {
       laM = -0.6, leM = +0.9
       break;
 
-
+/*
     case 6:
       la = +0.32, le = -0.64//pro proklik
       laM = -0.28, leM = +0.43
@@ -129,12 +129,13 @@ map.on('zoomend', function() {
       la = +0.02, le = -0.04//pro proklik
       laM = -0.02, leM = +0.03
       break;
+*/
   }
   for (var i = 0; i < locations.length; i++) {
     markers[i] = L.marker([locations[i][1]+laM, locations[i][2]+leM])
       .bindPopup(locations[i][0])
       .addTo(map);
   }
-  console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
+  //console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
 });
 

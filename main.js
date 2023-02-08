@@ -3,8 +3,6 @@ const path = require('path')
 var fs = require('fs')
 const axios = require('axios').default;
 
-const Tabulator = require('tabulator-tables');
-
 
 
 let mainWindow
@@ -13,12 +11,33 @@ let child
 var httpReqestAddr
 var servOffFile
 var graphsSet
+var axiosInst
+
+
 
 fs.readFile("./settings.json", (err, jsonString) => {
   var sett = JSON.parse(jsonString)
   httpReqestAddr = sett.httpReq
   servOffFile = sett.serversOfflineFile
   graphsSet = sett.graphs
+
+
+  //TODO příprava pro zabezpečenou komunikaci pomocí knihovny tls
+  
+
+  
+  
+
+  const options = {
+    host: 'yourserver.com',
+    port: 443,
+    rejectUnauthorized: false,
+    secureProtocol: 'TLSv1_2_method'
+  };
+
+  axiosInst = axios.create({
+    baseURL: httpReqestAddr.http
+  })
 })
   
 
@@ -99,10 +118,10 @@ function createWindow () {
       {
         label: 'Switch',
         submenu: [
-          { label: 'Graph', click: () => mainWindow.webContents.send("fromMain_showhide", 0) },
+          { label: 'Graph', click: () => mainWindow.webContents.send("fromMainhowHideSwitch", 0) },
           { type: 'separator' },
-          { label: 'Json', click: () => mainWindow.webContents.send("fromMain_showhide", 1) },
-          { label: 'Map', click: () => mainWindow.webContents.send("fromMain_showhide", 2) },
+          { label: 'Json', click: () => mainWindow.webContents.send("fromMainhowHideSwitch", 1) },
+          { label: 'Map', click: () => mainWindow.webContents.send("fromMainhowHideSwitch", 2) },
         ]
       },
       // { role: 'editMenu' }
@@ -190,12 +209,12 @@ function createWindow () {
 
 //načítání aplikace a poté spuštění funkcí které si volá render proces
 app.whenReady().then(() => {
-  ipcMain.on("toMain_sett", (event, args) => {
-    mainWindow.webContents.send("fromMain_sett", graphsSet);//posílá nastavení pro podprogramy
+  ipcMain.on("toMainSettings", (event, args) => {
+    mainWindow.webContents.send("fromMainSettings", graphsSet);//posílá nastavení pro podprogramy
   })
   
 //načte json pro úpravu dat nebo vytvoří soubor json
-  ipcMain.on("toMain_jslo", (event, args) => {
+  ipcMain.on("toMainJsonLoad", (event, args) => {
     serv = ""
     fs.readFile(servOffFile, (err, jsonString) => {
       if (err) {
@@ -205,22 +224,23 @@ app.whenReady().then(() => {
           }
         })
       }else{serv=jsonString}
-      mainWindow.webContents.send("fromMain_jslo", JSON.parse(serv));
+      mainWindow.webContents.send("fromMainJsonLoad", JSON.parse(serv));
     });
   });
 
 
 //ukládá data do json
-  ipcMain.on('toMain_jssa', (event, textforsave2) => {
+  ipcMain.on('toMainJsonSave', (event, textforsave2) => {
     fs.writeFileSync(servOffFile, textforsave2, (err) => {  //wrive file sync čeká na uložení pak dělá další program 
       if (!err) {console.log("written");}
       else{console.log(err)}
     })
   })
 
-  function getHttp(http_address,sender,sendval,action){
+//http requesty
+  function getHttp(http_address,sender,sendval,action){//funkce pro http requesty GET volaná později
     post_log = ""
-    axios.get(http_address, sendval)
+    axiosInst.get(http_address, sendval)
     .then(function (response) {
       mainWindow.webContents.send(sender,response.data)
       post_log = [action + " " + response.statusText, response.status]
@@ -236,32 +256,32 @@ app.whenReady().then(() => {
       }
     })
     .then(function (){
-      console.log(post_log)
-      mainWindow.webContents.send("http_logs", post_log)
+      mainWindow.webContents.send("fromMainRequestLog", post_log)
     })
     
   }
 
-  ipcMain.handle("load_html_req", async (event, reqVar)=>{
-    getHttp(httpReqestAddr.httpLoad,"html_req","","Load graph data")
+  ipcMain.handle("requestLoadAll", async (event, reqVar)=>{
+    getHttp(httpReqestAddr.httpLoad,"fromMainRequestLoadAll","","Load graph data")
+
   })
 
-  ipcMain.handle("load_html_req_from_time", async (event, reqVar)=>{
-    getHttp(httpReqestAddr.httpLoadFrom,"html_req_from_time",reqVar,"Load graph data from")
+  ipcMain.handle("requestLoadAllFromTime", async (event, reqVar)=>{
+    getHttp(httpReqestAddr.httpLoadFrom,"fromMainRequestLoadFromTime",reqVar,"Load graph data from")
   })
 
-  ipcMain.handle("load_html_req_status", async (event, reqVar)=>{
-    getHttp(httpReqestAddr.httpTasks,"html_req_status",reqVar,"Load tasks data")
+  ipcMain.handle("requestTasksProperties", async (event, reqVar)=>{
+    getHttp(httpReqestAddr.httpTasks,"fromMainRequestTaskProperties",reqVar,"Load tasks data")
   })
 
-  ipcMain.handle("load_html_ResponseSumary", async (event, reqVar)=>{
-    getHttp(httpReqestAddr.httpResponseSum,"http_responseSumary",reqVar,"Load Response sumary")
+  ipcMain.handle("requestTasksAverage", async (event, reqVar)=>{
+    getHttp(httpReqestAddr.httpResponseSum,"fromMainRequestTaskAverage",reqVar,"Load Response sumary")
   })
 
 
-  function postHttp(http_address, sendval, action){
+  function postHttp(http_address, sendval, action){//funkce pro http requesty POST
     post_log = ""
-    axios.post(http_address, null, sendval)
+    axiosInst.post(http_address, null, sendval)
     .then(function (response) {
       post_log = [action + " " + response.statusText, response.status]
     })
@@ -274,27 +294,27 @@ app.whenReady().then(() => {
       }
     })
     .then(function () {
-      mainWindow.webContents.send("http_logs", post_log)
+      mainWindow.webContents.send("fromMainRequestLog", post_log)
     });
   }
 
-  ipcMain.handle("add_html_req", async (event, requVar)=>{
+  ipcMain.handle("requestAddTask", async (event, requVar)=>{
     postHttp(httpReqestAddr.httpAdd, requVar, "Adding")
   })
 
-  ipcMain.handle("dell_html_req", async (event, reqVar)=>{
+  ipcMain.handle("requestDelTask", async (event, reqVar)=>{
     postHttp(httpReqestAddr.httpDell,reqVar, "Delete")
   })
   
-  ipcMain.handle("dellall_html_req", ()=>{
+  ipcMain.handle("requestClearAllDatabase", ()=>{
     postHttp(httpReqestAddr.httpDellAll, "", "Delete all")
 
   })
-  ipcMain.handle("update_html_req", async (event, reqVar)=>{
+  ipcMain.handle("requestUpdateTask", async (event, reqVar)=>{
     postHttp(httpReqestAddr.httpUpdate,reqVar,"Update")
   })
   
-  ipcMain.handle("pause_html_req", async (event, reqVar)=>{
+  ipcMain.handle("requestPauseStartTask", async (event, reqVar)=>{
     postHttp(httpReqestAddr.httpPause,reqVar,"Pause")
   })
 
