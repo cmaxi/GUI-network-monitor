@@ -5,8 +5,6 @@
     content="default-src 'self'; img-src https://* file://* data:; child-src 'none';">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     
-    <link rel="stylesheet" href="node_modules/tabulator-tables/dist/css/tabulator_bootstrap4.min.css"/>
-    
     <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" crossorigin=""/>
     <!---->
     <script src="node_modules/leaflet/dist/leaflet.js"></script>
@@ -28,7 +26,7 @@
       <div class="dropdown-container">
         <a href="#" id="s3" class="swapPage">Graph responses</a>
         <a href="#" id="s4" class="swapPage">Graph errors</a>
-        <a href="#" id="s5" class="swapPage">Graoh average</a>
+        <a href="#" id="s5" class="swapPage">Graph average</a>
       </div>
       
       <a></a>
@@ -77,9 +75,36 @@
           </div>
         </div>
         <h1>Servers specs</h1>
-          <div id="example-table"></div>
-        
-        <script src="node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+
+          <div class="taskTable">
+          <table id="myTable">
+            <thead>
+              <tr>
+                <th id="sort0" class="tabH">ID</th>
+                <th id="sort1" class="tabH">Name</th>
+                <th id="sort2" class="tabH">Address</th>
+                <th id="sort3" class="tabH">Color</th>
+                <th id="sort4" class="tabH">Period</th>
+                <th id="sort5" class="tabH">Coordinates</th>
+                <th id="sort6" class="tabH">Worker</th>
+                <th id="sort7" class="tabH">Runing</th>
+              </tr>
+      
+            </thead>
+      
+            </table>
+          </div>
+      
+      
+          <!-- Context menu -->
+          <div id="context-menu" class="context-menu">
+            <ul>
+              <li id="PauseStart" class="dropdown">Pause/Start</li>
+              <li id="Delete" class="dropdown">Delete</li>
+              <li id="Hide" class="dropdown">Hide in graph</li>
+            </ul>
+          </div>
+
       <!--
 
       -->

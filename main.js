@@ -22,18 +22,8 @@ fs.readFile("./settings.json", (err, jsonString) => {
   graphsSet = sett.graphs
 
 
-  //TODO příprava pro zabezpečenou komunikaci pomocí knihovny tls
+  //TODO zabezpečenou komunikaci pomocí knihovny tls nebo secure-socket
   
-
-  
-  
-
-  const options = {
-    host: 'yourserver.com',
-    port: 443,
-    rejectUnauthorized: false,
-    secureProtocol: 'TLSv1_2_method'
-  };
 
   axiosInst = axios.create({
     baseURL: httpReqestAddr.http

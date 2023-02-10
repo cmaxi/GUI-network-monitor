@@ -1,69 +1,6 @@
 
 
-const list_servers = document.getElementById('server_names')
-var tasks_raw_data = "" //raw data
-
-function getName(d){
-  return d.name
-}
-var rowMenu = [
-  {
-      label:"<i class='fas fa-user'></i> Pause/Start",
-      action:function(e, row){
-        pausStart(getName(row.getData()))
-      }
-  },
-  {
-    separator:true,
-  },  
-  {
-      label:"<i class='fas fa-trash'></i> Delete",
-      action:function(e, row){
-        dellAdress(getName(row.getData()))
-      }
-  },
-  /*
-  {
-      label:"Admin Functions",
-      menu:[
-          {
-              label:"<i class='fas fa-trash'></i> Delete Row",
-              action:function(e, row){
-                  row.delete();
-              }
-          },
-          {
-              label:"<i class='fas fa-ban'></i> Disabled Option",
-              disabled:true,
-          },
-      ]
-  }*/
-]
-
-var table = new Tabulator("#example-table", {
-  height:400,
-  columnDefaults:{
-    resizable:true,
-  },
-  rowContextMenu: rowMenu, //add context menu to rows
-  columns:[
-  {title:"Name", field:"name", width:110},
-  {title:"Address", field:"address", width:185},
-  {title:"Color", field:"color" ,formatter:"color", width:85,headerSort:false},
-  {title:"Period", field:"period", width:115},
-  {title:"Coordinates", field:"coordinates", width:128,headerSort:false},
-  {title:"Runing", field:"runing", hozAlign:"center", formatter:"tickCross", width:120},
-  {title:"Worker", field:"worker", width:125},
-  ],
-});
-
-
-table.on("rowClick", function(e, column){
-  //e - the click event object
-  //column - column component
-  loadSpecs(e.target.innerHTML)
-});
-
+var tasks_raw_data
 
 
 function getlog(){
@@ -100,11 +37,9 @@ function load_server_json(){
           }
         });
         window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
+        refreshTable(tasks_raw_data)
       });
     getlog()
-    setTimeout(function() {
-      table.replaceData(tasks_raw_data);
-    }, 200);
   });
 }
 
@@ -157,7 +92,7 @@ loadnewserv.addEventListener('click', async () => { //load server from list
 
   })
 
-function correctData(count){
+function correctData(count){//validity check
   i = 0
   validity = true
   while (i<count){//kontrola nutno pro průchod skrze všechna pole co mají být kontrolována
@@ -328,5 +263,202 @@ dellallserv.addEventListener('click', async () => {
   window.api.httpRequest("requestClearAllDatabase")
   getlog()
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.querySelectorAll('.tabH').forEach(item => {
+  item.addEventListener('click', event => {
+    sortTable(item.id[4])
+  })
+  
+})
+
+
+
+
+document.querySelectorAll('.dropdown').forEach(item => {
+  item.addEventListener('click', event => {
+    contextMenu.classList.remove("show-context-menu");
+    //console.log(item, position)
+    if(item.id == "PauseStart"){
+      console.log(item.id,tasks_raw_data[position].name)
+      pausStart(tasks_raw_data[position].name)
+    }
+    if(item.id == "Delete"){
+      console.log(item.id,tasks_raw_data[position].name)
+      dellAdress(tasks_raw_data[position].name)
+    }
+    if(item.id == "Hide"){
+      console.log(item.id,tasks_raw_data[position].name)//TODO force to dont show data in graph but dont stop task
+    }
+    
+  })
+})
+
+
+
+var contextMenu = document.getElementById("context-menu");
+
+// Hide context menu on click outside
+document.addEventListener("click", function(event) {
+contextMenu.classList.remove("show-context-menu");
+});
+
+document.addEventListener('scroll', function(event) {
+  contextMenu.classList.remove("show-context-menu");
+});
+
+
+
+// sort table by ithem
+tableA = document.getElementById("myTable");
+function sortTable(n) {
+  var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  switching = true;
+  dir = "asc";
+  while (switching) {
+    switching = false;
+    rows = tableA.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+
+
+
+
+
+  
+    // Generate table rows and cells
+    
+    var position = 0
+
+    function appendTableData(data){
+      data.forEach(function callback(rowData, index){
+
+          var row = document.createElement("tr");
+          row.setAttribute("id", "row" + index);
+          row.classList.add("tabRow");
+          row.addEventListener("click", function() {
+            //alert("ID clicked: " + rowdata);
+            const pozice = parseInt(row.id.replace(/\D/g, ''));
+            console.log(pozice)
+            loadSpecs(tasks_raw_data[pozice].name)
+          });
+
+          row.addEventListener('contextmenu', event => {
+            position = parseInt(row.id.replace(/\D/g, ''));
+            
+            console.log(position)
+              // Show context menu on right click
+              event.preventDefault();
+              contextMenu.classList.add("show-context-menu");
+              contextMenu.style.left = event.pageX + "px";
+              contextMenu.style.top = event.pageY + "px";
+          })
+
+
+
+
+
+
+          var idCell = document.createElement("td");
+          n = (index+1 >= 10 ? '0' : '00') + (index+1)
+          
+          generate(row ,idCell, n, index)
+  
+          var nameCell = document.createElement("td");
+          generate(row ,nameCell, rowData["name"], index)
+  
+          var addressCell = document.createElement("td");
+          generate(row ,addressCell, rowData["address"], index)
+  
+          var colorCell = document.createElement("td");
+          colorCell.style.backgroundColor = rowData["color"];
+          colorCell.setAttribute("id", "row" + index);
+          row.appendChild(colorCell);
+  
+          var periodCell = document.createElement("td");
+          generate(row, periodCell, rowData["period"], index)
+  
+          var periodCell = document.createElement("td");
+          periodCell.innerHTML = "Lat: " + rowData["coordinates"][0]+"<br>Len: " + rowData["coordinates"][1];
+          periodCell.setAttribute("id", "row" + index);
+          row.appendChild(periodCell);
+  
+          var periodCell = document.createElement("td");
+          generate(row, periodCell, rowData["worker"], index)
+  
+          var periodCell = document.createElement("td");
+          generate(row, periodCell, rowData["runing"], index)
+  
+          tableA.appendChild(row);
+        });
+    }
+
+
+    //appendTableData(data)
+    function generate(row, cell, rowdata, index){
+      cell.classList.add("row");
+      cell.setAttribute("id", "row" + index);
+
+      cell.innerHTML = rowdata;
+      row.appendChild(cell);
+    }
+    
+
+    function refreshTable(data){
+      while (tableA.lastElementChild && tableA.lastElementChild!=tableA.firstElementChild) {
+            tableA.lastElementChild.remove();
+      
+      }
+      appendTableData(data)
+    }
+
 
 

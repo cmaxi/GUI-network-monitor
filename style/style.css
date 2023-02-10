@@ -19,7 +19,7 @@
         height: 150px;
     }
     #graf{
-        background-color: rgb(107, 240, 255);
+        background-color: rgb(118, 241, 255);
         text-align: center;
     }
 
@@ -66,8 +66,7 @@
         padding-right: 5px;
     }
     th {
-        background: rgb(184, 200, 243);
-        border-style: solid "black";
+        background: rgb(255, 255, 255);
         position: sticky;
         top: 0; /* Don't forget this, required for the stickiness */
         
@@ -77,53 +76,14 @@
         background-color: rgb(223, 241, 241);
     }
     
-    .myBox {
-        border-style: solid;
-        text-align: left;
-        padding: 10px;
-        padding-top: 0px;
-        display: inline-block;
-        width: 800px;
-        height: 200px;
-        overflow: scroll;
-    }
-    .popis{
-        font-size: small;
-    }
 
 
-    .alert-button{
-        margin-top: 8px;
-        width: 80px;
-        background-color: #ffffff;
-        border: none;
-    }
 
-    #alert-container{
-        height: 200px;
-        width: 100px;
-        overflow: scroll;
-        border-style: solid;
-    }
+
 
     #map { 
         height: 800px;
         width: 1100px;
-    }
-    
-    .tabulator-col-sorter{width: 10px;}
-
-    #example-table{
-        width: 1000px;
-        display: inline-block;
-        border-style: solid;
-    }
-
-    .tabulator-col-content{
-        padding: 0px;
-        margin: 0px;
-        border: 0px;
-
     }
 
 
@@ -196,3 +156,64 @@
         float: right;
         padding-right: 8px;
       }
+
+
+
+/*table*/
+.taskTable{
+    overflow: auto;
+    height: 400px;
+    text-align: center;
+    padding-left: 5px;
+    display: inline-block;
+}
+.tabRow{
+    border-bottom: 1px solid black;
+    height: 50px;
+}
+.tabRow:hover{
+    background-color: rgb(177, 173, 173);
+    cursor: pointer;
+}
+
+th{cursor: pointer;}
+/*td{cursor: pointer;}*/
+
+
+
+
+/* context menu */
+
+ /* Hidden context menu */
+ .context-menu {
+    display: none;
+    position: absolute;
+    z-index: 1;
+  }
+
+  /* Show context menu on right click */
+  .show-context-menu {
+    display: block;
+  }
+
+  /* Context menu items */
+  .context-menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Context menu items */
+  .context-menu li {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    color: black;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  /* Highlight context menu item on hover */
+  .context-menu li:hover {
+    background-color: #ddd;
+  }
