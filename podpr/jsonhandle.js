@@ -169,7 +169,6 @@ update.addEventListener('click', async () => {  //update/save
       }
       window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
       clear()
-      getlog()
       load_server_json()
     } else {console.log("You canceled!");}
     
@@ -200,7 +199,6 @@ function dellAdress(Dname){
           send = l_ad[l_na.indexOf(Dname)]
           window.api.httpRequest("requestDelTask",{params:{'address':send}})
           clear()
-          getlog()
         } else {
           console.log("You canceled!");
         }
@@ -239,7 +237,6 @@ function pausStart(name){
             console.log(send)
           window.api.httpRequest("requestPauseStartTask",send)
           clear()
-          getlog()
         } else {
           console.log("You canceled!");
         }
@@ -387,14 +384,11 @@ function sortTable(n) {
           row.addEventListener("click", function() {
             //alert("ID clicked: " + rowdata);
             const pozice = parseInt(row.id.replace(/\D/g, ''));
-            console.log(pozice)
             loadSpecs(tasks_raw_data[pozice].name)
           });
 
           row.addEventListener('contextmenu', event => {
             position = parseInt(row.id.replace(/\D/g, ''));
-            
-            console.log(position)
               // Show context menu on right click
               event.preventDefault();
               contextMenu.classList.add("show-context-menu");
