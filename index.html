@@ -5,9 +5,9 @@
     content="default-src 'self'; img-src https://* file://* data:; child-src 'none';">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     
-    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
     <!---->
-    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+
     
     
     <title>Server handle</title>
@@ -15,18 +15,18 @@
   </head>
   <body>
 
-
     <div id="mySidenav" class="sidenav">
       <a href="#" class="closebtn" id="closebtn">&times;</a>
      <!--<a href="#" id="s0" class="swapPage">Graphs</a>--> 
+     <a href="#" id="s3" class="swapPage">Login</a>
      <a href="#" id="s1" class="swapPage">Data update</a> 
      <button class="dropdown-btn">Graphs 
         <i class="fa fa-caret-down">></i>
       </button>
       <div class="dropdown-container">
-        <a href="#" id="s3" class="swapPage">Graph responses</a>
-        <a href="#" id="s4" class="swapPage">Graph errors</a>
-        <a href="#" id="s5" class="swapPage">Graph average</a>
+        <a href="#" id="s4" class="swapPage">Graph responses</a>
+        <a href="#" id="s5" class="swapPage">Graph errors</a>
+        <a href="#" id="s6" class="swapPage">Graph average</a>
       </div>
       
       <a></a>
@@ -34,6 +34,22 @@
     </div>
     <span id="openNav">&#9776;</span>
 
+
+
+
+    <!--login -->
+    <div id="login"> 
+      <form>
+        <label for="username">Username:</label>
+        <input type="text" id="username">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password">
+        <br>
+        <input type="button" value="Log In" id="validateLogIn">
+      </form>
+    </div>
+    <div id="spacer"></div>
     <!--json handle -->
 
     <div id="jsonpar">
@@ -96,7 +112,7 @@
           </div>
       
       
-          <!-- Context menu -->
+          <!-- Context menu for table -->
           <div id="context-menu" class="context-menu">
             <ul>
               <li id="PauseStart" class="dropdown">Pause/Start</li>
@@ -104,17 +120,8 @@
               <li id="Hide" class="dropdown">Hide in graph</li>
             </ul>
           </div>
-
-      <!--
-
-      -->
-
-      <script src="./podpr/jsonhandle.js"></script>
     </div>
 
-
-
-    <div id="spacer"></div>
     <!--grafy -->
 
 
@@ -150,10 +157,6 @@
           </div>
         </div>
       <br><br>
-      <script src="node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="./podpr/graphs.js"></script>
     </div>
 
     <!-- mapa -->
@@ -162,8 +165,24 @@
       <div id="map"></div>
         <button type="button" id="llll">click</button>
       </div>
-    <script src="./podpr/maps.js"></script>
 
-   <script src="./renderer.js"></script>   <!-- spustí skript -->
+
+
+
+
+      <script src="./renderer.js"></script>   <!-- spustí skript -->
+      
+      <script src="./podpr/jsonhandle.js"></script>
+
+      <script src="node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="./podpr/graphs.js"></script>
+  
+      <script src="node_modules/leaflet/dist/leaflet.js"></script>
+      <script src="./podpr/maps.js"></script>
+  
+      
+
   </body>
 </html>

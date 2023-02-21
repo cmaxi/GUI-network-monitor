@@ -43,8 +43,11 @@ function load_server_json(){
   });
 }
 
-load_server_json();
-
+//
+window.api.receive("successfulLogin", (data) => {
+  console.log(data)
+  load_server_json();
+});
 
 //texts
 const old_name_server = document.getElementById('s_old_name')
@@ -453,6 +456,3 @@ function sortTable(n) {
       }
       appendTableData(data)
     }
-
-
-

@@ -13,9 +13,11 @@ contextBridge.exposeInMainWorld("api", {
                 "toMainJsonLoad" - load data from local json file
                 "toMainJsonSave" - save updated local json file
                 "toMainSettings" - load saved settings
+                "toMainServerDown" - user response for server down for close app
+                
         */
         // whitelist channels
-        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings"];
+        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings", "toMainServerDown", "toMainServerUp"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
             console.log("%c  -" + channel +  " send", 'color:green')//transfer log
@@ -32,8 +34,10 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainRequestTaskAverage" - requested data -average of tasks
                 "fromMainRequestLoadFromTime" - requested data -responses from time
                 "fromMainSettings" - requested data -loaded data from json settings
+                "successfulLogin" - message server is online and runing
+
         */
-        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestLog", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestLog", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "successfulLogin"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
@@ -66,8 +70,9 @@ contextBridge.exposeInMainWorld("api", {
                 "requestTasksProperties" - request -properties from server
                 "requestTasksAverage" - request -average times
                 "requestLoadAllFromTime" - request -responses from time
+                "requestServerUp" - message server is online and runing
         */
-        let validChannels = ["requestLoadAll","requestAddTask","requestDelTask","requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime"];
+        let validChannels = ["requestLoadAll","requestAddTask","requestDelTask","requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp"];
         console.log("%c  -" + channel + " html request send", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             await ipcRenderer.invoke(channel,reqValues)

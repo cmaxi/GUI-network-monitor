@@ -274,38 +274,52 @@ input2.addEventListener("keypress", function(event) {
   }
 });
 
-window.api.send("toMainSettings")//načítá nastavení a všechna data
-window.api.receive("fromMainSettings", (sett) => {
-  refreshTime = sett.secsForGraphUpdate
-  lenLimit = sett.graphValueCount
-  
-  input.value = refreshTime
-  input2.value = lenLimit
-  
-  loadAllDataNew()  // načtení všech dat
 
 
-  lastTime = 0
-  t = refreshTime
+var refreshTime = 60
+var lenLimit = 300
 
-  const timer = document.getElementById('timer')
-  setInterval(function(){ // renew every sec
-    if (t==1){
-      timer.innerText = "Time to refresh: " + --t + " s"
-      if (myBarChart.data.labels.length>1){
-        loadDataFrom(lastTime)
+
+window.api.receive("successfulLogin", (data) => {
+  data == true ? loadTableData():console.log(data)
+});
+
+
+
+function loadTableData(){
+  window.api.send("toMainSettings")//načítá nastavení a všechna data
+  window.api.receive("fromMainSettings", (sett) => {
+    refreshTime = sett.secsForGraphUpdate
+    lenLimit = sett.graphValueCount
+    
+    input.value = refreshTime
+    input2.value = lenLimit
+    
+    loadAllDataNew()  // načtení všech dat
+
+
+    lastTime = 0
+    t = refreshTime
+
+    const timer = document.getElementById('timer')
+    setInterval(function(){ // renew every sec
+      if (t==1){
+        timer.innerText = "Time to refresh: " + --t + " s"
+        if (myBarChart.data.labels.length>1){
+          loadDataFrom(lastTime)
+        }else{
+          loadAllDataNew()
+        }
+        console.log(myChart.data)
+        t=refreshTime
       }else{
-        loadAllDataNew()
+        timer.innerText = "Time to refresh: " + --t + " s"
+        //console.log(--t)
       }
-      console.log(myChart.data)
-      t=refreshTime
-    }else{
-      timer.innerText = "Time to refresh: " + --t + " s"
-      //console.log(--t)
-    }
 
-  }, 1000);//1000
-})
+    }, 1000);//1000
+  })
+}
 
 
 
@@ -546,4 +560,3 @@ function loadDataFrom(dtf){
     })
   })
 }
-

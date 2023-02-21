@@ -1,3 +1,4 @@
+
 var map = L.map('map').setView([50.087465, 14.421254],3)
 
 
@@ -5,7 +6,6 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 5,
     minZoom:2,
     attribution: '© OpenStreetMap',
-    zoomAnimation: false,
 }).addTo(map);
 
 var southWest = L.latLng(-89.98155760646617, -180),
@@ -18,7 +18,13 @@ map.on('drag', function() {
 });
 
 
-afterLoad()
+
+
+window.api.receive("successfulLogin", (data) => {
+  data == true ? afterLoad():console.log(data)
+  
+});
+
 locations = []
 markers = []
 function afterLoad(){

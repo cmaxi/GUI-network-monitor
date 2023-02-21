@@ -2,26 +2,27 @@
 const graph = document.getElementById('graf')
 const jsonpar = document.getElementById('jsonpar')
 const maps = document.getElementById('maps')
+const login = document.getElementById('login')
 
 const graph0 = document.getElementById('gResp0')
 const graph1 = document.getElementById('gResp1')
 const graph2 = document.getElementById('gResp')
 const spacer = document.getElementById('spacer')
 
-const windows = [graph, jsonpar, maps, graph0, graph1, graph2, spacer]  //div sectors by id
+const windows = [graph, jsonpar, maps, login, graph0, graph1, graph2, spacer]  //div sectors by id
 
 function sh(sh){
   for (let i = 0; i < windows.length; i++) { 
     windows[i].style.display = "none";
   }
   windows[sh].style.display = "block";
-  if (sh>=3 || sh<=5 && sh!=1 && sh!=2)
+  if (sh>=4 || sh<=6 && sh!=1 && sh!=2 && sh!=3)
   {
     windows[0].style.display = "block";
   }
 }
 
-sh(1)
+sh(3)
 
 
 window.api.receive_cmd("fromMainhowHideSwitch", (show) => {
@@ -61,3 +62,35 @@ for (i = 0; i < dropdown.length; i++) {
     }
   });
 }
+
+
+
+
+
+
+
+const b11 = document.getElementById('validateLogIn')
+b11.addEventListener('click', async () => {
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+
+  if (username == "e" && password == "p") {
+    window.api.httpRequest("requestServerUp")
+    window.api.receive("successfulLogin", (data) => {//ošetření jestli server běží
+      console.log(data)
+      if(data==true){
+        alert("Login successful!");
+        sh(1)
+
+      }else{
+        if (confirm(data+"\n OK: for reconect\nCancel: For close app")){
+          window.api.httpRequest("requestServerUp")
+        }else if (data.status != true){
+          window.api.send("toMainServerDown")
+        }
+      }
+  });
+  } else {
+    alert("Incorrect username or password.");
+  }
+})

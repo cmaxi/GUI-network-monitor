@@ -200,9 +200,13 @@ function createWindow () {
 //načítání aplikace a poté spuštění funkcí které si volá render proces
 app.whenReady().then(() => {
   ipcMain.on("toMainSettings", (event, args) => {
-    mainWindow.webContents.send("fromMainSettings", graphsSet);//posílá nastavení pro podprogramy
+      mainWindow.webContents.send("fromMainSettings", graphsSet);//posílá nastavení pro podprogramy
   })
-  
+
+  ipcMain.on("toMainServerDown", (event, args) => {
+    app.quit()
+  })
+
 //načte json pro úpravu dat nebo vytvoří soubor json
   ipcMain.on("toMainJsonLoad", (event, args) => {
     serv = ""
@@ -230,30 +234,41 @@ app.whenReady().then(() => {
 //http requesty
   function getHttp(http_address,sender,sendval,action){//funkce pro http requesty GET volaná později
     post_log = ""
+    run = true
     axiosInst.get(http_address, sendval)
     .then(function (response) {
       mainWindow.webContents.send(sender,response.data)
       post_log = [action + " " + response.statusText, response.status]
+      mainWindow.webContents.send("fromMainRequestLog", post_log)
     })
     .catch(function (error) {
       console.log("Nepřipojeno")
       if (error.code == 'ECONNREFUSED'){
         post_log = ["Not connected network error", ""]
+        
       }
       else{
         console.log(error.response.status);
         post_log = [action + " " + error.response.data, error.response.status]
       }
+      run = false
     })
-    .then(function (){
-      mainWindow.webContents.send("fromMainRequestLog", post_log)
+    return run
+  }
+  
+  ipcMain.handle("requestServerUp", async (event, reqVar)=>{
+    axiosInst.get("/")
+    .then(function (response) {
+      mainWindow.webContents.send("successfulLogin", true)
+    })
+    .catch(function (error) {
+      mainWindow.webContents.send("successfulLogin", false)
     })
     
-  }
+  })
 
   ipcMain.handle("requestLoadAll", async (event, reqVar)=>{
     getHttp(httpReqestAddr.httpLoad,"fromMainRequestLoadAll","","Load graph data")
-
   })
 
   ipcMain.handle("requestLoadAllFromTime", async (event, reqVar)=>{
@@ -274,6 +289,7 @@ app.whenReady().then(() => {
     axiosInst.post(http_address, null, sendval)
     .then(function (response) {
       post_log = [action + " " + response.statusText, response.status]
+      mainWindow.webContents.send("fromMainRequestLog", post_log)
     })
     .catch(function (error) {
       if (error.code == 'ECONNREFUSED'){
@@ -283,9 +299,6 @@ app.whenReady().then(() => {
         post_log = [action + " " + error.response.data, error.response.status]
       }
     })
-    .then(function () {
-      mainWindow.webContents.send("fromMainRequestLog", post_log)
-    });
   }
 
   ipcMain.handle("requestAddTask", async (event, requVar)=>{
