@@ -276,12 +276,17 @@ input2.addEventListener("keypress", function(event) {
 
 
 
+
+
+
 var refreshTime = 60
 var lenLimit = 300
-
+var stopTimer = false
 
 window.api.receive("successfulLogin", (data) => {
-  data == true ? loadTableData():console.log(data)
+  if (data==true){
+    loadTableData()
+  }
 });
 
 
@@ -296,15 +301,28 @@ function loadTableData(){
     input2.value = lenLimit
     
     loadAllDataNew()  // načtení všech dat
+    
+    autoReload()
+  })
+}
+
+/* ----------------------------------------- auto reload ----------------------------------------- */ 
 
 
-    lastTime = 0
-    t = refreshTime
+let lastTime = 0
+const myCheckbox = document.getElementById('myCheckbox');
 
-    const timer = document.getElementById('timer')
+function autoReload(){
+  
+  t = refreshTime
+
+    timer = document.getElementById('timer')
+    
     setInterval(function(){ // renew every sec
+      myCheckbox.checked==true?--t:""
+
       if (t==1){
-        timer.innerText = "Time to refresh: " + --t + " s"
+        timer.innerText = "Time to refresh: " + t + " s"
         if (myBarChart.data.labels.length>1){
           loadDataFrom(lastTime)
         }else{
@@ -313,13 +331,11 @@ function loadTableData(){
         console.log(myChart.data)
         t=refreshTime
       }else{
-        timer.innerText = "Time to refresh: " + --t + " s"
-        //console.log(--t)
+        timer.innerText = "Time to refresh: " + t + " s"
       }
-
     }, 1000);//1000
-  })
 }
+
 
 
 
@@ -351,8 +367,6 @@ function dataForGraphs(dataAdd){//write to line graph and get data for other gra
         }
         myChart.data.labelTimestamp.push(Math.round(da.time/1000))
         
-        
-        time>lastTime ? lastTime=lR:lastTime;
 
         if (myChart.data.labels.length>lenLimit){
           myChart.data.labelTimestamp.shift()
@@ -392,7 +406,16 @@ function dataForGraphs(dataAdd){//write to line graph and get data for other gra
   return ld
 }
 
-function setAndUpdate(B_failed, B_passed, P_color, P_data, D_color, D_data, firstSett, averageData){
+function setAndUpdate(firstSett, averageData){
+  var B_failed = []
+  var B_passed = []
+
+  var P_data = []
+  var P_color = []
+
+  var D_data = []
+  var D_color = []
+
   myChart.data.datasets.forEach(element => {
     if (firstSett){
       myBarChart.data.labels.push(element.label)
@@ -457,24 +480,25 @@ function setAndUpdate(B_failed, B_passed, P_color, P_data, D_color, D_data, firs
 
 var YMDprews = ''
 
-function loadAllDataNew(){
-  shifted = 0
-  hmsPrews = 0
+function clearDataFromGraphs(){
+
   myChart.data.labels = []
   myChart.data.datasets = []
   myChart.data.labelTimestamp = []
 
-  var B_failed = []
-  var B_passed = []
   myBarChart.data.labels = []
 
   myPolarChart.data.labels = []
-  var P_data = []
-  var P_color = []
 
   myDoughnutChart.data.labels = []
-  var D_data = []
-  var D_color = []
+}
+
+function loadAllDataNew(){
+
+  clearDataFromGraphs()
+  
+  shifted = 0
+  hmsPrews = 0
 
 
   window.api.httpRequest("requestLoadAll")//načítá všechna data všechny časy
@@ -482,15 +506,15 @@ function loadAllDataNew(){
     window.api.receive("fromMainRequestLog", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
-    window.api.send("toMainJsonLoad")//načítá data z jsonu o serverech
-    window.api.receive("fromMainJsonLoad", (taskSpecs) => {
-      window.api.httpRequest("requestTasksAverage", {params:{'worker':"default"}})//načtení prměrů všech úkolů
+    window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
+    window.api.receive("fromMainRequestTaskProperties", (taskSpecs) => {
+      window.api.httpRequest("requestTasksAverage", {params:{worker:"default"}})//načtení prměrů všech úkolů
       window.api.receive("fromMainRequestTaskAverage", (averageData) => {
         window.api.receive("fromMainRequestLog", (data) => {
           console.log('\x1B[34m %s %s', data[0], data[1]);
         });
         taskSpecs.forEach(element => {
-          if(averageData.data.some(item => item.address === element.address)){
+          if(averageData.data.some(item => item.address === element.address && element.hide==false)){
             posAvr = averageData.data.findIndex(function(item, i){return item.address == element.address})
             lR = averageData.data[posAvr].last_response
             lR>lastTime ? lastTime=lR:lastTime;
@@ -514,7 +538,7 @@ function loadAllDataNew(){
         
         dataForGraphs(allResp.data)
 
-        setAndUpdate(B_failed, B_passed, P_color, P_data, D_color, D_data, true, averageData)
+        setAndUpdate(true, averageData)
         
 
       })
@@ -526,17 +550,9 @@ function loadAllDataNew(){
 /* ----------------------------------------- refresh datas ----------------------------------------- */ 
 
 function loadDataFrom(dtf){
-  var B_failed = []
-  var B_passed = []
-
-  var P_data = []
-  var P_color = []
-
-  var D_data = []
-  var D_color = []
   
-  window.api.httpRequest("requestLoadAllFromTime", {params:{'timeFrom':dtf}})//načítá data od posledního času a přepisuje (TODO) časy
-  window.api.receive("fromMainRequestLoadFromTime", (allRespFrom) => {
+  window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf}})//načítá data od posledního času a přepisuje (TODO) časy
+  window.api.receive("fromMainRequestLoadAll", (allRespFrom) => {
     window.api.receive("fromMainRequestLog", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
@@ -550,11 +566,45 @@ function loadDataFrom(dtf){
         
         ld = dataForGraphs(allRespFrom.data)
 
-        setAndUpdate(B_failed, B_passed, P_color, P_data, D_color, D_data, false, averageData)
+        setAndUpdate(false, averageData)
+        
+        if (allRespFrom.length!=undefined){
+          console.log(allRespFrom.length)
+        }
+
+        ld==true?loadAllDataNew():ld=true;
+      }catch{
+        console.log("catch")
+        loadAllDataNew()
+      }
+    })
+  })
+}
+
+
+function loadDataInterval(dtf,dtt){
+  
+  window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf,'time_to':dtt}})//načítá data od posledního času a přepisuje (TODO) časy
+  window.api.receive("fromMainRequestLoadAll", (allRespFrom) => {
+    window.api.receive("fromMainRequestLog", (data) => {
+      console.log('\x1B[34m %s %s', data[0], data[1]);
+    });
+    window.api.httpRequest("requestTasksAverage", {params:{'worker':"default"}})//načtení prmůěrů všech úkolů
+    window.api.receive("fromMainRequestTaskAverage", (averageData) => {
+      window.api.receive("fromMainRequestLog", (data) => {
+        console.log('\x1B[34m %s %s', data[0], data[1]);
+      });
+
+      try{
+        
+        ld = dataForGraphs(allRespFrom.data)
+        console.log(ld)
+        setAndUpdate(false, averageData)
         
         if (allRespFrom.length!=undefined){console.log(allRespFrom.length)}
         ld==true?loadAllDataNew():ld=true;
       }catch{
+        console.log("catch")
         loadAllDataNew()
       }
     })

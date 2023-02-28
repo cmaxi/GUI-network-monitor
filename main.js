@@ -2,6 +2,7 @@ const {app, BrowserWindow, ipcMain, dialog, Menu} = require('electron')
 const path = require('path')
 var fs = require('fs')
 const axios = require('axios').default;
+const https = require('https');
 
 
 
@@ -11,7 +12,10 @@ let child
 var httpReqestAddr
 var servOffFile
 var graphsSet
+
 var axiosInst
+var accessToken
+var config
 
 
 
@@ -25,9 +29,23 @@ fs.readFile("./settings.json", (err, jsonString) => {
   //TODO zabezpečenou komunikaci pomocí knihovny tls nebo secure-socket
   
 
+
+  const cert = fs.readFileSync('certif/Local1crt.pem');
+  const key = fs.readFileSync('certif/Local1Key.pem');
+
+  const agent = new https.Agent({
+    cert: cert,
+    key: key,
+    rejectUnauthorized: false // This is needed for self-signed certificates
+  });
+
+
   axiosInst = axios.create({
+    httpsAgent: agent,
     baseURL: httpReqestAddr.http
   })
+  
+
 })
   
 
@@ -207,6 +225,7 @@ app.whenReady().then(() => {
     app.quit()
   })
 
+  
 //načte json pro úpravu dat nebo vytvoří soubor json
   ipcMain.on("toMainJsonLoad", (event, args) => {
     serv = ""
@@ -218,7 +237,12 @@ app.whenReady().then(() => {
           }
         })
       }else{serv=jsonString}
-      mainWindow.webContents.send("fromMainJsonLoad", JSON.parse(serv));
+      JSON.parse(serv).forEach(element => {
+        send={params: {"name":element.name,"address":element.address,"color":element.color,"time":element.period,"latitude":element.coordinates[0], "longitude":element.coordinates[1],"worker":element.worker, "task":"ping", "hide":false, "runing":true}}
+          //postHttp(httpReqestAddr.httpAdd, send, "Adding")
+      });
+      
+      //mainWindow.webContents.send("fromMainJsonLoad", JSON.parse(serv));
     });
   });
 
@@ -235,7 +259,11 @@ app.whenReady().then(() => {
   function getHttp(http_address,sender,sendval,action){//funkce pro http requesty GET volaná později
     post_log = ""
     run = true
-    axiosInst.get(http_address, sendval)
+
+    fh = config
+    fh.params=sendval.params
+
+    axiosInst.get(http_address, fh)
     .then(function (response) {
       mainWindow.webContents.send(sender,response.data)
       post_log = [action + " " + response.statusText, response.status]
@@ -257,21 +285,90 @@ app.whenReady().then(() => {
   }
   
   ipcMain.handle("requestServerUp", async (event, reqVar)=>{
+
+
+    function getAccessToken(username, password) {
+      const data = new URLSearchParams();
+      data.append('grant_type', '');
+      data.append('username', username);
+      data.append('password', password);
+      data.append('scope', '');
+      data.append('client_id', '');
+      data.append('client_secret', '');
+      reqVarr={
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        }
+      }
+      axiosInst.post('/token', data, reqVarr)
+      .then(response => {
+        accessToken = response.data.access_token
+        config = {
+          headers: {
+            'Authorization': `Bearer `+accessToken,
+            'Accept': 'application/json'
+          }
+        };
+        mainWindow.webContents.send("successfulLogin", true)
+      })
+      .catch(error => {
+        console.error(error.code);
+        mainWindow.webContents.send("successfulLogin", error.code)
+      });
+    }
+    
+    getAccessToken(reqVar[0], reqVar[1])
+
+
+ /* 
+  setTimeout(function() {
+    console.log(accessToken)
+    config = {
+      headers: {
+        'Authorization': `Bearer `+accessToken,
+        'Accept': 'application/json'
+      }
+    };
+    console.log(config)
+    axiosInst.get("/users/me/",config)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  */
+ 
+    /*
+    axiosInst.get("/items/",config)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }, 500);
+
+
+
     axiosInst.get("/")
     .then(function (response) {
-      mainWindow.webContents.send("successfulLogin", true)
+      
     })
     .catch(function (error) {
-      mainWindow.webContents.send("successfulLogin", false)
+      
     })
+    */
     
   })
 
   ipcMain.handle("requestLoadAll", async (event, reqVar)=>{
-    getHttp(httpReqestAddr.httpLoad,"fromMainRequestLoadAll","","Load graph data")
+    getHttp(httpReqestAddr.httpLoad,"fromMainRequestLoadAll",reqVar!=undefined?reqVar:"","Load graph data")
   })
 
   ipcMain.handle("requestLoadAllFromTime", async (event, reqVar)=>{
+    
     getHttp(httpReqestAddr.httpLoadFrom,"fromMainRequestLoadFromTime",reqVar,"Load graph data from")
   })
 
@@ -286,7 +383,11 @@ app.whenReady().then(() => {
 
   function postHttp(http_address, sendval, action){//funkce pro http requesty POST
     post_log = ""
-    axiosInst.post(http_address, null, sendval)
+    
+    fh = config
+    fh.params=sendval.params
+
+    axiosInst.post(http_address, null, fh)
     .then(function (response) {
       post_log = [action + " " + response.statusText, response.status]
       mainWindow.webContents.send("fromMainRequestLog", post_log)
@@ -319,6 +420,10 @@ app.whenReady().then(() => {
   
   ipcMain.handle("requestPauseStartTask", async (event, reqVar)=>{
     postHttp(httpReqestAddr.httpPause,reqVar,"Pause")
+  })
+
+  ipcMain.handle("requestHideTask", async (event, reqVar)=>{
+    postHttp(httpReqestAddr.httpHide,reqVar,"Hide")
   })
 
 

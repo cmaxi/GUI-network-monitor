@@ -11,42 +11,21 @@ function getlog(){
 
 
 function load_server_json(){
-    window.api.send("toMainJsonLoad")
-    window.api.receive("fromMainJsonLoad", (data) => {
-    tasks_raw_data = data  
     send = { params: {worker:"default"}}
     window.api.httpRequest("requestTasksProperties",send)
       window.api.receive("fromMainRequestTaskProperties", (data) => {
-        runingAddress = []
-        data.forEach(element => {
-          runingAddress.push(element.address)
-        });
-        
-        tasks_raw_data.forEach(element => {
-          if (runingAddress.includes(element.address)){
-            tasks_raw_data[tasks_raw_data.indexOf(element)].runing = true
-            runingAddress.splice(runingAddress.indexOf(element.address),1)
-          }else{
-            tasks_raw_data[tasks_raw_data.indexOf(element)].runing = false
-          }
-        });
-        data.forEach(element => {
-          if (runingAddress.includes(element.address)){
-            strll = {"name":element.address,"address":element.address,"color":"#000000","period":element.frequency,"coordinates":[0, 0],"worker":element.worker,"runing":true}
-            tasks_raw_data.push(strll)
-          }
-        });
-        window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
+        tasks_raw_data=data
         refreshTable(tasks_raw_data)
       });
     getlog()
-  });
-}
+  }
 
 //
 window.api.receive("successfulLogin", (data) => {
-  console.log(data)
-  load_server_json();
+  if (data==true){
+   load_server_json();
+  }
+  window.api.send("toMainJsonLoad")
 });
 
 //texts
@@ -73,9 +52,9 @@ function loadSpecs(name){
         s_name.value = tasks_raw_data[i].name
         s_address.value = tasks_raw_data[i].address
         s_color.value = tasks_raw_data[i].color
-        s_period.value = tasks_raw_data[i].period
-        s_lat.value = tasks_raw_data[i].coordinates[0]
-        s_long.value = tasks_raw_data[i].coordinates[1]
+        s_period.value = tasks_raw_data[i].frequency
+        s_lat.value = tasks_raw_data[i].latitude
+        s_long.value = tasks_raw_data[i].longitude
         s_work.value = tasks_raw_data[i].worker
         return true
     }
@@ -111,7 +90,7 @@ function correctData(count){//validity check
 update.addEventListener('click', async () => {  //update/save 
 
   if (correctData(5)){
-    strll = {"name":s_name.value,"address":s_address.value,"color":s_color.value,"period":s_period.value,"coordinates":[parseFloat(s_lat.value), parseFloat(s_long.value)],"worker":s_work.value}
+
     l_na = []
     l_ad = []
     canc = false
@@ -128,7 +107,7 @@ update.addEventListener('click', async () => {  //update/save
       txt = "Update 1 " + nn
       will_update_byName = true
     }
-    else if (l_na.indexOf(nn) == l_ad.indexOf(addr) && l_na.indexOf(nn) == -1){//jm addr nejsou
+    else if (l_na.indexOf(nn) == l_ad.indexOf(addr) && l_na.indexOf(nn) == -1){//jm a addr nejsou
       txt = "Add "+nn
     }
     else if (l_na.indexOf(nn) != -1 && l_ad.indexOf(addr) == -1){//jm je addr neni
@@ -146,34 +125,33 @@ update.addEventListener('click', async () => {  //update/save
 
 
     if (confirm(txt) == true && canc == false) {
-      
-      send={params: {'address':s_address.value, 'task':'ping', 'time':s_period.value, 'worker':s_work.value}}
+      send={params: {"name":s_name.value,"address":s_address.value,"color":s_color.value,"time":s_period.value,"latitude":parseFloat(s_lat.value), "longitude":parseFloat(s_long.value),"worker":s_work.value, "task":"ping", "hide":false}}
       if(will_update_byName){
         send.params.oldAddress = tasks_raw_data[l_na.indexOf(nn)].address
-        strll.runing = tasks_raw_data[l_na.indexOf(nn)].runing
-        tasks_raw_data[l_na.indexOf(nn)] = strll
-        if (strll.runing){
-          window.api.httpRequest("requestUpdateTask",send)
-        }
+        send.params.runing = tasks_raw_data[l_na.indexOf(nn)].runing
+        //tasks_raw_data[l_na.indexOf(nn)] = strll
+        window.api.httpRequest("requestUpdateTask",send)
+        
       }
       else if(will_update_byAddress){
         send.params.oldAddress = tasks_raw_data[l_ad.indexOf(addr)].address
-        strll.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
-        tasks_raw_data[l_ad.indexOf(addr)] = strll
-        if (strll.runing){
-          window.api.httpRequest("requestUpdateTask",send)
-        }
+        send.params.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
+        //strll.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
+        //tasks_raw_data[l_ad.indexOf(addr)] = strll
+        window.api.httpRequest("requestUpdateTask",send)
       }
       else
       {
-        strll.runing = true
-        tasks_raw_data.push(strll)
+        send.params.runing = true
         window.api.httpRequest("requestAddTask",send)
       }
-      window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
       clear()
       load_server_json()
-    } else {console.log("You canceled!");}
+      loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+    } 
+    else {
+      console.log("You canceled!");
+    }
     
   }
   
@@ -196,12 +174,12 @@ function dellAdress(Dname){
         txt = "delete: " + Dname
         found = true
         if (confirm(txt) == true) {
-          tasks_raw_data.splice(i,1)
-          window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
-          load_server_json()
+          //tasks_raw_data.splice(i,1)
+          //window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
           send = l_ad[l_na.indexOf(Dname)]
           window.api.httpRequest("requestDelTask",{params:{'address':send}})
           clear()
+          load_server_json()
         } else {
           console.log("You canceled!");
         }
@@ -209,7 +187,9 @@ function dellAdress(Dname){
       i++
     });
     txt = Dname + " not found!"
-    if(found == false){alert(txt)}
+    if(found == false){
+      alert(txt)
+    }
 
 }
 
@@ -231,15 +211,11 @@ function pausStart(name){
         element.runing == true ? txt = "Pause: " + name: txt = "Start: " + name
         if (confirm(txt) == true) {
           poss = tasks_raw_data.indexOf(element)
-          tasks_raw_data[poss].runing == false ? tasks_raw_data[poss].runing = true : tasks_raw_data[poss].runing = false
-
-          window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
-          load_server_json()
-          n_task = tasks_raw_data[tasks_raw_data.indexOf(element)]
-          send={params: {'address':n_task.address, 'task':'ping', 'time':n_task.period, 'runing':n_task.runing, 'worker':n_task.worker}}
-            console.log(send)
+          
+          send={params: {'address':element.address, 'runing':tasks_raw_data[poss].runing == false ? true : false}}
           window.api.httpRequest("requestPauseStartTask",send)
           clear()
+          load_server_json()
         } else {
           console.log("You canceled!");
         }
@@ -249,6 +225,30 @@ function pausStart(name){
       alert("Not found")
     }
 }
+
+function hideTask(name){
+  found = false
+    tasks_raw_data.forEach(element => {
+      if(element.name == name){
+        found = true
+        element.runing == true ? txt = "Show in graphs: " + name: txt = "Hide in graphs: " + name
+        if (confirm(txt) == true) {
+          poss = tasks_raw_data.indexOf(element)
+          
+          send={params: {'address':element.address, 'hide':tasks_raw_data[poss].hide == false ? true : false}}
+          window.api.httpRequest("requestHideTask",send)
+          clear()
+          load_server_json()
+        } else {
+          console.log("You canceled!");
+        }
+      }
+    });
+    if (!found){
+      alert("Not found")
+    }
+}
+
 
 const paus = document.getElementById('runing')
 paus.addEventListener('click', async () => {
@@ -311,6 +311,7 @@ document.querySelectorAll('.dropdown').forEach(item => {
     }
     if(item.id == "Hide"){
       console.log(item.id,tasks_raw_data[position].name)//TODO force to dont show data in graph but dont stop task
+      hideTask(tasks_raw_data[position].name)
     }
     
   })
@@ -421,10 +422,10 @@ function sortTable(n) {
           row.appendChild(colorCell);
   
           var periodCell = document.createElement("td");
-          generate(row, periodCell, rowData["period"], index)
+          generate(row, periodCell, rowData["frequency"], index)
   
           var periodCell = document.createElement("td");
-          periodCell.innerHTML = "Lat: " + rowData["coordinates"][0]+"<br>Len: " + rowData["coordinates"][1];
+          periodCell.innerHTML = "Lat: " + rowData["latitude"]+"<br>Lon: " + rowData["longitude"];
           periodCell.setAttribute("id", "row" + index);
           row.appendChild(periodCell);
   
@@ -433,6 +434,11 @@ function sortTable(n) {
   
           var periodCell = document.createElement("td");
           generate(row, periodCell, rowData["runing"], index)
+          periodCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
+
+          var hideCell = document.createElement("td");
+          generate(row, hideCell, rowData["hide"], index)
+          hideCell.style.backgroundColor = rowData["hide"]==true?"gray":"white";
   
           tableA.appendChild(row);
         });

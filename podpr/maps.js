@@ -18,21 +18,31 @@ map.on('drag', function() {
 });
 
 
-
+document.getElementById("llll").addEventListener("click", function() {
+  map.invalidateSize();
+});
 
 window.api.receive("successfulLogin", (data) => {
-  data == true ? afterLoad():console.log(data)
+  if (data==true){
+    afterLoad()
+    
+  }
   
 });
+
+/*
+window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
+window.api.receive("fromMainRequestTaskProperties", (taskSpecs) => {
+*/
 
 locations = []
 markers = []
 function afterLoad(){
-  window.api.receive("fromMainJsonLoad", (data) => {
+  window.api.receive("fromMainRequestTaskProperties", (data) => {
 
     locations = []
-    tasks_raw_data.forEach(element => {
-      locations.push([element.name, element.coordinates[0], element.coordinates[1]])
+    data.forEach(element => {
+      locations.push([element.name, element.latitude, element.longitude])
     });
     if(markers.length != 0){
       markers.forEach(element => {

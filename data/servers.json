@@ -1,1 +1,16 @@
-[{"name":"seznam","address":"www.seznam.cz","color":"#e60000","period":"11m","coordinates":[0,0],"worker":"default","runing":true},{"name":"FB","address":"facebook.com","color":"#0011ff","period":"11m","coordinates":[60,-160],"worker":"default","runing":true},{"name":"GOG","address":"google.com","color":"#eeff00","period":"9m","coordinates":[30,-80],"worker":"default","runing":true},{"name":"alza","address":"alza.cz","color":"#099806","period":"11m","coordinates":[-60,-160],"worker":"default","runing":true},{"name":"Palace","address":"palaceskateboards.com","color":"#fb00ff","period":"13m","coordinates":[-30,-80],"worker":"default","runing":true},{"name":"Supreme","address":"supremenewyork.com","color":"#940000","period":"15m","coordinates":[30,80],"worker":"default","runing":true},{"name":"www.kos.cvut.cz","address":"www.kos.cvut.cz","color":"#000000","period":"11m","coordinates":[60,160],"worker":"default","runing":true},{"name":"chart","address":"www.chartjs.org","color":"#cd4747","period":"11m","coordinates":[-30,80],"worker":"default","runing":true},{"name":"epoch time","address":"www.epochconverter.com","color":"#ab00ad","period":"9m","coordinates":[-60,160],"worker":"default","runing":true},{"name":"alaska","address":"www.alaskaair.com","color":"#2bff00","period":"9m","coordinates":[null,null],"worker":"default","runing":false},{"name":"au","address":"www.australia.gov.au","color":"#ff5900","period":"11m","coordinates":[null,null],"worker":"default","runing":true},{"name":"jetbrains","address":"jetbrains.com","color":"#0300b3","period":"11m","coordinates":[null,null],"worker":"default","runing":false}]
+
+[
+    {"name":"seznam",
+"address":"www.seznam.cz",
+"color":"#e60000",
+"period":"11m",
+"coordinates":[0,0],
+"worker":"default",
+"runing":true
+
+
+
+},{"name":"FB","address":"facebook.com","color":"#0011ff","period":"11m","coordinates":[60,-160],"worker":"default","runing":true},{"name":"GOG","address":"google.com","color":"#eeff00","period":"9m","coordinates":[30,-80],"worker":"default","runing":true},{"name":"alza","address":"alza.cz","color":"#099806","period":"11m","coordinates":[-60,-160],"worker":"default","runing":true},{"name":"Palace","address":"palaceskateboards.com","color":"#fb00ff","period":"13m","coordinates":[-30,-80],"worker":"default","runing":true},{"name":"Supreme","address":"supremenewyork.com","color":"#940000","period":"15m","coordinates":[30,80],"worker":"default","runing":true},{"name":"www.kos.cvut.cz","address":"www.kos.cvut.cz","color":"#000000","period":"11m","coordinates":[60,160],"worker":"default","runing":true},{"name":"chart","address":"www.chartjs.org","color":"#cd4747","period":"11m","coordinates":[-30,80],"worker":"default","runing":true},{"name":"epoch time","address":"www.epochconverter.com","color":"#ab00ad","period":"9m","coordinates":[-60,160],"worker":"default","runing":true},
+{"name":"alaska","address":"www.alaskaair.com","color":"#2bff00","period":"9m","coordinates":[10,10],"worker":"default","runing":false},
+{"name":"au","address":"www.australia.gov.au","color":"#ff5900","period":"11m","coordinates":[10,10],"worker":"default","runing":true},
+{"name":"jetbrains","address":"jetbrains.com","color":"#0300b3","period":"11m","coordinates":[10,10],"worker":"default","runing":false}]

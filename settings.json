@@ -1,7 +1,7 @@
 {
     "serversOfflineFile":"./data/servers.json",
     "httpReq":{
-        "http":"http://192.168.1.101:8000",
+        "http":"https://192.168.1.110:8000",
         "httpLoad":"/getAllResponses",
         "httpAdd":"/createTask",
         "httpDell":"/deleteTask",
@@ -10,7 +10,7 @@
         "httpPause":"/pauseTask",
         "httpTasks":"/getWorkerTasks",
         "httpResponseSum":"/getResponseSummary",
-        "httpLoadFrom":"/getAllResponsesFrom"
+        "httpHide":"/hideTask"
     },
     "graphs":{
         "graphValueCount":300,

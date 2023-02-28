@@ -41,6 +41,7 @@ contextBridge.exposeInMainWorld("api", {
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
+            
             ipcRenderer.once(channel, (event, ...args) => func(...args));
         }
         else {console.log("%c  -" + channel + " is not in whitelist of recieve", 'color:red')}
@@ -71,10 +72,12 @@ contextBridge.exposeInMainWorld("api", {
                 "requestTasksAverage" - request -average times
                 "requestLoadAllFromTime" - request -responses from time
                 "requestServerUp" - message server is online and runing
+                "requestHideTask" - request -hide task in graphs
         */
-        let validChannels = ["requestLoadAll","requestAddTask","requestDelTask","requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp"];
+        let validChannels = ["requestLoadAll","requestAddTask","requestDelTask","requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp", "requestHideTask"];
         console.log("%c  -" + channel + " html request send", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
+
             await ipcRenderer.invoke(channel,reqValues)
         }
         else {console.log("%c  -" + channel + " is not in whitelist of recieve", 'color:red')}

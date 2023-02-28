@@ -21,7 +21,8 @@
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",
     "chartjs-plugin-zoom": "^1.2.1",
-    "leaflet": "^1.8.0",
+    "https": "^1.0.0",
+    "leaflet": "^1.9.3",
     "mapbox-gl": "^2.12.0"
   }
 }
