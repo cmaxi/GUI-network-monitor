@@ -25,11 +25,6 @@ function sh(sh){
 sh(3)
 
 
-window.api.receive_cmd("fromMainhowHideSwitch", (show) => {
-  sh(show);
-});
-
-
 const menuO = document.getElementById('openNav') 
 menuO.addEventListener('click', async () => {
   document.getElementById("mySidenav").style.width = "250px";
@@ -45,6 +40,7 @@ document.querySelectorAll('.swapPage').forEach(item =>{
     sh(parseInt(item.id[1]))
     document.getElementById("mySidenav").style.width = "0px";
     map.invalidateSize();//překreslení mapy pro korektní zobrazení
+    
   })
 })
 
@@ -76,7 +72,7 @@ b11.addEventListener('click', async () => {
   var password = document.getElementById("password").value;
 
     window.api.httpRequest("requestServerUp", [username, password])
-    window.api.receive("successfulLogin", (data) => {//ošetření jestli server běží a uživ je přihlášen?
+    window.api.receive("fromMainSuccessfulLogin", (data) => {//ošetření jestli server běží a uživ je přihlášen?
       console.log(data)
       if(data==true){
         alert("Login successful!");

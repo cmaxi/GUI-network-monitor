@@ -7,7 +7,6 @@ const https = require('https');
 
 
 let mainWindow
-let child
 
 var httpReqestAddr
 var servOffFile
@@ -23,11 +22,7 @@ fs.readFile("./settings.json", (err, jsonString) => {
   var sett = JSON.parse(jsonString)
   httpReqestAddr = sett.httpReq
   servOffFile = sett.serversOfflineFile
-  graphsSet = sett.graphs
-
-
-  //TODO zabezpečenou komunikaci pomocí knihovny tls nebo secure-socket
-  
+  graphsSet = sett.graphs  
 
 
   const cert = fs.readFileSync('certif/Local1crt.pem');
@@ -50,33 +45,135 @@ fs.readFile("./settings.json", (err, jsonString) => {
   
 
 
+
+
+
+function postHttp(http_address, sendval, action){//funkce pro http requesty POST
+  post_log = ""
+  
+  fh = config
+  fh.params=sendval.params
+
+  axiosInst.post(http_address, null, fh)
+  .then(function (response) {
+    post_log = [action + " " + response.statusText, response.status]
+    mainWindow.webContents.send("fromMainRequestLog", post_log)
+  })
+  .catch(function (error) {
+    if (error.code == 'ECONNREFUSED'){
+      post_log = ["Not connected network error", ""]
+    }
+    else{
+      post_log = [action + " " + error.response.data, error.response.status]
+    }
+    mainWindow.webContents.send("fromMainServerDown")
+  })
+}
+
+
+function getHttp(http_address,sender,sendval,action){//funkce pro http requesty GET volaná později
+  post_log = ""
+  run = true
+  fh = config
+  fh.params=sendval.params
+
+  axiosInst.get(http_address, fh)
+  .then(function (response) {
+    post_log = [action + " " + response.statusText, response.status]
+    mainWindow.webContents.send("fromMainRequestLog", post_log)
+    mainWindow.webContents.send(sender,response.data)
+  })
+  .catch(function (error) {
+    console.log("Nepřipojeno")
+    if (error.code == 'ECONNREFUSED'){
+      post_log = ["Not connected network error", ""]
+      
+    }
+    else{
+      console.log(error.response.status);
+      post_log = [action + " " + error.response.data, error.response.status]
+    }
+    run = false
+    mainWindow.webContents.send("fromMainServerDown")
+    mainWindow.webContents.send(sender,"errorFlag")
+  })
+  
+  return run
+}
+
+
+
+
+
+
+
+
+
 const options = {
   type: 'question',
-  buttons: ['Cancel', 'Yes, please', 'No, thanks'],
-  defaultId: 2,
-  title: 'Question',
-  message: 'Do you want to do this?',
-  detail: 'It does not really matter',
-  checkboxLabel: 'Remember my answer',
-  checkboxChecked: true,
+  buttons: ['Cancel', 'Yes'],
+  title: 'Load',
+  message: 'Do you want to load servers from file?',
+  detail: 'Load and start tasks'
 };
 // file open and return message with filepath
 
 async function handleFileOpen() {
+  
   const { canceled, filePaths } = await dialog.showOpenDialog()
   if (canceled) {
     return
   } else {
     options.message = filePaths[0]
     dialog.showMessageBox(mainWindow, options).then(box => {
-      console.log('Button Clicked Index - ', box.response);
-      console.log('Checkbox Checked - ', box.checkboxChecked);
-    }).catch(err => {
+      if (box.response==1){
+        fs.readFile(filePaths[0], "utf-8", (err, data) => {
+          if (err) {
+            console.error("Chyba při čtení souboru:", err);
+            return;
+          }
+          try {
+            const jsonData = JSON.parse(data);
+            jsonData.forEach(json => {
+              if (
+                json.hasOwnProperty("longitude") &&
+                json.hasOwnProperty("worker") &&
+                json.hasOwnProperty("runing") &&
+                json.hasOwnProperty("task") &&
+                json.hasOwnProperty("last_run") &&
+                json.hasOwnProperty("address") &&
+                json.hasOwnProperty("color") &&
+                json.hasOwnProperty("name") &&
+                json.hasOwnProperty("latitude") &&
+                json.hasOwnProperty("hide") &&
+                json.hasOwnProperty("frequency") &&
+                json.hasOwnProperty("id"))
+              {
+                send={params: {"name":json.name,"address":json.address,"color":json.color,"time":json.frequency,"latitude":json.latitude, "longitude":json.longitude,"worker":json.worker, "task":"ping", "hide":json.hide}}
+                postHttp(httpReqestAddr.httpAdd, send, "Adding")
+              }
+              else
+              {
+                console.log("nesplňuje formát")
+              }
+            });
+          }
+          catch
+          {
+            console.log("neni json")
+          }
+        })
+      }
+    })
+    .catch(err => {
       console.log(err)
   }); 
     return filePaths[0]
   }
 }
+
+
+
 
 
 function createWindow () {
@@ -87,13 +184,6 @@ function createWindow () {
       contextIsolation : true,
       preload: path.join(__dirname, 'preload.js')}
   })
-/*
-  child = new BrowserWindow({parent: win,width:400,height:300,frame:false})
-    child.loadURL(url.format({
-        pathname:path.join(__dirname,'login.html'),
-        protocol:'file',
-        slashes:true
-    }))*/
 
 
   //vzhled menu
@@ -225,64 +315,21 @@ app.whenReady().then(() => {
     app.quit()
   })
 
-  
-//načte json pro úpravu dat nebo vytvoří soubor json
-  ipcMain.on("toMainJsonLoad", (event, args) => {
-    serv = ""
-    fs.readFile(servOffFile, (err, jsonString) => {
-      if (err) {
-        fs.writeFileSync(servOffFile, "[]", (err) => {  //wrive file sync čeká na uložení pak dělá další program 
-          if (!err) {
-            fs.readFile(servOffFile, (err, jsonString)=>{serv = jsonString})
-          }
-        })
-      }else{serv=jsonString}
-      JSON.parse(serv).forEach(element => {
-        send={params: {"name":element.name,"address":element.address,"color":element.color,"time":element.period,"latitude":element.coordinates[0], "longitude":element.coordinates[1],"worker":element.worker, "task":"ping", "hide":false, "runing":true}}
-          //postHttp(httpReqestAddr.httpAdd, send, "Adding")
-      });
-      
-      //mainWindow.webContents.send("fromMainJsonLoad", JSON.parse(serv));
-    });
-  });
-
-
-//ukládá data do json
+  //ukládá data do json
   ipcMain.on('toMainJsonSave', (event, textforsave2) => {
-    fs.writeFileSync(servOffFile, textforsave2, (err) => {  //wrive file sync čeká na uložení pak dělá další program 
-      if (!err) {console.log("written");}
-      else{console.log(err)}
+    dialog.showSaveDialog()
+    .then(result=>{
+      fs.writeFileSync(result.filePath+".json", JSON.stringify(textforsave2, null, 2), (err) => {  //null pro nepřevedení do řádku a 2 pro mezery mezi řeťezci
+        if (!err) {console.log("written");}
+        else{console.log(err)}
+      })
     })
+    .catch(err => {
+      console.log(err)
+    }); 
   })
 
 //http requesty
-  function getHttp(http_address,sender,sendval,action){//funkce pro http requesty GET volaná později
-    post_log = ""
-    run = true
-
-    fh = config
-    fh.params=sendval.params
-
-    axiosInst.get(http_address, fh)
-    .then(function (response) {
-      mainWindow.webContents.send(sender,response.data)
-      post_log = [action + " " + response.statusText, response.status]
-      mainWindow.webContents.send("fromMainRequestLog", post_log)
-    })
-    .catch(function (error) {
-      console.log("Nepřipojeno")
-      if (error.code == 'ECONNREFUSED'){
-        post_log = ["Not connected network error", ""]
-        
-      }
-      else{
-        console.log(error.response.status);
-        post_log = [action + " " + error.response.data, error.response.status]
-      }
-      run = false
-    })
-    return run
-  }
   
   ipcMain.handle("requestServerUp", async (event, reqVar)=>{
 
@@ -310,56 +357,16 @@ app.whenReady().then(() => {
             'Accept': 'application/json'
           }
         };
-        mainWindow.webContents.send("successfulLogin", true)
+        mainWindow.webContents.send("fromMainSuccessfulLogin", true)
       })
       .catch(error => {
         console.error(error.code);
-        mainWindow.webContents.send("successfulLogin", error.code)
+        mainWindow.webContents.send("fromMainSuccessfulLogin", error.code)
       });
     }
     
     getAccessToken(reqVar[0], reqVar[1])
-
-
- /* 
-  setTimeout(function() {
-    console.log(accessToken)
-    config = {
-      headers: {
-        'Authorization': `Bearer `+accessToken,
-        'Accept': 'application/json'
-      }
-    };
-    console.log(config)
-    axiosInst.get("/users/me/",config)
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  */
- 
-    /*
-    axiosInst.get("/items/",config)
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  }, 500);
-
-
-
-    axiosInst.get("/")
-    .then(function (response) {
-      
-    })
-    .catch(function (error) {
-      
-    })
-    */
+    
     
   })
 
@@ -381,26 +388,7 @@ app.whenReady().then(() => {
   })
 
 
-  function postHttp(http_address, sendval, action){//funkce pro http requesty POST
-    post_log = ""
-    
-    fh = config
-    fh.params=sendval.params
-
-    axiosInst.post(http_address, null, fh)
-    .then(function (response) {
-      post_log = [action + " " + response.statusText, response.status]
-      mainWindow.webContents.send("fromMainRequestLog", post_log)
-    })
-    .catch(function (error) {
-      if (error.code == 'ECONNREFUSED'){
-        post_log = ["Not connected network error", ""]
-      }
-      else{
-        post_log = [action + " " + error.response.data, error.response.status]
-      }
-    })
-  }
+  
 
   ipcMain.handle("requestAddTask", async (event, requVar)=>{
     postHttp(httpReqestAddr.httpAdd, requVar, "Adding")

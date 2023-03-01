@@ -14,6 +14,11 @@ function load_server_json(){
     send = { params: {worker:"default"}}
     window.api.httpRequest("requestTasksProperties",send)
       window.api.receive("fromMainRequestTaskProperties", (data) => {
+        if (data == "errorFlag")
+        {
+          console.log("errorFla")
+          return
+        }
         tasks_raw_data=data
         refreshTable(tasks_raw_data)
       });
@@ -21,7 +26,7 @@ function load_server_json(){
   }
 
 //
-window.api.receive("successfulLogin", (data) => {
+window.api.receive("fromMainSuccessfulLogin", (data) => {
   if (data==true){
    load_server_json();
   }
@@ -147,7 +152,7 @@ update.addEventListener('click', async () => {  //update/save
       }
       clear()
       load_server_json()
-      loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+      
     } 
     else {
       console.log("You canceled!");
@@ -274,6 +279,16 @@ dellallserv.addEventListener('click', async () => {
 
 
 
+window.api.receive_cmd("fromMainhowHideSwitch", () => {
+  console.log(tasks_raw_data)
+  window.api.send("toMainJsonSave",tasks_raw_data)
+});
+
+
+
+
+
+
 
 
 
@@ -313,7 +328,7 @@ document.querySelectorAll('.dropdown').forEach(item => {
       console.log(item.id,tasks_raw_data[position].name)//TODO force to dont show data in graph but dont stop task
       hideTask(tasks_raw_data[position].name)
     }
-    
+    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
   })
 })
 

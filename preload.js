@@ -34,10 +34,11 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainRequestTaskAverage" - requested data -average of tasks
                 "fromMainRequestLoadFromTime" - requested data -responses from time
                 "fromMainSettings" - requested data -loaded data from json settings
-                "successfulLogin" - message server is online and runing
+                "fromMainSuccessfulLogin" - message server is online and runing
+                "fromMainServerDown" - message server is online and runing
 
         */
-        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestLog", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "successfulLogin"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestLog", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 

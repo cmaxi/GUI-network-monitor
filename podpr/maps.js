@@ -22,7 +22,7 @@ document.getElementById("llll").addEventListener("click", function() {
   map.invalidateSize();
 });
 
-window.api.receive("successfulLogin", (data) => {
+window.api.receive("fromMainSuccessfulLogin", (data) => {
   if (data==true){
     afterLoad()
     
@@ -39,7 +39,11 @@ locations = []
 markers = []
 function afterLoad(){
   window.api.receive("fromMainRequestTaskProperties", (data) => {
-
+    if (data == "errorFlag")
+    {
+      console.log("errorFla")
+      return
+    }
     locations = []
     data.forEach(element => {
       locations.push([element.name, element.latitude, element.longitude])

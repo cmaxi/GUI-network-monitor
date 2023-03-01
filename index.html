@@ -74,13 +74,13 @@
                   <td><input type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required></td>
                   <td><input type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1/www.example.com" required></td> 
                   <td><input type = "color" id = "s_color" required></td>
-                  <td><input type = "text" id = "s_period" pattern="([1-99]+h+[0-59]+m+[0-59]+s)|([1-59]+m+[0-59]+s)|([1-59]+s)|([1-59]+m)|([1-59]+h)" placeholder="-h-m-s or -m-s or -s or -m" required></td>
+                  <td><input type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required></td>
                   <td><input type = "text" id = "s_worker" placeholder="worker"required>
                   <td>
                     <input type = "text" id = "s_latitude" placeholder="Latitude"><br><br>
                     <input type = "text" id = "s_longitude" placeholder="Longitude">
                   </td>
-                  
+
                 </form>
               </tr>
             </table>

@@ -283,10 +283,16 @@ var refreshTime = 60
 var lenLimit = 300
 var stopTimer = false
 
-window.api.receive("successfulLogin", (data) => {
+window.api.receive("fromMainSuccessfulLogin", (data) => {
   if (data==true){
     loadTableData()
+    myCheckbox.checked=true
   }
+});
+
+window.api.receive("fromMainServerDown", (data) => {
+  console.log("down")
+  myCheckbox.checked=false
 });
 
 
@@ -320,8 +326,7 @@ function autoReload(){
     
     setInterval(function(){ // renew every sec
       myCheckbox.checked==true?--t:""
-
-      if (t==1){
+      if (t==2){
         timer.innerText = "Time to refresh: " + t + " s"
         if (myBarChart.data.labels.length>1){
           loadDataFrom(lastTime)
@@ -329,6 +334,10 @@ function autoReload(){
           loadAllDataNew()
         }
         console.log(myChart.data)
+        --t
+      }
+      if (t==1){
+        
         t=refreshTime
       }else{
         timer.innerText = "Time to refresh: " + t + " s"
@@ -354,8 +363,8 @@ function dataForGraphs(dataAdd){//write to line graph and get data for other gra
   dataAdd.forEach(da => {
     kl = myChart.data.datasets.findIndex(function(item, i){return item.address == da.address})
     if(kl != -1){
-      k = (hmsPrews >= Math.round(da.time/1000))
-      hmsPrews!=Math.round(da.time/1000)?hmsPrews=Math.round(da.time/1000):hmsPrews;
+      k = (hmsPrews >= Math.floor(da.time/1000))
+      hmsPrews!=Math.floor(da.time/1000)?hmsPrews=Math.floor(da.time/1000):hmsPrews;
 
       var time = timeConv(da.time)
       if (!k){
@@ -365,7 +374,7 @@ function dataForGraphs(dataAdd){//write to line graph and get data for other gra
           myChart.data.labels.push([time.hms,time.YMD])
           YMDprews = time.YMD
         }
-        myChart.data.labelTimestamp.push(Math.round(da.time/1000))
+        myChart.data.labelTimestamp.push(Math.floor(da.time/1000))
         
 
         if (myChart.data.labels.length>lenLimit){
@@ -391,7 +400,7 @@ function dataForGraphs(dataAdd){//write to line graph and get data for other gra
       else{
         myChart.data.datasets.forEach(element => {
           if (element.address==da.address){
-            var posAvr = myChart.data.labelTimestamp.findIndex(function(item, i){return item == Math.round(da.time/1000)})
+            var posAvr = myChart.data.labelTimestamp.findIndex(function(item, i){return item == Math.floor(da.time/1000)})
             element.data[posAvr] = da.value
             da.value == -1 ? element.failed++:element.passed++;
           }
@@ -503,6 +512,12 @@ function loadAllDataNew(){
 
   window.api.httpRequest("requestLoadAll")//načítá všechna data všechny časy
   window.api.receive("fromMainRequestLoadAll", (allResp) => {
+    if (allResp == "errorFlag")
+    {
+      myCheckbox.checked=false
+      console.log("errorFla")
+      return
+    }
     window.api.receive("fromMainRequestLog", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
@@ -553,6 +568,12 @@ function loadDataFrom(dtf){
   
   window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf}})//načítá data od posledního času a přepisuje (TODO) časy
   window.api.receive("fromMainRequestLoadAll", (allRespFrom) => {
+    if (allRespFrom == "errorFlag")
+    {
+      myCheckbox.checked=false
+      console.log("errorFla")
+      return
+    }
     window.api.receive("fromMainRequestLog", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
@@ -586,6 +607,12 @@ function loadDataInterval(dtf,dtt){
   
   window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf,'time_to':dtt}})//načítá data od posledního času a přepisuje (TODO) časy
   window.api.receive("fromMainRequestLoadAll", (allRespFrom) => {
+    if (allRespFrom == "errorFlag")
+    {
+      console.log("errorFla")
+      myCheckbox.checked=false
+      return
+    }
     window.api.receive("fromMainRequestLog", (data) => {
       console.log('\x1B[34m %s %s', data[0], data[1]);
     });
