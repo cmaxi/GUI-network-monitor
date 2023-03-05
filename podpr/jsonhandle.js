@@ -3,11 +3,7 @@
 var tasks_raw_data
 
 
-function getlog(){
-  window.api.receive("fromMainRequestLog", (data) => {
-    console.log('\x1B[34m %s %s', data[0], data[1]);
-  });
-}
+
 
 
 function load_server_json(){
@@ -22,16 +18,9 @@ function load_server_json(){
         tasks_raw_data=data
         refreshTable(tasks_raw_data)
       });
-    getlog()
   }
 
-//
-window.api.receive("fromMainSuccessfulLogin", (data) => {
-  if (data==true){
-   load_server_json();
-  }
-  window.api.send("toMainJsonLoad")
-});
+
 
 //texts
 const old_name_server = document.getElementById('s_old_name')
@@ -54,6 +43,7 @@ function loadSpecs(name){
   var i = 0
   while (tasks_raw_data[i]){
     if (tasks_raw_data[i].name == name){
+      showMenu()
         s_name.value = tasks_raw_data[i].name
         s_address.value = tasks_raw_data[i].address
         s_color.value = tasks_raw_data[i].color
@@ -159,7 +149,8 @@ update.addEventListener('click', async () => {  //update/save
     }
     
   }
-  
+  hideSettMenu()
+  loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
 })
 function dellAdress(Dname){
 
@@ -195,7 +186,7 @@ function dellAdress(Dname){
     if(found == false){
       alert(txt)
     }
-
+    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
 }
 
 function clear(){
@@ -229,6 +220,7 @@ function pausStart(name){
     if (!found){
       alert("Not found")
     }
+    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
 }
 
 function hideTask(name){
@@ -252,6 +244,7 @@ function hideTask(name){
     if (!found){
       alert("Not found")
     }
+    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
 }
 
 
@@ -266,7 +259,6 @@ paus.addEventListener('click', async () => {
 const dellallserv = document.getElementById('dellall_html')
 dellallserv.addEventListener('click', async () => {
   window.api.httpRequest("requestClearAllDatabase")
-  getlog()
 })
 
 
@@ -328,7 +320,6 @@ document.querySelectorAll('.dropdown').forEach(item => {
       console.log(item.id,tasks_raw_data[position].name)//TODO force to dont show data in graph but dont stop task
       hideTask(tasks_raw_data[position].name)
     }
-    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
   })
 })
 
@@ -447,13 +438,36 @@ function sortTable(n) {
           var periodCell = document.createElement("td");
           generate(row, periodCell, rowData["worker"], index)
   
-          var periodCell = document.createElement("td");
-          generate(row, periodCell, rowData["runing"], index)
-          periodCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
+          var pauseCell = document.createElement("td");
+          const buttonP = document.createElement("button");
+          buttonP.textContent = rowData["runing"]==true?"Pause":"Run";
+          buttonP.addEventListener("click", function() {
+            pausStart(tasks_raw_data[index].name)
+          });
+          pauseCell.appendChild(buttonP);
+          row.appendChild(pauseCell)
+          pauseCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
+
 
           var hideCell = document.createElement("td");
-          generate(row, hideCell, rowData["hide"], index)
+          const buttonH = document.createElement("button");
+          buttonH.textContent = rowData["hide"]==true?"Show":"Hide";
+          buttonH.addEventListener("click", function() {
+            hideTask(tasks_raw_data[index].name)
+          });
+          hideCell.appendChild(buttonH);
+          row.appendChild(hideCell)
           hideCell.style.backgroundColor = rowData["hide"]==true?"gray":"white";
+
+
+          var dellCell = document.createElement("td");
+          const buttonD = document.createElement("button");
+          buttonD.textContent = "Smazat";
+          buttonD.addEventListener("click", function() {
+            dellAdress(tasks_raw_data[index].name)
+          });
+          dellCell.appendChild(buttonD);
+          row.appendChild(dellCell)
   
           tableA.appendChild(row);
         });
@@ -477,3 +491,32 @@ function sortTable(n) {
       }
       appendTableData(data)
     }
+
+
+
+
+
+    const menuButton = document.getElementById('menuButton');
+    const menu = document.getElementById('menu');
+
+    menuButton.addEventListener('click', function() {
+      showMenu()
+    });
+
+    const hideMenuBtn = document.getElementById('hide-menu-btn');
+
+    hideMenuBtn.addEventListener('click', () => {
+      hideSettMenu()
+    });
+
+    function hideSettMenu(){
+      menu.classList.toggle('visible');
+      document.body.classList.remove('overlay');
+      clear()
+    }
+
+    function showMenu(){
+      menu.classList.toggle('visible');
+      document.body.classList.add('overlay');
+    }
+

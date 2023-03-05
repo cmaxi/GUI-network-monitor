@@ -34,7 +34,6 @@ fs.readFile("./settings.json", (err, jsonString) => {
     rejectUnauthorized: false // This is needed for self-signed certificates
   });
 
-
   axiosInst = axios.create({
     httpsAgent: agent,
     baseURL: httpReqestAddr.http
@@ -57,7 +56,6 @@ function postHttp(http_address, sendval, action){//funkce pro http requesty POST
   axiosInst.post(http_address, null, fh)
   .then(function (response) {
     post_log = [action + " " + response.statusText, response.status]
-    mainWindow.webContents.send("fromMainRequestLog", post_log)
   })
   .catch(function (error) {
     if (error.code == 'ECONNREFUSED'){
@@ -67,6 +65,10 @@ function postHttp(http_address, sendval, action){//funkce pro http requesty POST
       post_log = [action + " " + error.response.data, error.response.status]
     }
     mainWindow.webContents.send("fromMainServerDown")
+  })
+  .finally(()=>{
+    post_log.push("login")
+    mainWindow.webContents.send("fromMainRequestLog", post_log)
   })
 }
 
@@ -80,7 +82,6 @@ function getHttp(http_address,sender,sendval,action){//funkce pro http requesty 
   axiosInst.get(http_address, fh)
   .then(function (response) {
     post_log = [action + " " + response.statusText, response.status]
-    mainWindow.webContents.send("fromMainRequestLog", post_log)
     mainWindow.webContents.send(sender,response.data)
   })
   .catch(function (error) {
@@ -96,6 +97,10 @@ function getHttp(http_address,sender,sendval,action){//funkce pro http requesty 
     run = false
     mainWindow.webContents.send("fromMainServerDown")
     mainWindow.webContents.send(sender,"errorFlag")
+  })
+  .finally(()=>{
+    post_log.push("get")
+    mainWindow.webContents.send("fromMainRequestLog", post_log)
   })
   
   return run
@@ -119,7 +124,6 @@ const options = {
 // file open and return message with filepath
 
 async function handleFileOpen() {
-  
   const { canceled, filePaths } = await dialog.showOpenDialog()
   if (canceled) {
     return
@@ -209,17 +213,7 @@ function createWindow () {
         label: 'File',
         submenu: [
           { label: 'Load file', click: () => handleFileOpen() },
-          { label: 'Save', click: () => "" },
-          { label: 'Save as', click: () => "" },
-        ]
-      },
-      {
-        label: 'Switch',
-        submenu: [
-          { label: 'Graph', click: () => mainWindow.webContents.send("fromMainhowHideSwitch", 0) },
-          { type: 'separator' },
-          { label: 'Json', click: () => mainWindow.webContents.send("fromMainhowHideSwitch", 1) },
-          { label: 'Map', click: () => mainWindow.webContents.send("fromMainhowHideSwitch", 2) },
+          { label: 'Save', click: () => mainWindow.webContents.send("fromMainhowHideSwitch") },
         ]
       },
       // { role: 'editMenu' }
@@ -279,10 +273,7 @@ function createWindow () {
       }
   ]
   
-  //když je mac přidá prázdnou položku do menu na první pozici
-  if(process.platform == 'darwin'){
-    //menu.unshift({label:''});
-  }
+
   //vývojářské nástroje
   if(process.env.NODE_ENV !== 'production'){
     menu.push({
@@ -334,7 +325,16 @@ app.whenReady().then(() => {
   ipcMain.handle("requestServerUp", async (event, reqVar)=>{
 
 
-    function getAccessToken(username, password) {
+    function getAccessToken(username, password, addr) {
+      post_log = ""
+      if (addr){
+        axiosInst.defaults.baseURL = addr;
+      }
+      else{
+        axiosInst.defaults.baseURL = httpReqestAddr.http;
+      }
+      
+      
       const data = new URLSearchParams();
       data.append('grant_type', '');
       data.append('username', username);
@@ -342,13 +342,13 @@ app.whenReady().then(() => {
       data.append('scope', '');
       data.append('client_id', '');
       data.append('client_secret', '');
-      reqVarr={
+      const sen={
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Accept': 'application/json'
         }
       }
-      axiosInst.post('/token', data, reqVarr)
+      axiosInst.post('/token', data, sen)
       .then(response => {
         accessToken = response.data.access_token
         config = {
@@ -358,14 +358,24 @@ app.whenReady().then(() => {
           }
         };
         mainWindow.webContents.send("fromMainSuccessfulLogin", true)
+        post_log = ["Login " + response.statusText, response.status]
       })
       .catch(error => {
-        console.error(error.code);
-        mainWindow.webContents.send("fromMainSuccessfulLogin", error.code)
-      });
+        if (error.code == 'ECONNREFUSED'){
+          post_log = ["Not connected network error", ""]
+        }
+        else{
+          post_log = ["Login " + error.response.data, error.response.status]
+        }
+        mainWindow.webContents.send("fromMainSuccessfulLogin", false)
+      })
+      .finally(()=>{
+        post_log.push("post")
+        mainWindow.webContents.send("fromMainRequestLog", post_log)
+      })
     }
     
-    getAccessToken(reqVar[0], reqVar[1])
+    getAccessToken(reqVar[0], reqVar[1], reqVar[2])
     
     
   })
@@ -426,5 +436,3 @@ app.whenReady().then(() => {
 app.on('close', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-
-

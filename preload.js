@@ -29,7 +29,6 @@ contextBridge.exposeInMainWorld("api", {
             function:
                 "fromMainJsonLoad" - loaded data from json task properties
                 "fromMainRequestLoadAll" - requested data -all responses
-                "fromMainRequestLog" - requested data -log from transfer
                 "fromMainRequestTaskProperties" - requested data -properties of tasks
                 "fromMainRequestTaskAverage" - requested data -average of tasks
                 "fromMainRequestLoadFromTime" - requested data -responses from time
@@ -38,7 +37,7 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainServerDown" - message server is online and runing
 
         */
-        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestLog", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
@@ -51,9 +50,10 @@ contextBridge.exposeInMainWorld("api", {
         /*
             function:
                 "fromMainhowHideSwitch" - switch betwen windows
+                "fromMainRequestLog" - requested data -log from transfer
         */
         // whitelist channels
-        let validChannels = ["fromMainhowHideSwitch"];
+        let validChannels = ["fromMainhowHideSwitch", "fromMainRequestLog"];
         console.log("%c  -" + channel + " recieve_cmd", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             ipcRenderer.on(channel, (event, ...args) => func(...args));

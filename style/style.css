@@ -1,5 +1,6 @@
     body{
         text-align: center;
+        background-color: darkgrey;
     }
     
     
@@ -7,10 +8,6 @@
         color: rgb(63, 95, 63);
     }
 
-    div {
-        margin: 10px;
-    }
-    
     svg{
         background-color: aliceblue;
     }
@@ -22,18 +19,26 @@
         background-color: rgb(118, 241, 255);
         text-align: center;
     }
-
+    #gRespM{
+      width: 1010px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 60px;
+    }
     #gResp{
-        width: 1000px;
-        overflow: hidden;
+      width: 1100px;
+      overflow: hidden;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+
     }
-    #gRespCH1{
-        width: 450px;
-        float:left;
-    }
-    #gRespCH2{
-        width: 450px;
-        float: left;
+    #gRespCH1, #gRespCH2{
+        width: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     #spacer{
         height: 300px;
@@ -51,16 +56,19 @@
     button{
         cursor: pointer;
         text-align: center;
+        height: 40px;
+        margin: 5px;
+        padding: 3px;
     }
 
     
     table, th, td{
         border-collapse:collapse;
         padding: 6px;
-        margin: 6px;
+        margin: 3px;
     }
     .main_T th {
-        background: rgb(255, 255, 255);
+        background: rgb(209, 209, 209);
     }
     td{
         padding-right: 5px;
@@ -72,17 +80,47 @@
         
       }
 
-    #cc{
-        background-color: rgb(223, 241, 241);
+
+
+
+    #loadnewserv{
+      height: 25px;
     }
     
 
 
 
+    #loginForm{
+      height: 500px;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+    .logF{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .log{
+      height: 30px;
+      width: 180px;
+      margin: 5px;
+    }
 
 
+
+    
+
+    #mapM {
+      margin-top: 380px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
     #map { 
-        height: 800px;
+        height: 700px;
         width: 80%;
         position: fixed;
         top: 50;
@@ -165,12 +203,22 @@
 
 
 /*table*/
+.taskTableN{
+  overflow: auto;
+  height: 700px;
+  width: 840px;
+  text-align: center;
+  display: inline-block;
+}
+
 .taskTable{
     overflow: auto;
-    height: 400px;
+    height: 660px;
+    width: 830px;
     text-align: center;
     padding-left: 5px;
     display: inline-block;
+    padding-top: 30px;
 }
 .tabRow{
     border-bottom: 1px solid black;
@@ -182,7 +230,70 @@
 }
 
 th{cursor: pointer;}
-/*td{cursor: pointer;}*/
+
+
+#taskTableN {
+  position: relative;
+}
+
+#cc {
+  position: absolute;
+  text-align: right;
+  top: 0;
+  right: 0;
+  background-color: darkgrey;
+  width: 830px;
+}
+
+#menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.1s ease;
+  background-color: rgba(167, 167, 167, 0.95);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+#menu.visible {
+  height: 95%; /* Nastavit výšku menu podle potřeby */
+}
+
+#menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#menu ul li {
+  margin: 0 20px;
+}
+
+#menu ul li a {
+  color: #333;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
 
 
 

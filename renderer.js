@@ -70,12 +70,21 @@ const b11 = document.getElementById('validateLogIn')
 b11.addEventListener('click', async () => {
   var username = document.getElementById("username").value;
   var password = document.getElementById("password").value;
+  var ipAddress = document.getElementById("ipAddress").value;
 
-    window.api.httpRequest("requestServerUp", [username, password])
+    window.api.httpRequest("requestServerUp", [username, password, ipAddress])
     window.api.receive("fromMainSuccessfulLogin", (data) => {//ošetření jestli server běží a uživ je přihlášen?
-      console.log(data)
       if(data==true){
         alert("Login successful!");
+        
+        load_server_json()// load table data
+        loadTableData()//graphs reload
+        afterLoad()//map data reload
+        
+        rr={}
+
+
+
         sh(1)
       }
       else if(data=="ECONNREFUSED"){
@@ -86,5 +95,15 @@ b11.addEventListener('click', async () => {
       else if(data=="ERR_BAD_REQUEST"){
         alert("Bad PSWD or NAME")
       }
+      
   });
+
 })
+
+
+
+//logs from main
+
+window.api.receive_cmd("fromMainRequestLog",(data)=>{
+    console.log("%c"+data[0] +" "+ data[1],data[1]!=200?'color:red':'color:cyan')
+  })

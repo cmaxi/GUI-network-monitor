@@ -39,79 +39,90 @@
 
     <!--login -->
     <div id="login"> 
-      <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username">
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password">
-        <br>
-        <input type="button" value="Log In" id="validateLogIn">
-      </form>
+
+
+      <div id="loginForm">
+        <form class="logF">
+          <label for="username" class="log">Username:</label>
+          <input type="text" id="username" class="log" placeholder="username">
+          <br>
+          <label for="password" class="log">Password:</label>
+          <input type="password" id="password" class="log" placeholder="password">
+          <br>
+          <label for="ipAddress" class="log">IP:</label>
+          <input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log" value="https://192.168.1.110:8000">
+          <br>
+          <br>
+          <a>Change IP if server not on host/your pc else leave empty!</a>
+          <br>
+          <br>
+          <input type="button" value="Log In" class="log" id="validateLogIn">
+        </form>
+      </div>
+      
     </div>
     <div id="spacer"></div>
     <!--json handle -->
 
     <div id="jsonpar">
-      <h1>Server update</h1>
-        <div class='parent'>
-          <div class='child'>
-            <h2>Update server or Add new server</h2>
-            <table class="main_T">
-              <tr>
-                <th id="cc">Find server</th>
-                <th>Name / New name</th>
-                <th>Address</th> 
-                <th>Color</th>
-                <th>Period</th>
-                <th>Worker</th>
-                <th>Coordinates</th>
-                <th></th>
-              </tr>
-              <tr>
-                  <td id="cc"><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$"><br><br><button id = "loadnewserv">Find</button></td>
-                <form id="sform">
-                  <td><input type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required></td>
-                  <td><input type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1/www.example.com" required></td> 
-                  <td><input type = "color" id = "s_color" required></td>
-                  <td><input type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required></td>
-                  <td><input type = "text" id = "s_worker" placeholder="worker"required>
-                  <td>
-                    <input type = "text" id = "s_latitude" placeholder="Latitude"><br><br>
-                    <input type = "text" id = "s_longitude" placeholder="Longitude">
-                  </td>
 
-                </form>
-              </tr>
-            </table>
-              <button type = "button" id = "upsave">Update Add task</button>
-              <button type = "button" id = "runing">Pause/Start task</button>
-              <button type="button" id="btn6">path empty</button>
-              <button type="button" id="dellall_html">dell all results on server</button>
+      <button id="menuButton">Ad new task</button><br>
+      
+      <div id="menu" class="hidden">
+        <button id="hide-menu-btn">Hide Menu</button><br>
+        <div class='child'>
+          <table class="main_T">
+            <tr>
+              <th>Name / New name</th>
+              <th>Address</th> 
+              <th>Color</th>
+              <th>Period</th>
+              <th>Worker</th>
+              <th>Coordinates</th>
+              <th></th>
+            </tr>
+            <tr>
+                <form id="sform">
+                <td><input type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required></td>
+                <td><input type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1/www.example.com" required></td> 
+                <td><input type = "color" id = "s_color" required></td>
+                <td><input type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required></td>
+                <td><input type = "text" id = "s_worker" placeholder="worker"required>
+                <td>
+                  <input type = "text" id = "s_latitude" placeholder="Latitude"><br><br>
+                  <input type = "text" id = "s_longitude" placeholder="Longitude">
+                </td>
+
+              </form>
+            </tr>
+          </table>
+            <button type = "button" id = "upsave">Update Add task</button>
+            <button type = "button" id = "runing">Pause/Start task</button>
+            <button type="button" id="btn6">path empty</button>
+            <button type="button" id="dellall_html">dell all results on server</button>
+          </div>
+      </div>
+        <div id="taskTableN"  class="taskTableN">
+          <div id="cc"><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$"><button id = "loadnewserv">Find</button></div>
+            <div class="taskTable">
+              <table id="myTable">
+                <thead>
+                  <tr>
+                    <th id="sort0" class="tabH">ID</th>
+                    <th id="sort1" class="tabH">Name</th>
+                    <th id="sort2" class="tabH">Address</th>
+                    <th id="sort3" class="tabH">Color</th>
+                    <th id="sort4" class="tabH">Period</th>
+                    <th id="sort5" class="tabH">Coordinates</th>
+                    <th id="sort6" class="tabH">Worker</th>
+                    <th id="sort7" class="tabH">Runing</th>
+                    <th id="sort8" class="tabH">Hide in graph</th>
+                    <th id="sort9" class="tabH">Dellete</th>
+                  </tr>
+                </thead>
+              </table>
           </div>
         </div>
-        <h1>Servers specs</h1>
-
-          <div class="taskTable">
-          <table id="myTable">
-            <thead>
-              <tr>
-                <th id="sort0" class="tabH">ID</th>
-                <th id="sort1" class="tabH">Name</th>
-                <th id="sort2" class="tabH">Address</th>
-                <th id="sort3" class="tabH">Color</th>
-                <th id="sort4" class="tabH">Period</th>
-                <th id="sort5" class="tabH">Coordinates</th>
-                <th id="sort6" class="tabH">Worker</th>
-                <th id="sort7" class="tabH">Runing</th>
-                <th id="sort8" class="tabH">Hide in graph</th>
-              </tr>
-      
-            </thead>
-      
-            </table>
-          </div>
-      
       
           <!-- Context menu for table -->
           <div id="context-menu" class="context-menu">
@@ -136,38 +147,56 @@
       <b id="timer">Set graf area length:</b>
       <input type = "number" id = "lenMax">
       <button type="button" id="load_d">Reload all data.</button>
+      <br>
+      <label for="start-time">Start Time:</label>
+      <input type="datetime-local" id="start-time" name="start-time">
+
+      <label for="end-time">End Time:</label>
+      <input type="datetime-local" id="end-time" name="end-time">
+      <label for="end-time">Step size: </label>
+      <select id="myDropdownM">
+        <option value="s">s</option>
+        <option value="m">m</option>
+        <option value="h">h</option>
+        <option value="D">D</option>
+        <option value="M">M</option>
+        <option value="Y">Y</option>
+      </select>
+      <button type="button" id="loadFromTo">Load data in interval.</button>
       
 
       <div id="gResp0">
-        <h1>Graf</h1>
         <canvas id="myChart"></canvas>
         <button type="button" id="left_m">Shift to Left</button>
         <button type="button" id="resetZoom">Reset zoom</button>
         <button type="button" id="right_m">Shift to Right</button>
       </div>
         <div id="gResp1">
-          <h1>Graf Chybovosti</h1>
+          <h1>Error graph</h1>
           <canvas id="myBarChart"></canvas>
         </div>
         <div id="gResp">
-          <div id="gRespCH1">
-            <h1>průměry rychlostí odezvy</h1>
-            <canvas id="myPolarChart"></canvas>
-          </div>
-          <div id="gRespCH2">
-            <h1>počet naměřených hodnot</h1>
-            <canvas id="myDoughnutChart"></canvas>
+          <div id="gRespM">
+            <div id="gRespCH1">
+              <h1>Average responses</h1>
+              <canvas id="myPolarChart"></canvas>
+            </div>
+            <div id="gRespCH2">
+              <h1>Count of measured values</h1>
+              <canvas id="myDoughnutChart"></canvas>
+            </div>
           </div>
         </div>
-      <br><br>
     </div>
 
     <!-- mapa -->
     <div id="maps">
-      <br><br>
-      <div id="map"></div>
-        <button type="button" id="llll">click</button>
+      
+      <div id="mapM">
+        <div id="map"></div>
       </div>
+      
+    </div>
 
 
 

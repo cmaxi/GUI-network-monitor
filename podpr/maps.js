@@ -18,17 +18,6 @@ map.on('drag', function() {
 });
 
 
-document.getElementById("llll").addEventListener("click", function() {
-  map.invalidateSize();
-});
-
-window.api.receive("fromMainSuccessfulLogin", (data) => {
-  if (data==true){
-    afterLoad()
-    
-  }
-  
-});
 
 /*
 window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
