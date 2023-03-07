@@ -296,7 +296,9 @@ window.api.receive_cmd("fromMainhowHideSwitch", () => {
 
 document.querySelectorAll('.tabH').forEach(item => {
   item.addEventListener('click', event => {
-    sortTable(item.id[4])
+    if (item.id[4]!="x"){
+      sortTable(item.id[4])
+    }
   })
   
 })
@@ -391,11 +393,6 @@ function sortTable(n) {
           var row = document.createElement("tr");
           row.setAttribute("id", "row" + index);
           row.classList.add("tabRow");
-          row.addEventListener("click", function() {
-            //alert("ID clicked: " + rowdata);
-            const pozice = parseInt(row.id.replace(/\D/g, ''));
-            loadSpecs(tasks_raw_data[pozice].name)
-          });
 
           row.addEventListener('contextmenu', event => {
             position = parseInt(row.id.replace(/\D/g, ''));
@@ -409,11 +406,23 @@ function sortTable(n) {
 
 
 
-
+          var updateCell = document.createElement("td");
+          const buttonU = document.createElement("button");
+          var img = document.createElement("img");
+          img.src = "icons/Update.png";  // Zde nastavte cestu k vaší ikoně
+          img.height = 20;
+          buttonU.appendChild(img);
+          buttonU.addEventListener("click", function() {
+            const pozice = parseInt(row.id.replace(/\D/g, ''));
+            loadSpecs(tasks_raw_data[pozice].name)
+          });
+          updateCell.appendChild(buttonU);
+          row.appendChild(updateCell)
 
           var idCell = document.createElement("td");
           n = (index+1 >= 10 ? '0' : '00') + (index+1)
           
+
           generate(row ,idCell, n, index)
   
           var nameCell = document.createElement("td");
@@ -440,7 +449,10 @@ function sortTable(n) {
   
           var pauseCell = document.createElement("td");
           const buttonP = document.createElement("button");
-          buttonP.textContent = rowData["runing"]==true?"Pause":"Run";
+          var img = document.createElement("img");
+          img.src = rowData["runing"]==true?"icons/Pause.png":"icons/Start.png";  // Zde nastavte cestu k vaší ikoně
+          img.height = 20;
+          buttonP.appendChild(img);
           buttonP.addEventListener("click", function() {
             pausStart(tasks_raw_data[index].name)
           });
@@ -451,7 +463,10 @@ function sortTable(n) {
 
           var hideCell = document.createElement("td");
           const buttonH = document.createElement("button");
-          buttonH.textContent = rowData["hide"]==true?"Show":"Hide";
+          var img = document.createElement("img");
+          img.src = rowData["hide"]==true?"icons/Show.png":"icons/Hide.png";  // Zde nastavte cestu k vaší ikoně
+          img.height = 20;
+          buttonH.appendChild(img);
           buttonH.addEventListener("click", function() {
             hideTask(tasks_raw_data[index].name)
           });
@@ -462,7 +477,10 @@ function sortTable(n) {
 
           var dellCell = document.createElement("td");
           const buttonD = document.createElement("button");
-          buttonD.textContent = "Smazat";
+          var img = document.createElement("img");
+          img.src = "icons/Trash.png";  // Zde nastavte cestu k vaší ikoně
+          img.height = 20;
+          buttonD.appendChild(img);
           buttonD.addEventListener("click", function() {
             dellAdress(tasks_raw_data[index].name)
           });

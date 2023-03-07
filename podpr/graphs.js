@@ -544,7 +544,6 @@ function loadAllDataNew(){
         dataForGraphs(allResp.data)
 
         setAndUpdate(true, averageData)
-        
 
       })
     }) 
@@ -603,15 +602,12 @@ loadFromTo.addEventListener('click', async () => {
   const startTime = Date.parse(startInput.value);
   const endTime = Date.parse(endInput.value);
   const selectedOption = dropdownM.options[dropdownM.selectedIndex].value;
-  console.log(selectedOption); // vypíše hodnotu vybraného prvku
 
-  console.log(startInput.value==""?"":startTime,endInput.value==""?"":endTime, selectedOption)
   loadDataInterval(startInput.value==""?0:startTime,endInput.value==""?Date.now():endTime, selectedOption)
 })
 
 
 function loadDataInterval(dtf,dtt,step){
-  console.log(dtf,dtt)
   shifted = 0
   hmsPrews = 0
 
@@ -620,7 +616,6 @@ function loadDataInterval(dtf,dtt,step){
 
   window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf,'time_to':dtt}})//načítá data od posledního času a přepisuje (TODO) časy
   window.api.receive("fromMainRequestLoadAll", (allRespInterv) => {
-    console.log(allRespInterv)
     if (allRespInterv == "errorFlag")
     {
       console.log("errorFla")
@@ -656,9 +651,8 @@ function loadDataInterval(dtf,dtt,step){
 
         myCheckbox.checked=false
         dataForGraphsInterv(allRespInterv.data, step)
-
+        
         setAndUpdate(true, averageData)
-
       })
       
     })
@@ -694,10 +688,6 @@ function dataForGraphsInterv(dataAdd, step){//write to line graph and get data f
           else{
             element.data.push(NaN)
           }
-
-          if (element.data.length>lenLimit){
-            element.data.shift()
-          }
         });
       }
       else{
@@ -714,11 +704,11 @@ function dataForGraphsInterv(dataAdd, step){//write to line graph and get data f
       ld = true
     }
   });
-  
+
   const [retLabels, arrIndex] = roundTimeOccurrencesa(myChart.data.labels, step)
+  console.log(retLabels, arrIndex)
   myChart.data.datasets.forEach(element => {
     const data = [], labels = []
-    console.log(element)
     for (let i = 0; i <= arrIndex.length-2; i++) {
       data.push(sumNumbers(element.data,arrIndex[i],arrIndex[i+1]))
       labels.push(retLabels[i])
@@ -726,7 +716,7 @@ function dataForGraphsInterv(dataAdd, step){//write to line graph and get data f
     myChart.data.labels = labels
     element.data = data
   });
-  console.log(myChart.data.labels, myChart.data.datasets)
+  
   return ld
 }
 
@@ -773,10 +763,8 @@ function roundTimeOccurrencesa(occurrences, roundingUnit) {
         break;
     }
     if (preVal!=newTime || (date!=undefined && preValY!=newDate)){
-      //console.log(preVal[0], newTime, preVal[1], dd)
       preValY = newDate;
       preVal = newTime;
-      console.log(date!=undefined?[newTime, newDate]:[newTime], index)
       ind.push(index)
       roundedOccurrences.push(date!=undefined?[newTime, newDate]:[newTime]);
     }

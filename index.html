@@ -7,8 +7,6 @@
     
     <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
     <!---->
-
-    
     
     <title>Server handle</title>
     <link rel="stylesheet" href="style/style.css" />
@@ -17,7 +15,6 @@
 
     <div id="mySidenav" class="sidenav">
       <a href="#" class="closebtn" id="closebtn">&times;</a>
-     <!--<a href="#" id="s0" class="swapPage">Graphs</a>--> 
      <a href="#" id="s3" class="swapPage">Login</a>
      <a href="#" id="s1" class="swapPage">Data update</a> 
      <button class="dropdown-btn">Graphs 
@@ -108,16 +105,17 @@
               <table id="myTable">
                 <thead>
                   <tr>
-                    <th id="sort0" class="tabH">ID</th>
-                    <th id="sort1" class="tabH">Name</th>
-                    <th id="sort2" class="tabH">Address</th>
-                    <th id="sort3" class="tabH">Color</th>
-                    <th id="sort4" class="tabH">Period</th>
-                    <th id="sort5" class="tabH">Coordinates</th>
-                    <th id="sort6" class="tabH">Worker</th>
-                    <th id="sort7" class="tabH">Runing</th>
-                    <th id="sort8" class="tabH">Hide in graph</th>
-                    <th id="sort9" class="tabH">Dellete</th>
+                    <th id="sortx" class="tabH">Update</th>
+                    <th id="sort1" class="tabH">ID</th>
+                    <th id="sort2" class="tabH">Name</th>
+                    <th id="sort3" class="tabH">Address</th>
+                    <th id="sortx" class="tabH">Color</th>
+                    <th id="sortx" class="tabH">Period</th>
+                    <th id="sort6" class="tabH">Coordinates</th>
+                    <th id="sort7" class="tabH">Worker</th>
+                    <th id="sort8" class="tabH">Runing</th>
+                    <th id="sort9" class="tabH">Hide in graph</th>
+                    <th id="sortx" class="tabH">Dellete</th>
                   </tr>
                 </thead>
               </table>
@@ -155,9 +153,9 @@
       <input type="datetime-local" id="end-time" name="end-time">
       <label for="end-time">Step size: </label>
       <select id="myDropdownM">
-        <option value="s">s</option>
-        <option value="m">m</option>
         <option value="h">h</option>
+        <option value="m">m</option>
+        <option value="s">s</option>
         <option value="D">D</option>
         <option value="M">M</option>
         <option value="Y">Y</option>
