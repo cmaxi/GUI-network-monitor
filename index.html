@@ -59,6 +59,11 @@
       
     </div>
     <div id="spacer"></div>
+
+
+
+
+
     <!--json handle -->
 
     <div id="jsonpar">
@@ -66,7 +71,7 @@
       <button id="menuButton">Ad new task</button><br>
       
       <div id="menu" class="hidden">
-        <button id="hide-menu-btn">Hide Menu</button><br>
+        <button id="hide-menu-btn">Cancel</button><br>
         <div class='child'>
           <table class="main_T">
             <tr>
@@ -86,8 +91,8 @@
                 <td><input type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required></td>
                 <td><input type = "text" id = "s_worker" placeholder="worker"required>
                 <td>
-                  <input type = "text" id = "s_latitude" placeholder="Latitude"><br><br>
-                  <input type = "text" id = "s_longitude" placeholder="Longitude">
+                  <input type = "text" id = "s_latitude" pattern="^[0-9.]{1,30}$" placeholder="Latitude"><br><br>
+                  <input type = "text" id = "s_longitude" pattern="^[0-9.]{1,30}$" placeholder="Longitude">
                 </td>
 
               </form>
@@ -95,7 +100,6 @@
           </table>
             <button type = "button" id = "upsave">Update Add task</button>
             <button type = "button" id = "runing">Pause/Start task</button>
-            <button type="button" id="btn6">path empty</button>
             <button type="button" id="dellall_html">dell all results on server</button>
           </div>
       </div>
@@ -136,14 +140,19 @@
 
 
     <div id="graf">
-      <br>
+      
+      <div id="menu-G" class="hidden-G">
+        <button id="hide-menu-btn-G">Cancel</button><br>
+        <b>Set reload time [s]:</b>
+        <input type = "number" id = "timerMax">
+        <b>Reload is runing:</b>
+        <input type="checkbox" id="myCheckbox" checked="true">
+        <br>
+        <b>Set graf area length:</b>
+        <input type = "number" id = "lenMax">
+      </div>
       <b id="timer"></b>
-      <b id="timer">Set reload time [s]:</b>
-      <input type = "number" id = "timerMax">
-      <input type="checkbox" id="myCheckbox" checked="true">
-      <br>
-      <b id="timer">Set graf area length:</b>
-      <input type = "number" id = "lenMax">
+      <button id="menuButton-G"><img src="icons/Settings.png" height="20px"></button>
       <button type="button" id="load_d">Reload all data.</button>
       <br>
       <label for="start-time">Start Time:</label>

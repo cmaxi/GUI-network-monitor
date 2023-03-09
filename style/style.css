@@ -262,26 +262,7 @@ th{cursor: pointer;}
   height: 95%; /* Nastavit výšku menu podle potřeby */
 }
 
-#menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
 
-#menu ul li {
-  margin: 0 20px;
-}
-
-#menu ul li a {
-  color: #333;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: bold;
-}
 
 
 .overlay {
@@ -332,4 +313,35 @@ th{cursor: pointer;}
   /* Highlight context menu item on hover */
   .context-menu li:hover {
     background-color: #ddd;
+  }
+
+
+
+
+  /*menu v grafech*/
+  #menu-G {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.1s ease;
+    background-color: rgba(167, 167, 167, 0.95);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+  
+  #menu-G.visible-G {
+    height: 95%; /* Nastavit výšku menu podle potřeby */
+  }
+
+  .overlay-G {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.6);
   }

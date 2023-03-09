@@ -797,3 +797,29 @@ function timeConvV(time, t){
   ,"hms":(time.getHours()+':'+time.getMinutes()+':'+time.getSeconds())}
   return returnedTime
 }
+
+
+//menu
+const menuButtonG = document.getElementById('menuButton-G');
+    const menuG = document.getElementById('menu-G');
+
+    menuButtonG.addEventListener('click', function() {
+      showMenuG()
+    });
+
+    const hideMenuBtnG = document.getElementById('hide-menu-btn-G');
+
+    hideMenuBtnG.addEventListener('click', () => {
+      hideSettMenuG()
+    });
+
+    function hideSettMenuG(){
+      menuG.classList.toggle('visible-G');
+      document.body.classList.remove('overlay-G');
+      clear()
+    }
+
+    function showMenuG(){
+      menuG.classList.toggle('visible-G');
+      document.body.classList.add('overlay-G');
+    }
