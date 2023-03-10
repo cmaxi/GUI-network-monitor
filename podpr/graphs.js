@@ -453,6 +453,7 @@ function setAndUpdate(firstSett, averageData){
 
   //myChart.data.labels =  myChart.data.labels
   //myChart.data.datasets = myChart.data.datasets
+  
   myChart.update()
 
   //myBarChart.data.labels =  myBarChart.data.labels
@@ -607,7 +608,7 @@ loadFromTo.addEventListener('click', async () => {
 })
 
 
-function loadDataInterval(dtf,dtt,step){
+async function loadDataInterval(dtf,dtt,step){
   shifted = 0
   hmsPrews = 0
 
@@ -616,6 +617,7 @@ function loadDataInterval(dtf,dtt,step){
 
   window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf,'time_to':dtt}})//načítá data od posledního času a přepisuje (TODO) časy
   window.api.receive("fromMainRequestLoadAll", (allRespInterv) => {
+    console.log(myChart.data)
     if (allRespInterv == "errorFlag")
     {
       console.log("errorFla")
@@ -624,8 +626,10 @@ function loadDataInterval(dtf,dtt,step){
     }
     window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
     window.api.receive("fromMainRequestTaskProperties", (taskSpecs) => {
+      console.log(myChart.data)
       window.api.httpRequest("requestTasksAverage", {params:{'worker':"default"}})//načtení prmůěrů všech úkolů
       window.api.receive("fromMainRequestTaskAverage", (averageData) => {
+        console.log(myChart.data)
         taskSpecs.forEach(element => {
           if(averageData.data.some(item => item.address === element.address && element.hide==false)){
             posAvr = averageData.data.findIndex(function(item, i){return item.address == element.address})
@@ -649,18 +653,29 @@ function loadDataInterval(dtf,dtt,step){
           }
         });
 
-        myCheckbox.checked=false
+        myCheckbox.checked=false/*
         dataForGraphsInterv(allRespInterv.data, step)
         
-        setAndUpdate(true, averageData)
+        setTimeout(() => {
+          setAndUpdate(true, averageData)
+        }, 3000);*/
+        console.log(myChart.data)
+        processData(allRespInterv.data, step, averageData)
+        console.log(myChart.data)
       })
       
     })
   })
 }
 
+async function processData(allResp, step, average) {
+  const data = await dataForGraphsInterv(allResp, step);
+  setAndUpdate(true, average);
+}
 
-function dataForGraphsInterv(dataAdd, step){//write to line graph and get data for other graphs setting it to json from first graph
+
+
+async function dataForGraphsInterv(dataAdd, step){//write to line graph and get data for other graphs setting it to json from first graph
   var ld = false
   dataAdd.forEach(da => {
     kl = myChart.data.datasets.findIndex(function(item, i){return item.address == da.address})
