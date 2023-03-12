@@ -134,14 +134,15 @@ function createWindow () {
   mainWindow.webContents.openDevTools()   //otevře vývojářské nástroje při spuštění
 }
 
-fs.readFile("./settings.json", (err, jsonString) => {
+fs.readFile(path.join(__dirname, 'settings.json'), (err, jsonString) => {
+  
+  const cert = fs.readFileSync(path.join(__dirname, 'certif/Local1crt.pem'));
+  const key = fs.readFileSync(path.join(__dirname, 'certif/Local1Key.pem'));
+
   var sett = JSON.parse(jsonString)
   httpReqestAddr = sett.httpReq
   graphsSet = sett.graphs  
 
-
-  const cert = fs.readFileSync('certif/Local1crt.pem');
-  const key = fs.readFileSync('certif/Local1Key.pem');
 
   const agent = new https.Agent({
     cert: cert,
@@ -349,10 +350,10 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-
-console.log(app.getVersion())
+  autoUpdater.checkForUpdates();
+  console.log(app.getVersion())
   ipcMain.on("toMainUpdateMessage", (event, args) => {
-    autoUpdater.checkForUpdates()
+    //autoUpdater.checkForUpdatesAndNotify()
     mainWindow.webContents.send("fromMainUpdateMessage", ("Version is "+app.getVersion()))
   })
 
@@ -421,20 +422,18 @@ console.log(app.getVersion())
 
 
 
-
-
-  /*New Update Available*/
+  //New Update Available
   autoUpdater.on("update-available", (info) => {
     mainWindow.webContents.send("fromMainUpdateMessage",`Update available. Current version ${app.getVersion()}`);
     let pth = autoUpdater.downloadUpdate();
-    curWindow.showMessage(pth);
+    mainWindow.webContents.send("fromMainUpdateMessage",pth);
   });
 
   autoUpdater.on("update-not-available", (info) => {
     mainWindow.webContents.send("fromMainUpdateMessage",`No update available. Current version ${app.getVersion()}`);
   });
 
-  /*Download Completion Message*/
+  //Download Completion Message
   autoUpdater.on("update-downloaded", (info) => {
     mainWindow.webContents.send("fromMainUpdateMessage",`Update downloaded. Current version ${app.getVersion()}`);
   });
@@ -444,10 +443,9 @@ console.log(app.getVersion())
   });
 
 
+  
 
-
-
- // Quit app when closed Zavře vše včetně druhého okna
+ // Quit app when closed Zavře vše
 app.on('close', function () {
   if (process.platform !== 'darwin') app.quit()
 })

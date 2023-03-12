@@ -1,6 +1,6 @@
 {
   "name": "Network-monitor",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "GUI for api app",
   "main": "main.js",
   "scripts": {
@@ -13,17 +13,22 @@
     "GUI",
     "Network application"
   ],
+  "files": [
+    "index.html",
+    "main.js",
+    "preload.js",
+    "settings.json",
+    "pics/**/*",
+    "certif/**/*"
+  ],
   "repository": "https://github.com/Guestas/GUI-network-monitor",
   "publish": {
     "provider": "github",
     "releaseType": "release"
   },
   "build": {
-    "appId": "com.MC.NetworkMonitor",
+    "appId": "com.MCNetworkMonitor.app",
     "productName": "Network Monitor app",
-    "win": {
-      "target": "nsis"
-    },
     "directories": {
       "output": "dist"
     }

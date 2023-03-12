@@ -74,9 +74,9 @@ function afterLoad(){
 
 var popup = L.popup();
 //počáteční zoom je na 3
-la = +3.8, le = -5.8
-laM = -2.4, leM = +3.4
-/*
+la = 0, le = 0
+laM = 0, leM = 0
+
 function onMapClick(e) {
   ll={"lat":e.latlng.lat + la,"lng":e.latlng.lng + le}
   console.log(ll, map.getZoom())
@@ -91,14 +91,14 @@ map.on('click', onMapClick);
 
 map.on('', function() {
   
-})*/
+})
 
 
 
-map.on('zoomend', function() {
+map.on('zoomend', function() {/*
   markers.forEach(element => {
     element.remove()
-  });
+  });*/
   switch(map.getZoom()) {
     case 2:
       la = +5.12, le = -10.24//pro proklik
@@ -139,12 +139,12 @@ map.on('zoomend', function() {
       laM = -0.02, leM = +0.03
       break;
 */
-  }
+  }/*
   for (var i = 0; i < locations.length; i++) {
     markers[i] = L.marker([locations[i][1]+laM, locations[i][2]+leM])
       .bindPopup(locations[i][0])
       .addTo(map);
-  }
+  }*/
   //console.log(la,le, 5.12/Math.pow(2,map.getZoom()-2),10.24/Math.pow(2,map.getZoom()-2),map.getZoom())
 });
 
