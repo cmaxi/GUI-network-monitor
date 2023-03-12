@@ -1,26 +1,44 @@
 {
-  "name": "graphics",
-  "version": "1.2.0",
-  "description": "",
+  "name": "Network-monitor",
+  "version": "1.0.0",
+  "description": "GUI for api app",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dist": "electron-builder"
   },
   "keywords": [
     "Electron",
     "GUI",
     "Network application"
   ],
+  "repository": "https://github.com/Guestas/GUI-network-monitor",
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
+  },
+  "build": {
+    "appId": "com.MC.NetworkMonitor",
+    "productName": "Network Monitor app",
+    "win": {
+      "target": "nsis"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
   "author": "Martin Cé",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^20.1.0"
+    "electron": "^20.1.0",
+    "electron-builder": "^23.6.0"
   },
   "dependencies": {
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",
     "chartjs-plugin-zoom": "^1.2.1",
+    "electron-updater": "^5.3.0",
     "https": "^1.0.0",
     "leaflet": "^1.9.3",
     "mapbox-gl": "^2.12.0"

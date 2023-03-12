@@ -1,5 +1,4 @@
 {
-    "serversOfflineFile":"./data/servers.json",
     "httpReq":{
         "http":"https://127.0.0.1:8000",
         "httpLoad":"/getAllResponses",

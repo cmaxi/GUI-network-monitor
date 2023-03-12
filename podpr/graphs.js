@@ -1,4 +1,36 @@
-/* ----------------------------------------- Lin chart ----------------------------------------- */
+//menu settings
+const menuButtonG = document.getElementById('menuButton-G');
+const menuG = document.getElementById('menu-G');
+menuButtonG.addEventListener('click', function() {
+  showMenuG()
+});
+
+const hideMenuBtnG = document.getElementById('hide-menu-btn-G');
+hideMenuBtnG.addEventListener('click', () => {
+  hideSettMenuG()
+});
+
+function hideSettMenuG(){
+  menuG.classList.toggle('visible-G');
+  document.body.classList.remove('overlay-G');
+  clear()
+}
+
+function showMenuG(){
+  menuG.classList.toggle('visible-G');
+  document.body.classList.add('overlay-G');
+}
+
+window.api.receive("fromMainServerDown", (data) => {
+  myCheckbox.checked=false
+});
+
+function loadAllDataNew(){
+  dataForGraphsT(undefined, undefined, "s", true, true)
+}
+
+
+/* ----------------------------------------- lin chart init ----------------------------------------- */
 const Lchart = document.getElementById('myChart')
 const labelsL = [""];
 const configL = {
@@ -99,7 +131,8 @@ var myChart = new Chart(Lchart, configL);
 //butons
 const load_d = document.getElementById('load_d') 
 load_d.addEventListener('click', async () => {
-  loadAllDataNew()
+  myCheckbox.checked=true
+  dataForGraphsT(undefined, undefined, "s", true, true)
 })
 
 const resZ = document.getElementById('resetZoom')
@@ -109,18 +142,15 @@ resZ.addEventListener('click', ()=>{
 
 const lm = document.getElementById('left_m')
 lm.addEventListener('click', ()=>{
-  myChart.pan({x: 200}, undefined, 'default');
+  myChart.pan({x: 100}, undefined, 'default');
 })
 
 const rm = document.getElementById('right_m')
 rm.addEventListener('click', ()=>{
-  myChart.pan({x: -200}, undefined, 'default');
+  myChart.pan({x: -100}, undefined, 'default');
 })
 
-
-
-/* ----------------------------------------- Barr chart ----------------------------------------- */
-
+/* ----------------------------------------- barr chart init ----------------------------------------- */
 
 const Bchart = document.getElementById('myBarChart')
 const labelsB = [""];
@@ -168,7 +198,7 @@ var myBarChart = new Chart(Bchart, configB);
 
 
 
-/* ----------------------------------------- Polar area chart ----------------------------------------- */
+/* ----------------------------------------- polar init ----------------------------------------- */
 
 const dataP = {
   labels: [''],
@@ -205,16 +235,14 @@ const Pchart = document.getElementById('myPolarChart')
 var myPolarChart = new Chart(Pchart, configP);
 
 
-/* ----------------------------------------- doughnut loading ----------------------------------------- */ 
+/* ----------------------------------------- doughnut init ----------------------------------------- */ 
 
 const dataD = {
-  labels: [
-  ],
+  labels: [],
   datasets: [{
     label: 'My First Dataset',
     data: [],
-    backgroundColor: [
-    ],
+    backgroundColor: [],
     borderColor: 'rgba(255, 99, 132, 0)',
     hoverOffset: 4
   }]
@@ -239,10 +267,10 @@ const configD = {
 const Dchart = document.getElementById('myDoughnutChart')
 var myDoughnutChart = new Chart(Dchart, configD);
 
-
-
-
 /* ----------------------------------------- init loading ----------------------------------------- */ 
+var refreshTime = 60
+var lenLimit = 300
+
 //nastavení délky vykreslovaných dat
 var input = document.getElementById("timerMax");
 input.addEventListener("keypress", function(event) {
@@ -255,7 +283,6 @@ input.addEventListener("keypress", function(event) {
       console.log(input.value, "new set time")
       refreshTime = input.value
     }
-    
   }
 });
 
@@ -270,27 +297,12 @@ input2.addEventListener("keypress", function(event) {
       console.log(input2.value, "new set data len for graph")
       lenLimit = input2.value
     }
-    
   }
 });
 
 
 
-
-
-
-var refreshTime = 60
-var lenLimit = 300
-var stopTimer = false
-
-
-window.api.receive("fromMainServerDown", (data) => {
-  console.log("down")
-  myCheckbox.checked=false
-});
-
-
-var initAutoReload = false;//start auto reload onli on first load
+var initAutoReload = false; //start auto reload only on first load
 
 function loadTableData(){
   window.api.send("toMainSettings")//načítá nastavení a všechna data
@@ -302,8 +314,7 @@ function loadTableData(){
     input2.value = lenLimit
     
     myCheckbox.checked=true
-
-    loadAllDataNew()  // načtení všech dat
+    dataForGraphsT(undefined, undefined, "s", true, true)
     if (!initAutoReload){
       autoReload()
       initAutoReload = true;
@@ -329,9 +340,9 @@ function autoReload(){
       if (t==2){
         timer.innerText = "Time to refresh: " + t + " s"
         if (myBarChart.data.labels.length>1){
-          loadDataFrom(lastTime)
+          dataForGraphsT(lastLoadedTime+1, undefined, "s", false, true)
         }else{
-          loadAllDataNew()
+          dataForGraphsT(undefined, undefined, "s", true, true)
         }
         console.log(myChart.data)
         --t
@@ -344,142 +355,6 @@ function autoReload(){
       }
     }, 1000);//1000
 }
-
-
-
-
-
-function timeConv(time){
-  time>lastTime ? lastTime=time:null;
-  time = new Date(time)
-  var returnedTime = {"YMD":(time.getFullYear()+'-'+(time.getMonth()+1)+'-'+time.getDate())
-  ,"hms":(time.getHours()+':'+time.getMinutes()+':'+time.getSeconds())}
-  return returnedTime
-}
-
-var shifted = 0
-function dataForGraphs(dataAdd){//write to line graph and get data for other graphs setting it to json from first graph
-  var ld = false
-  dataAdd.forEach(da => {
-    kl = myChart.data.datasets.findIndex(function(item, i){return item.address == da.address})
-    if(kl != -1){
-      k = (hmsPrews >= Math.floor(da.time/1000))
-      hmsPrews!=Math.floor(da.time/1000)?hmsPrews=Math.floor(da.time/1000):hmsPrews;
-
-      var time = timeConv(da.time)
-      if (!k){
-        if (YMDprews == time.YMD){
-          myChart.data.labels.push([time.hms])
-        }else{
-          myChart.data.labels.push([time.hms,time.YMD])
-          YMDprews = time.YMD
-        }
-        myChart.data.labelTimestamp.push(Math.floor(da.time/1000))
-        
-
-        if (myChart.data.labels.length>lenLimit){
-          myChart.data.labelTimestamp.shift()
-          myChart.data.labels.shift()
-          shifted++
-        }
-        myChart.data.datasets.forEach(element => {
-          
-          if (element.address==da.address){
-            element.data.push(da.value)
-            da.value == -1 ? element.failed++:element.passed++;
-          }
-          else{
-            element.data.push(NaN)
-          }
-
-          if (element.data.length>lenLimit){
-            element.data.shift()
-          }
-        });
-      }
-      else{
-        myChart.data.datasets.forEach(element => {
-          if (element.address==da.address){
-            var posAvr = myChart.data.labelTimestamp.findIndex(function(item, i){return item == Math.floor(da.time/1000)})
-            element.data[posAvr] = da.value
-            da.value == -1 ? element.failed++:element.passed++;
-          }
-        });
-      }
-    }
-  });
-  console.log("%c  Shifted count: "+ shifted +" values is hidden. \n  Graph limit: "+myChart.data.labels.length+"/"+lenLimit, 'color:yellow')
-}
-
-function setAndUpdate(firstSett, averageData){
-  var B_failed = []
-  var B_passed = []
-
-  var P_data = []
-  var P_color = []
-
-  var D_data = []
-  var D_color = []
-  myChart.data.datasets.forEach(element => {
-    if (firstSett){
-      myBarChart.data.labels.push(element.label)
-      myPolarChart.data.labels.push(element.label)
-      myDoughnutChart.data.labels.push(element.label)
-    }
-    else{
-      posAvr = averageData.data.findIndex(function(item, i){return item.address == element.address})
-      element.average = averageData.data[posAvr].average
-    }
-    
-
-    B_failed.push(element.failed)
-    B_passed.push(element.passed)
-  
-    
-    dcol = element.borderColor
-    P_color.push('rgba('+parseInt(dcol[1]+dcol[2], 16)+","+parseInt(dcol[3]+dcol[4], 16)+","+parseInt(dcol[5]+dcol[6], 16)+',0.7)')
-    P_data.push(element.average)
-
-    
-    D_color.push('rgba('+parseInt(dcol[1]+dcol[2], 16)+","+parseInt(dcol[3]+dcol[4], 16)+","+parseInt(dcol[5]+dcol[6], 16)+',1)')
-    D_data.push(element.passed)
-  });
-
-/*
-  console.log(myChart.data.labels,myChart.data.datasets)
-  console.log(myBarChart.data.labels, B_passed, B_failed)
-  console.log(myPolarChart.data.labels, P_color, P_data)
-  */
-
-  //myChart.data.labels =  myChart.data.labels
-  //myChart.data.datasets = myChart.data.datasets
-  
-  myChart.update()
-
-  //myBarChart.data.labels =  myBarChart.data.labels
-  myBarChart.data.datasets[0].data = B_passed
-  myBarChart.data.datasets[1].data = B_failed
-  myBarChart.update()
-
-  //myPolarChart.data.labels =  myPolarChart.data.labels
-  myPolarChart.data.datasets =  [{
-    backgroundColor: P_color,
-    borderColor: 'rgba(255, 99, 132, 0)',
-    data: P_data}]
-
-  myPolarChart.data.datasets.backgroundColor = P_color
-  myPolarChart.data.datasets.data = P_data
-  myPolarChart.update()
-
-
-  myDoughnutChart.data.datasets =[{
-    backgroundColor: D_color,
-    borderColor: 'rgba(255, 99, 132, 0)',
-    data: D_data
-  }]
-  myDoughnutChart.update()
-}
-
 
 
 
@@ -498,94 +373,6 @@ function clearDataFromGraphs(){
   myDoughnutChart.data.labels = []
 }
 
-function loadAllDataNew(){
-
-  myCheckbox.checked=true
-  clearDataFromGraphs()
-  
-  shifted = 0
-  hmsPrews = 0
-
-
-  window.api.httpRequest("requestLoadAll")//načítá všechna data všechny časy
-  window.api.receive("fromMainRequestLoadAll", (allResp) => {
-    if (allResp == "errorFlag")
-    {
-      myCheckbox.checked=false
-      console.log("errorFla")
-      return
-    }
-    window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
-    window.api.receive("fromMainRequestTaskProperties", (taskSpecs) => {
-      window.api.httpRequest("requestTasksAverage", {params:{worker:"default"}})//načtení prměrů všech úkolů
-      window.api.receive("fromMainRequestTaskAverage", (averageData) => {
-        taskSpecs.forEach(element => {
-          if(averageData.data.some(item => item.address === element.address && element.hide==false)){
-            posAvr = averageData.data.findIndex(function(item, i){return item.address == element.address})
-            lR = averageData.data[posAvr].last_response
-            lR>lastTime ? lastTime=lR:lastTime;
-            
-            myChart.data.datasets.push({
-              "address":element.address,
-              "failed":0,
-              "passed":0,
-              "average":averageData.data[posAvr].average,
-              label:element.name, 
-              borderColor: element.color,
-              backgroundColor: 'black',
-              data:[],
-              fill: false,
-              borderWidth: 2,
-              spanGaps: true,
-              tension: 0.1,
-            })
-          }
-        });
-        
-        dataForGraphs(allResp.data)
-
-        setAndUpdate(true, averageData)
-
-      })
-    }) 
-  })
-}
-
-
-/* ----------------------------------------- refresh datas ----------------------------------------- */ 
-
-function loadDataFrom(dtf){
-  
-  window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf}})//načítá data od posledního času a přepisuje (TODO) časy
-  window.api.receive("fromMainRequestLoadAll", (allRespFrom) => {
-    if (allRespFrom == "errorFlag")
-    {
-      myCheckbox.checked=false
-      console.log("errorFla")
-      return
-    }
-    window.api.httpRequest("requestTasksAverage", {params:{'worker':"default"}})//načtení prmůěrů všech úkolů
-    window.api.receive("fromMainRequestTaskAverage", (averageData) => {
-
-      try{
-        
-        dataForGraphs(allRespFrom.data)
-
-        setAndUpdate(false, averageData)
-        
-        if (allRespFrom.length!=undefined){
-          console.log(allRespFrom.length)
-        }
-
-      }catch{
-        console.log("catch")
-        loadAllDataNew()
-      }
-    })
-  })
-}
-
-
 
 /* ----------------------------------------- data in interval load ----------------------------------------- */ 
 
@@ -600,47 +387,81 @@ const dropdownM = document.getElementById("myDropdownM");
 //butons
 const loadFromTo = document.getElementById('loadFromTo') 
 loadFromTo.addEventListener('click', async () => {
+  myCheckbox.checked=false
   const startTime = Date.parse(startInput.value);
   const endTime = Date.parse(endInput.value);
   const selectedOption = dropdownM.options[dropdownM.selectedIndex].value;
 
-  loadDataInterval(startInput.value==""?0:startTime,endInput.value==""?Date.now():endTime, selectedOption)
+  dataForGraphsT(startInput.value==""?undefined:startTime, endInput.value==""?undefined:endTime, selectedOption, true, false)
 })
 
 
-async function loadDataInterval(dtf,dtt,step){
-  shifted = 0
-  hmsPrews = 0
 
-  clearDataFromGraphs()
+var lastLoadedTime = 0
+var lastLoadedTimeAuto = ""
 
+function timeConvT(time, roundingUnit){
 
+  time = new Date(time)
+
+  var [year, month, day, hour, minute, second] = [time.getFullYear(), (time.getMonth()+1), time.getDate(), time.getHours(), time.getMinutes(), time.getSeconds()]//YMDhms
+
+  switch (roundingUnit) {
+    case 's':
+      newTime = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}:${second.toString().padStart(2, "0")}`;
+      newDate = `${year.toString()}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+      break;
+    case 'm':
+      newTime = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}:00`;
+      newDate = `${year.toString()}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+      break;  
+    case 'h':
+      newTime = `${hour.toString().padStart(2, "0")}:00:00`;
+      newDate = `${year.toString()}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+      break;
+    case 'D':
+      newTime = "00:00:00"
+      newDate = `${year.toString()}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+      break;
+    case 'M':
+      newTime = "00:00:00"
+      newDate = `${year.toString()}-${month.toString().padStart(2, "0")}-00`;
+      break;
+    case 'Y':
+      newTime = "00:00:00"
+      newDate = `${year.toString()}-00-00`;
+      break;
+  }
+
+  var returnedTime = {"YMD":newDate, "hms":newTime}
+  return returnedTime
+}
+
+function dataForGraphsT(dtf = 0, dtt=Date.now(), step = "s", firsLoad = true, auto = true){//write to line graph and get data for other graphs setting it to json from first graph
+  var chartData = [], labels = [], newWal = true, i = 0
+  ttt = Date.now()
+  console.log((Date.now() - ttt), ttt = Date.now())
+  if (firsLoad){lastLoadedTime = 0}
   window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf,'time_to':dtt}})//načítá data od posledního času a přepisuje (TODO) časy
   window.api.receive("fromMainRequestLoadAll", (allRespInterv) => {
-    console.log(myChart.data)
     if (allRespInterv == "errorFlag")
     {
       console.log("errorFla")
       myCheckbox.checked=false
       return
     }
+    console.log((Date.now() - ttt), ttt = Date.now())
     window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
     window.api.receive("fromMainRequestTaskProperties", (taskSpecs) => {
-      console.log(myChart.data)
-      window.api.httpRequest("requestTasksAverage", {params:{'worker':"default"}})//načtení prmůěrů všech úkolů
-      window.api.receive("fromMainRequestTaskAverage", (averageData) => {
-        console.log(myChart.data)
-        taskSpecs.forEach(element => {
-          if(averageData.data.some(item => item.address === element.address && element.hide==false)){
-            posAvr = averageData.data.findIndex(function(item, i){return item.address == element.address})
-            lR = averageData.data[posAvr].last_response
-            lR>lastTime ? lastTime=lR:lastTime;
+      console.log((Date.now() - ttt), ttt = Date.now())
+      taskSpecs.filter(element => element.hide == false).forEach(element => {
             
-            myChart.data.datasets.push({
+            chartData.push({
               "address":element.address,
               "failed":0,
               "passed":0,
-              "average":averageData.data[posAvr].average,
+              "average":0,
+              "dataMed":[],
               label:element.name, 
               borderColor: element.color,
               backgroundColor: 'black',
@@ -650,149 +471,85 @@ async function loadDataInterval(dtf,dtt,step){
               spanGaps: true,
               tension: 0.1,
             })
-          }
         });
 
-        myCheckbox.checked=false/*
-        dataForGraphsInterv(allRespInterv.data, step)
+        if (auto){var tprev = lastLoadedTimeAuto}else{var tprev = {"YMD":"", "hms":""}}
         
-        setTimeout(() => {
-          setAndUpdate(true, averageData)
-        }, 3000);*/
-        console.log(myChart.data)
-        processData(allRespInterv.data, step, averageData)
-        console.log(myChart.data)
-      })
-      
+        allRespInterv.data.forEach(da => {
+          //kl = chartData.findIndex(function(item, i){return item.address == da.address})
+            lastLoadedTime = da.time
+            var time = timeConvT(da.time, step)//YMDhms
+
+            var newLabel = true
+            if (time.YMD != tprev.YMD) {
+              //console.log([time.hms, time.YMD])
+              labels.push([time.hms, time.YMD])
+            }
+            else if (time.hms != tprev.hms) {
+              //console.log([time.hms])
+              labels.push([time.hms])
+            }
+            else {
+              //console.log("aaaaaaa")
+              newLabel = false
+            }
+            tprev = time
+            lastLoadedTimeAuto = {"YMD":time.YMD, "hms":time.hms}
+            
+            if (newLabel){
+              chartData.forEach(element => {
+                if (!newWal) {
+                  //console.log(sumNumbersT(element.dataMed), i++, labels[labels.length-2], element.address)
+                  element.data.push(sumNumbersT(element.dataMed))
+                  element.dataMed = []
+                }
+
+                if (element.address==da.address){
+                  //element.data.push(da.value)
+                  element.dataMed.push(da.value)
+                  da.value == -1 ? element.failed++:element.passed++;
+                }
+                else{
+                  //element.data.push(NaN)
+                  element.dataMed.push(NaN)
+                }
+
+              });
+              if (newWal){
+                newWal = false
+              }
+            }
+            else{
+              chartData.forEach(element => {
+                if (element.address==da.address){
+                  element.dataMed.push(da.value)
+                  //var posAvr = myChart.data.labelTimestamp.findIndex(function(item, i){return item == Math.floor(da.time/1000)})
+                  //element.data[element.data.length-1] = da.value
+                  da.value == -1 ? element.failed++:element.passed++;
+                }
+              });
+            }
+        });
+
+        chartData.forEach(element => {
+          //console.log(sumNumbersT(element.dataMed), i++, labels[labels.length-1], element.address)
+          element.data.push(sumNumbersT(element.dataMed))
+          element.dataMed = []
+          element.average = sumNumbersT(element.data)
+        });
+        console.log((Date.now() - ttt), ttt = Date.now())
+        //console.log(lastLoadedTime, lastLoadedTimeAuto)   
+        setAndUpdateT(firsLoad, chartData, labels, auto);
+        console.log((Date.now() - ttt), ttt = Date.now())
     })
   })
-}
-
-async function processData(allResp, step, average) {
-  const data = await dataForGraphsInterv(allResp, step);
-  setAndUpdate(true, average);
-}
-
-
-
-async function dataForGraphsInterv(dataAdd, step){//write to line graph and get data for other graphs setting it to json from first graph
-  var ld = false
-  dataAdd.forEach(da => {
-    kl = myChart.data.datasets.findIndex(function(item, i){return item.address == da.address})
-    if(kl != -1){
-      k = (hmsPrews >= Math.floor(da.time/1000))
-      hmsPrews!=Math.floor(da.time/1000)?hmsPrews=Math.floor(da.time/1000):hmsPrews;
-
-      var time = timeConvV(da.time)//YMDhms
-      if (!k){    // if lable is not in graph memmory then create new label
-        if (YMDprews == time.YMD){//check if label is on same day else creat new inclueding day 
-          myChart.data.labels.push([time.hms])
-        }else{
-          myChart.data.labels.push([time.hms,time.YMD])
-          YMDprews = time.YMD
-        }
-        myChart.data.labelTimestamp.push(Math.floor(da.time/1000))//lable timestamps just for me not for graphs
-
-        
-        myChart.data.datasets.forEach(element => {
-          
-          if (element.address==da.address){
-            element.data.push(da.value)
-            da.value == -1 ? element.failed++:element.passed++;
-          }
-          else{
-            element.data.push(NaN)
-          }
-        });
-      }
-      else{
-        myChart.data.datasets.forEach(element => {
-          if (element.address==da.address){
-            var posAvr = myChart.data.labelTimestamp.findIndex(function(item, i){return item == Math.floor(da.time/1000)})
-            element.data[posAvr] = da.value
-            da.value == -1 ? element.failed++:element.passed++;
-          }
-        });
-      }
-    }
-    else{
-      ld = true
-    }
-  });
-
-  const [retLabels, arrIndex] = roundTimeOccurrencesa(myChart.data.labels, step)
-  console.log(retLabels, arrIndex)
-  myChart.data.datasets.forEach(element => {
-    const data = [], labels = []
-    for (let i = 0; i <= arrIndex.length-2; i++) {
-      data.push(sumNumbers(element.data,arrIndex[i],arrIndex[i+1]))
-      labels.push(retLabels[i])
-    }
-    myChart.data.labels = labels
-    element.data = data
-  });
   
-  return ld
 }
 
-
-
-
-
-function roundTimeOccurrencesa(occurrences, roundingUnit) {
-  const roundedOccurrences = [];
-  let dd = "";
-  let preVal = [];
-  let preValY = [];
-  const ind = [];
-  occurrences.forEach((occurrence, index) => {
-    const [time, date] = occurrence;
-    date!=undefined?dd=date:""
-    const [hour, minute, second] = time.split(':').map(str => parseInt(str, 10));
-    const [year, month, day] = dd.split('-').map(str => parseInt(str, 10));
-    let newTime = "", newDate = ""
-    switch (roundingUnit) {
-      case 's':
-        newTime = time;
-        newDate = dd;
-        break;
-      case 'm':
-        newTime = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}:00`;
-        newDate = dd
-        break;  
-      case 'h':
-        newTime = `${hour.toString().padStart(2, "0")}:00:00`;
-        newDate = dd
-        break;
-      case 'D':
-        newTime = "00:00:00"
-        newDate = `${year.toString()}:${month.toString().padStart(2, "0")}:${day.toString().padStart(2, "0")}`;
-        break;
-      case 'M':
-        newTime = "00:00:00"
-        newDate = `${year.toString()}:${month.toString().padStart(2, "0")}:01`;
-        break;
-      case 'Y':
-        newTime = "00:00:00"
-        newDate = `${year.toString()}:01:01`;
-        break;
-    }
-    if (preVal!=newTime || (date!=undefined && preValY!=newDate)){
-      preValY = newDate;
-      preVal = newTime;
-      ind.push(index)
-      roundedOccurrences.push(date!=undefined?[newTime, newDate]:[newTime]);
-    }
-  });
-  ind.push(occurrences.length)
-  return [roundedOccurrences, ind];
-}
-
-
-function sumNumbers(numbers, from, to) {
+function sumNumbersT(numbers) {//summ numbers and count average 
   let sum = 0;
   let nonNaN = 0
-  numbers.slice(from, to).forEach(function(num) {
+  numbers.forEach(function(num) {
     if (!isNaN(num)) {
       sum += num;
       nonNaN++
@@ -802,39 +559,120 @@ function sumNumbers(numbers, from, to) {
   return nonNaN>0?sum/nonNaN:NaN;
 }
 
+async function setAndUpdateT(firstSett, data, labels, auto){
+  //const nanArray = Array(myChart.data.labels.length).fill(NaN);
+  //console.log(nanArray, auto)
 
+  var L_datasets = myChart.data.datasets
+  var L_labels = myChart.data.labels
+  
+  var B_failed = myBarChart.data.datasets[1].data
+  var B_passed = myBarChart.data.datasets[0].data
 
+  var P_data = myPolarChart.data.datasets.data
+  var P_color = myPolarChart.data.datasets.backgroundColor
+  
+  var D_data = myDoughnutChart.data.datasets[0].data
+  var D_color = myDoughnutChart.data.datasets[0].backgroundColor
+    
+    
+  if (firstSett){//load labels if first sett label for line chart is in datasets
+    var L_datasets = [],B_failed = [],B_passed = [],P_data = [],P_color = [],D_data = [],D_color = [],L_labels = []
 
-function timeConvV(time, t){
+    clearDataFromGraphs()
+    data.forEach(element => {
+      myBarChart.data.labels.push(element.label)
+      myPolarChart.data.labels.push(element.label)
+      myDoughnutChart.data.labels.push(element.label)
 
-  time = new Date(time)
-  var returnedTime = {"YMD":(time.getFullYear()+'-'+(time.getMonth()+1)+'-'+time.getDate())
-  ,"hms":(time.getHours()+':'+time.getMinutes()+':'+time.getSeconds())}
-  return returnedTime
+      L_datasets.push(element)
+
+      B_failed.push(element.failed)
+      B_passed.push(element.passed)
+    
+      
+      dcol = element.borderColor
+      P_color.push('rgba('+parseInt(dcol[1]+dcol[2], 16)+","+parseInt(dcol[3]+dcol[4], 16)+","+parseInt(dcol[5]+dcol[6], 16)+',0.7)')
+      P_data.push(element.average)
+  
+      
+      D_color.push('rgba('+parseInt(dcol[1]+dcol[2], 16)+","+parseInt(dcol[3]+dcol[4], 16)+","+parseInt(dcol[5]+dcol[6], 16)+',1)')
+      D_data.push(element.passed)
+    });
+    L_labels = labels
+  }
+  else{
+    D_color = [], P_color = []
+    data.forEach(element => {
+      //console.log(element)
+      //console.log("asdfsadfsdafsadfsdafsdafsda", L_datasets.findIndex(function(item, i){return item.address == element.address}))
+      index = L_datasets.findIndex(function(item, i){return item.address == element.address})
+      //console.log(index,L_datasets[index].data)
+      if (index!=-1){
+        L_datasets[index].data = L_datasets[index].data.concat(element.data)
+
+        B_failed[index] = B_failed[index]+element.failed
+        B_passed[index] = B_passed[index]+element.passed
+
+        dcol = element.borderColor
+        P_color[index] = 'rgba('+parseInt(dcol[1]+dcol[2], 16)+","+parseInt(dcol[3]+dcol[4], 16)+","+parseInt(dcol[5]+dcol[6], 16)+',0.7)'
+
+        
+        P_data[index] = sumNumbersT([P_data[index], element.average])
+        
+        D_color[index] = 'rgba('+parseInt(dcol[1]+dcol[2], 16)+","+parseInt(dcol[3]+dcol[4], 16)+","+parseInt(dcol[5]+dcol[6], 16)+',1)'
+        D_data[index] = D_data[index] + element.passed
+
+      }
+    });
+    L_labels = L_labels.concat(labels)
+  }
+
+  if (auto){
+    trim = L_labels.length<lenLimit?0:L_labels.length-lenLimit
+    L_datasets.forEach(element => {
+      //console.log(element.data.length<lenLimit?0:-(lenLimit-element.data.length))
+      
+      element.data.splice(0, trim)
+
+    });
+    L_labels.splice(0, trim)
+    console.log("%c  Trimmed count: "+ trim +" values is hidden. \n  Graph limit: "+myChart.data.labels.length+"/"+lenLimit, 'color:yellow')
+  }
+
+  console.log("labels and data",[L_labels, L_datasets])
+
+  myChart.data.datasets = L_datasets
+  myChart.data.labels = L_labels
+  
+  myChart.update()
+
+  //myBarChart.data.labels =  myBarChart.data.labels
+  myBarChart.data.datasets[0].data = B_passed
+  myBarChart.data.datasets[1].data = B_failed
+  myBarChart.update()
+
+  //myPolarChart.data.labels =  myPolarChart.data.labels
+  myPolarChart.data.datasets =  [{
+    backgroundColor: P_color,
+    borderColor: 'rgba(255, 99, 132, 0)',
+    data: P_data}]
+
+  myPolarChart.data.datasets.backgroundColor = P_color
+  myPolarChart.data.datasets.data = P_data
+
+  myPolarChart.update()
+
+  myDoughnutChart.data.datasets =[{
+    backgroundColor: D_color,
+    borderColor: 'rgba(255, 99, 132, 0)',
+    data: D_data
+  }]
+
+  myDoughnutChart.update()
+  
+  //console.log(labels, L_datasets)
+  //console.log(myBarChart.data.labels, B_passed, B_failed)
+  //console.log(myPolarChart.data.labels, P_color, P_data)
+  //console.log(myDoughnutChart.data.labels, D_color, D_data, myDoughnutChart.data.datasets[0].backgroundColor)
 }
-
-
-//menu
-const menuButtonG = document.getElementById('menuButton-G');
-    const menuG = document.getElementById('menu-G');
-
-    menuButtonG.addEventListener('click', function() {
-      showMenuG()
-    });
-
-    const hideMenuBtnG = document.getElementById('hide-menu-btn-G');
-
-    hideMenuBtnG.addEventListener('click', () => {
-      hideSettMenuG()
-    });
-
-    function hideSettMenuG(){
-      menuG.classList.toggle('visible-G');
-      document.body.classList.remove('overlay-G');
-      clear()
-    }
-
-    function showMenuG(){
-      menuG.classList.toggle('visible-G');
-      document.body.classList.add('overlay-G');
-    }

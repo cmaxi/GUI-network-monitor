@@ -105,5 +105,18 @@ b11.addEventListener('click', async () => {
 //logs from main
 
 window.api.receive_cmd("fromMainRequestLog",(data)=>{
-    console.log("%c"+data[0] +" "+ data[1],data[1]!=200?'color:red':'color:cyan')
+  console.log("%c"+data[0] +" "+ data[1],data[1]!=200?'color:red':'color:cyan')
+})
+
+
+const version = document.getElementById('version')
+document.addEventListener("DOMContentLoaded", function(){
+  window.api.send("toMainUpdateMessage", "")
+  window.api.receive_cmd("fromMainUpdateMessage",(data)=>{
+    version.innerHTML = data
   })
+})
+
+
+
+

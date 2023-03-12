@@ -315,7 +315,12 @@ th{cursor: pointer;}
     background-color: #ddd;
   }
 
-
+  .arrow-up {
+    content: '\2191'; /* kód pro šipku nahoru */
+  }
+  .arrow-down {
+    content: '\2193'; /* kód pro šipku dolů */
+  }
 
 
   /*menu v grafech*/

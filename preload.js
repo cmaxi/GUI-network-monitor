@@ -14,10 +14,12 @@ contextBridge.exposeInMainWorld("api", {
                 "toMainJsonSave" - save updated local json file
                 "toMainSettings" - load saved settings
                 "toMainServerDown" - user response for server down for close app
+                "toMainUpdateMessage" - message about version of app
+
                 
         */
         // whitelist channels
-        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings", "toMainServerDown", "toMainServerUp"];
+        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings", "toMainServerDown", "toMainServerUp", "toMainUpdateMessage"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
             console.log("%c  -" + channel +  " send", 'color:green')//transfer log
@@ -37,7 +39,7 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainServerDown" - message server is online and runing
 
         */
-        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown", "fromMainUpdateMessage"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
@@ -51,9 +53,10 @@ contextBridge.exposeInMainWorld("api", {
             function:
                 "fromMainhowHideSwitch" - switch betwen windows
                 "fromMainRequestLog" - requested data -log from transfer
+                "fromMainUpdateMessage" - message about version of app
         */
         // whitelist channels
-        let validChannels = ["fromMainhowHideSwitch", "fromMainRequestLog"];
+        let validChannels = ["fromMainhowHideSwitch", "fromMainRequestLog", "fromMainUpdateMessage"];
         console.log("%c  -" + channel + " recieve_cmd", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             ipcRenderer.on(channel, (event, ...args) => func(...args));

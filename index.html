@@ -5,7 +5,7 @@
     content="default-src 'self'; img-src https://* file://* data:; child-src 'none';">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     
-    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css"/>
     <!---->
     
     <title>Server handle</title>
@@ -41,10 +41,10 @@
       <div id="loginForm">
         <form class="logF">
           <label for="username" class="log">Username:</label>
-          <input type="text" id="username" class="log" placeholder="username">
+          <input type="text" id="username" class="log" placeholder="username" value="aa">
           <br>
           <label for="password" class="log">Password:</label>
-          <input type="password" id="password" class="log" placeholder="password">
+          <input type="password" id="password" class="log" placeholder="password" value="aa">
           <br>
           <label for="ipAddress" class="log">IP:</label>
           <input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log" value="https://192.168.1.110:8000">
@@ -56,7 +56,7 @@
           <input type="button" value="Log In" class="log" id="validateLogIn">
         </form>
       </div>
-      
+      <p id="version">Version is </p>
     </div>
     <div id="spacer"></div>
 
@@ -109,16 +109,16 @@
               <table id="myTable">
                 <thead>
                   <tr>
-                    <th id="sortx" class="tabH">Update</th>
-                    <th id="sort1" class="tabH">ID</th>
-                    <th id="sort2" class="tabH">Name</th>
-                    <th id="sort3" class="tabH">Address</th>
-                    <th id="sortx" class="tabH">Color</th>
-                    <th id="sortx" class="tabH">Period</th>
-                    <th id="sort6" class="tabH">Coordinates</th>
-                    <th id="sort7" class="tabH">Worker</th>
-                    <th id="sort8" class="tabH">Runing</th>
-                    <th id="sort9" class="tabH">Hide in graph</th>
+                    <th id="sortx" class="tabH">Update</span></th>
+                    <th id="sort1" class="tabH">ID</span></th>
+                    <th id="sort2" class="tabH">Name</span></th>
+                    <th id="sort3" class="tabH">Address</span></th>
+                    <th id="sortx" class="tabH">Color</span></th>
+                    <th id="sortx" class="tabH">Period</span></th>
+                    <th id="sort6" class="tabH">Coordinates</span></th>
+                    <th id="sort7" class="tabH">Worker</span></th>
+                    <th id="sort8" class="tabH">Runing</span></th>
+                    <th id="sort9" class="tabH">Hide in graph</span></th>
                     <th id="sortx" class="tabH">Dellete</th>
                   </tr>
                 </thead>
@@ -134,6 +134,8 @@
               <li id="Hide" class="dropdown">Hide in graph</li>
             </ul>
           </div>
+
+
     </div>
 
     <!--grafy -->
@@ -152,7 +154,7 @@
         <input type = "number" id = "lenMax">
       </div>
       <b id="timer"></b>
-      <button id="menuButton-G"><img src="icons/Settings.png" height="20px"></button>
+      <button id="menuButton-G"><img src="pics/Settings.png" height="20px"></button>
       <button type="button" id="load_d">Reload all data.</button>
       <br>
       <label for="start-time">Start Time:</label>
@@ -177,6 +179,7 @@
         <button type="button" id="left_m">Shift to Left</button>
         <button type="button" id="resetZoom">Reset zoom</button>
         <button type="button" id="right_m">Shift to Right</button>
+        
       </div>
         <div id="gResp1">
           <h1>Error graph</h1>
@@ -209,16 +212,16 @@
 
 
 
-      <script src="./renderer.js"></script>   <!-- spustí skript -->
+      <script src="./podpr/renderer.js"></script>   <!-- spustí skript -->
       
       <script src="./podpr/jsonhandle.js"></script>
 
-      <script src="node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="./node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="./node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="./node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
       <script src="./podpr/graphs.js"></script>
   
-      <script src="node_modules/leaflet/dist/leaflet.js"></script>
+      <script src="./node_modules/leaflet/dist/leaflet.js"></script>
       <script src="./podpr/maps.js"></script>
   
       

@@ -342,6 +342,7 @@ document.addEventListener('scroll', function(event) {
 
 // sort table by ithem
 tableA = document.getElementById("myTable");
+var prevClickedHeader = null;
 function sortTable(n) {
   var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
   switching = true;
@@ -376,165 +377,171 @@ function sortTable(n) {
       }
     }
   }
+  // aktualizovat proměnnou prevClickedHeader při kliknutí na sloupec
+  
+  if (prevClickedHeader) {
+    prevClickedHeader.innerHTML = prevClickedHeader.innerHTML.replace(/[↑↓]/g, "");
+  }
+  var arrow = dir === "asc" ? "&uarr;" : "&darr;";
+  tableA.rows[0].getElementsByTagName("TH")[n].innerHTML += arrow;
+  prevClickedHeader = tableA.rows[0].getElementsByTagName("TH")[n];
+}
+
+
+
+
+// Generate table rows and cells
+
+var position = 0
+
+function appendTableData(data){
+  data.forEach(function callback(rowData, index){
+
+      var row = document.createElement("tr");
+      row.setAttribute("id", "row" + index);
+      row.classList.add("tabRow");
+
+      row.addEventListener('contextmenu', event => {
+        position = parseInt(row.id.replace(/\D/g, ''));
+          // Show context menu on right click
+          event.preventDefault();
+          contextMenu.classList.add("show-context-menu");
+          contextMenu.style.left = event.pageX + "px";
+          contextMenu.style.top = event.pageY + "px";
+      })
+
+
+
+
+      var updateCell = document.createElement("td");
+      const buttonU = document.createElement("button");
+      var img = document.createElement("img");
+      img.src = "pics/Update.png";  // Zde nastavte cestu k vaší ikoně
+      img.height = 20;
+      buttonU.appendChild(img);
+      buttonU.addEventListener("click", function() {
+        const pozice = parseInt(row.id.replace(/\D/g, ''));
+        loadSpecs(tasks_raw_data[pozice].name)
+      });
+      updateCell.appendChild(buttonU);
+      row.appendChild(updateCell)
+
+      var idCell = document.createElement("td");
+      n = (index+1 >= 10 ? '0' : '00') + (index+1)
+      
+
+      generate(row ,idCell, n, index)
+
+      var nameCell = document.createElement("td");
+      generate(row ,nameCell, rowData["name"], index)
+
+      var addressCell = document.createElement("td");
+      generate(row ,addressCell, rowData["address"], index)
+
+      var colorCell = document.createElement("td");
+      colorCell.style.backgroundColor = rowData["color"];
+      colorCell.setAttribute("id", "row" + index);
+      row.appendChild(colorCell);
+
+      var periodCell = document.createElement("td");
+      generate(row, periodCell, rowData["frequency"], index)
+
+      var periodCell = document.createElement("td");
+      periodCell.innerHTML = "Lat: " + rowData["latitude"]+"<br>Lon: " + rowData["longitude"];
+      periodCell.setAttribute("id", "row" + index);
+      row.appendChild(periodCell);
+
+      var periodCell = document.createElement("td");
+      generate(row, periodCell, rowData["worker"], index)
+
+      var pauseCell = document.createElement("td");
+      const buttonP = document.createElement("button");
+      var img = document.createElement("img");
+      img.src = rowData["runing"]==true?"pics/Pause.png":"pics/Start.png";  // Zde nastavte cestu k vaší ikoně
+      img.height = 20;
+      buttonP.appendChild(img);
+      buttonP.addEventListener("click", function() {
+        pausStart(tasks_raw_data[index].name)
+      });
+      pauseCell.appendChild(buttonP);
+      row.appendChild(pauseCell)
+      pauseCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
+
+
+      var hideCell = document.createElement("td");
+      const buttonH = document.createElement("button");
+      var img = document.createElement("img");
+      img.src = rowData["hide"]==true?"pics/Show.png":"pics/Hide.png";  // Zde nastavte cestu k vaší ikoně
+      img.height = 20;
+      buttonH.appendChild(img);
+      buttonH.addEventListener("click", function() {
+        hideTask(tasks_raw_data[index].name)
+      });
+      hideCell.appendChild(buttonH);
+      row.appendChild(hideCell)
+      hideCell.style.backgroundColor = rowData["hide"]==true?"gray":"white";
+
+
+      var dellCell = document.createElement("td");
+      const buttonD = document.createElement("button");
+      var img = document.createElement("img");
+      img.src = "pics/Trash.png";  // Zde nastavte cestu k vaší ikoně
+      img.height = 20;
+      buttonD.appendChild(img);
+      buttonD.addEventListener("click", function() {
+        dellAdress(tasks_raw_data[index].name)
+      });
+      dellCell.appendChild(buttonD);
+      row.appendChild(dellCell)
+
+      tableA.appendChild(row);
+    });
+}
+
+
+//appendTableData(data)
+function generate(row, cell, rowdata, index){
+  cell.classList.add("row");
+  cell.setAttribute("id", "row" + index);
+
+  cell.innerHTML = rowdata;
+  row.appendChild(cell);
+}
+
+
+function refreshTable(data){
+  while (tableA.lastElementChild && tableA.lastElementChild!=tableA.firstElementChild) {
+        tableA.lastElementChild.remove();
+  
+  }
+  appendTableData(data)
 }
 
 
 
 
 
-  
-    // Generate table rows and cells
-    
-    var position = 0
+const menuButton = document.getElementById('menuButton');
+const menu = document.getElementById('menu');
 
-    function appendTableData(data){
-      data.forEach(function callback(rowData, index){
+menuButton.addEventListener('click', function() {
+  showMenu()
+});
 
-          var row = document.createElement("tr");
-          row.setAttribute("id", "row" + index);
-          row.classList.add("tabRow");
+const hideMenuBtn = document.getElementById('hide-menu-btn');
 
-          row.addEventListener('contextmenu', event => {
-            position = parseInt(row.id.replace(/\D/g, ''));
-              // Show context menu on right click
-              event.preventDefault();
-              contextMenu.classList.add("show-context-menu");
-              contextMenu.style.left = event.pageX + "px";
-              contextMenu.style.top = event.pageY + "px";
-          })
+hideMenuBtn.addEventListener('click', () => {
+  hideSettMenu()
+});
 
+function hideSettMenu(){
+  menu.classList.toggle('visible');
+  document.body.classList.remove('overlay');
+  clear()
+}
 
-
-
-          var updateCell = document.createElement("td");
-          const buttonU = document.createElement("button");
-          var img = document.createElement("img");
-          img.src = "icons/Update.png";  // Zde nastavte cestu k vaší ikoně
-          img.height = 20;
-          buttonU.appendChild(img);
-          buttonU.addEventListener("click", function() {
-            const pozice = parseInt(row.id.replace(/\D/g, ''));
-            loadSpecs(tasks_raw_data[pozice].name)
-          });
-          updateCell.appendChild(buttonU);
-          row.appendChild(updateCell)
-
-          var idCell = document.createElement("td");
-          n = (index+1 >= 10 ? '0' : '00') + (index+1)
-          
-
-          generate(row ,idCell, n, index)
-  
-          var nameCell = document.createElement("td");
-          generate(row ,nameCell, rowData["name"], index)
-  
-          var addressCell = document.createElement("td");
-          generate(row ,addressCell, rowData["address"], index)
-  
-          var colorCell = document.createElement("td");
-          colorCell.style.backgroundColor = rowData["color"];
-          colorCell.setAttribute("id", "row" + index);
-          row.appendChild(colorCell);
-  
-          var periodCell = document.createElement("td");
-          generate(row, periodCell, rowData["frequency"], index)
-  
-          var periodCell = document.createElement("td");
-          periodCell.innerHTML = "Lat: " + rowData["latitude"]+"<br>Lon: " + rowData["longitude"];
-          periodCell.setAttribute("id", "row" + index);
-          row.appendChild(periodCell);
-  
-          var periodCell = document.createElement("td");
-          generate(row, periodCell, rowData["worker"], index)
-  
-          var pauseCell = document.createElement("td");
-          const buttonP = document.createElement("button");
-          var img = document.createElement("img");
-          img.src = rowData["runing"]==true?"icons/Pause.png":"icons/Start.png";  // Zde nastavte cestu k vaší ikoně
-          img.height = 20;
-          buttonP.appendChild(img);
-          buttonP.addEventListener("click", function() {
-            pausStart(tasks_raw_data[index].name)
-          });
-          pauseCell.appendChild(buttonP);
-          row.appendChild(pauseCell)
-          pauseCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
-
-
-          var hideCell = document.createElement("td");
-          const buttonH = document.createElement("button");
-          var img = document.createElement("img");
-          img.src = rowData["hide"]==true?"icons/Show.png":"icons/Hide.png";  // Zde nastavte cestu k vaší ikoně
-          img.height = 20;
-          buttonH.appendChild(img);
-          buttonH.addEventListener("click", function() {
-            hideTask(tasks_raw_data[index].name)
-          });
-          hideCell.appendChild(buttonH);
-          row.appendChild(hideCell)
-          hideCell.style.backgroundColor = rowData["hide"]==true?"gray":"white";
-
-
-          var dellCell = document.createElement("td");
-          const buttonD = document.createElement("button");
-          var img = document.createElement("img");
-          img.src = "icons/Trash.png";  // Zde nastavte cestu k vaší ikoně
-          img.height = 20;
-          buttonD.appendChild(img);
-          buttonD.addEventListener("click", function() {
-            dellAdress(tasks_raw_data[index].name)
-          });
-          dellCell.appendChild(buttonD);
-          row.appendChild(dellCell)
-  
-          tableA.appendChild(row);
-        });
-    }
-
-
-    //appendTableData(data)
-    function generate(row, cell, rowdata, index){
-      cell.classList.add("row");
-      cell.setAttribute("id", "row" + index);
-
-      cell.innerHTML = rowdata;
-      row.appendChild(cell);
-    }
-    
-
-    function refreshTable(data){
-      while (tableA.lastElementChild && tableA.lastElementChild!=tableA.firstElementChild) {
-            tableA.lastElementChild.remove();
-      
-      }
-      appendTableData(data)
-    }
-
-
-
-
-
-    const menuButton = document.getElementById('menuButton');
-    const menu = document.getElementById('menu');
-
-    menuButton.addEventListener('click', function() {
-      showMenu()
-    });
-
-    const hideMenuBtn = document.getElementById('hide-menu-btn');
-
-    hideMenuBtn.addEventListener('click', () => {
-      hideSettMenu()
-    });
-
-    function hideSettMenu(){
-      menu.classList.toggle('visible');
-      document.body.classList.remove('overlay');
-      clear()
-    }
-
-    function showMenu(){
-      menu.classList.toggle('visible');
-      document.body.classList.add('overlay');
-    }
+function showMenu(){
+  menu.classList.toggle('visible');
+  document.body.classList.add('overlay');
+}
 
