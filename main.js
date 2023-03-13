@@ -497,6 +497,7 @@ autoUpdater.on('update-available', (info) => {
   });
 });
 
+
 // Informace o stažení aktualizace
 autoUpdater.on('update-downloaded', (info) => {
   dialog.showMessageBox({
