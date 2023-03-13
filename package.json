@@ -1,6 +1,6 @@
 {
   "name": "Network-monitor",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "GUI for api app",
   "main": "main.js",
   "scripts": {
@@ -24,7 +24,9 @@
   "repository": "https://github.com/Guestas/GUI-network-monitor",
   "publish": {
     "provider": "github",
-    "releaseType": "release"
+    "releaseType": "release",
+    "private": true,
+    "prerelease": false    
   },
   "build": {
     "appId": "com.MCNetworkMonitor.app",

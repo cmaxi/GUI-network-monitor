@@ -131,7 +131,9 @@ function createWindow () {
   }
   Menu.setApplicationMenu(Menu.buildFromTemplate(menu))//nastavení položek v menu
   mainWindow.loadFile('index.html')         //načte html soubor
-  mainWindow.webContents.openDevTools()   //otevře vývojářské nástroje při spuštění
+  if(process.env.NODE_ENV != "development"){
+    mainWindow.webContents.openDevTools()   //otevře vývojářské nástroje při spuštění
+  }
 }
 
 fs.readFile(path.join(__dirname, 'settings.json'), (err, jsonString) => {
@@ -350,14 +352,17 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-  autoUpdater.checkForUpdates();
+
+  //autoUpdater.checkForUpdates();
   console.log(app.getVersion())
   ipcMain.on("toMainUpdateMessage", (event, args) => {
-    //autoUpdater.checkForUpdatesAndNotify()
+    const isMac = process.platform === 'darwin'
+    autoUpdater.checkForUpdates()
     mainWindow.webContents.send("fromMainUpdateMessage", ("Version is "+app.getVersion()))
   })
 
   ipcMain.on("toMainSettings", (event, args) => {
+    
       mainWindow.webContents.send("fromMainSettings", graphsSet);//posílá nastavení pro podprogramy
   })
 
@@ -420,13 +425,11 @@ app.whenReady().then(() => {
   }
 )
 
-
-
   //New Update Available
   autoUpdater.on("update-available", (info) => {
     mainWindow.webContents.send("fromMainUpdateMessage",`Update available. Current version ${app.getVersion()}`);
-    let pth = autoUpdater.downloadUpdate();
-    mainWindow.webContents.send("fromMainUpdateMessage",pth);
+    //let pth = autoUpdater.downloadUpdate();
+    //mainWindow.webContents.send("fromMainUpdateMessage",pth);
   });
 
   autoUpdater.on("update-not-available", (info) => {
@@ -442,10 +445,77 @@ app.whenReady().then(() => {
     mainWindow.webContents.send("fromMainUpdateMessage",info);
   });
 
-
   
+
 
  // Quit app when closed Zavře vše
 app.on('close', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+
+/*
+
+// Nastavení URL pro kontrolu aktualizací
+autoUpdater.setFeedURL({
+  url: 'https://github.com/Guestas/GUI-network-monitor',
+  serverType: 'generic'
+});
+*/
+
+/*
+if (process.platform === 'darwin') {
+  autoUpdater.setFeedURL({
+    url: 'https://example.com/releases/latest/mac',
+    serverType: 'generic'
+  });
+} else if (process.platform === 'win32') {
+  autoUpdater.setFeedURL({
+    url: 'https://example.com/releases/latest/win32',
+    serverType: 'generic'
+  });
+} else if (process.platform === 'linux') {
+  autoUpdater.setFeedURL({
+    url: 'https://example.com/releases/latest/linux',
+    serverType: 'generic'
+  });
+}
+*/
+
+// Zobrazí dialog s informací o aktualizaci
+autoUpdater.on('update-available', (info) => {
+  const isMac = process.platform === 'darwin'
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update available',
+    message: isMac?"A new version of ${app.getName()} is available. From: https://github.com/Guestas/GUI-network-monitor/releases/":`A new version of ${app.getName()} is available. Do you want to download and install it now?`,
+    buttons: isMac?['OK']:['Yes', 'No']
+  }).then(box=>{
+    if (box.response === 0 && !isMac) {
+      autoUpdater.downloadUpdate();
+    }
+  });
+});
+
+// Informace o stažení aktualizace
+autoUpdater.on('update-downloaded', (info) => {
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update ready',
+    message: 'A new version of the app is ready. Quit and install now?',
+    buttons: ['Yes', 'No']
+  }).then(box=>{
+    if (box.response === 0) {
+      setImmediate(() => {
+        app.removeAllListeners("window-all-closed")
+        if (mainWindow != null) {
+          mainWindow.close()
+        }
+        autoUpdater.quitAndInstall(false)
+      })
+    }
+  });
+});
+
+
+
