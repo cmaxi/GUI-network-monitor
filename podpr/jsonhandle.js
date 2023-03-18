@@ -256,12 +256,6 @@ paus.addEventListener('click', async () => {
 })
 
 
-const dellallserv = document.getElementById('dellall_html')
-dellallserv.addEventListener('click', async () => {
-  window.api.httpRequest("requestClearAllDatabase")
-})
-
-
 
 
 
@@ -465,13 +459,13 @@ function appendTableData(data){
       });
       pauseCell.appendChild(buttonP);
       row.appendChild(pauseCell)
-      pauseCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
+      //pauseCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
 
 
       var hideCell = document.createElement("td");
       const buttonH = document.createElement("button");
       var img = document.createElement("img");
-      img.src = rowData["hide"]==true?"pics/Show.png":"pics/Hide.png";  // Zde nastavte cestu k vaší ikoně
+      img.src = rowData["hide"]==false?"pics/Show.png":"pics/Hide.png";  // Zde nastavte cestu k vaší ikoně
       img.height = 20;
       buttonH.appendChild(img);
       buttonH.addEventListener("click", function() {
@@ -479,7 +473,7 @@ function appendTableData(data){
       });
       hideCell.appendChild(buttonH);
       row.appendChild(hideCell)
-      hideCell.style.backgroundColor = rowData["hide"]==true?"gray":"white";
+      //hideCell.style.backgroundColor = rowData["hide"]==true?"gray":"white";
 
 
       var dellCell = document.createElement("td");

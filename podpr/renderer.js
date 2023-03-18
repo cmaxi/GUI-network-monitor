@@ -106,6 +106,10 @@ b11.addEventListener('click', async () => {
 
 window.api.receive_cmd("fromMainRequestLog",(data)=>{
   console.log("%c"+data[0] +" "+ data[1],data[1]!=200?'color:red':'color:cyan')
+  if (data[1]==401){
+    alert("Time out!");
+    sh(3)
+  }
 })
 
 

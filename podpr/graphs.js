@@ -1,3 +1,5 @@
+const labelGraphCol = "white";
+
 //menu settings
 const menuButtonG = document.getElementById('menuButton-G');
 const menuG = document.getElementById('menu-G');
@@ -37,7 +39,6 @@ const configL = {
   type: 'line',
   data: {
     labels: labelsL,
-    "labelTimestamp":[],
     datasets: [
       {
           label: '',
@@ -48,6 +49,7 @@ const configL = {
           borderWidth: 0,
           spanGaps: true,
           tension: 0.1,
+          color:labelGraphCol
       }
       ]
   },
@@ -55,10 +57,19 @@ const configL = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'right',
-        title:{
-            display:true,
-            text:'Legend'
+        position: 'bottom',
+        display:true,
+        text:'Legend',
+        color: labelGraphCol,
+        fontColor:labelGraphCol,
+        labels:{
+          color: labelGraphCol,
+        },
+        onHover: function(event, chartElement) {
+          document.body.style.cursor = 'pointer';
+        },
+        onLeave: function(event, chartElement) {
+          document.body.style.cursor = 'default';
         }
       },
       title: {
@@ -72,7 +83,8 @@ const configL = {
           },
           mode:'x'
         },
-      }
+      },
+      
     },
     scales:{
           y:{
@@ -81,30 +93,38 @@ const configL = {
               title:{
                   display: true,
                   text:'Ping [ms]',
+                  color: labelGraphCol,
+              },
+              ticks: {
+                color:labelGraphCol,
               },
               min: -1.5,
           },
           x:{
-              title:{
-                  display: true,
-                  text:'Time [h/m/s]',
-              },
-              ticks:{
-                  maxRotation: 90,
-                  minRotation: 0,
-                  callback: function(label) {
-                    let realLabel = this.getLabelForValue(label)
-                    return realLabel[0];
-                  }
+            title:{
+                display: true,
+                text:'Time [h/m/s]',
+                color:"white",
+            },
+            ticks:{
+              color:"white",
+              maxRotation: 90,
+              minRotation: 0,
+              callback: function(label) {
+                let realLabel = this.getLabelForValue(label)
+                return realLabel[0];
               }
+            }
           },
           xAxis2: {
             type: "category",
             title:{
               display: true,
               text:'Time [Y/M/D]',
+              color:"white",
             },
             ticks:{
+              color: labelGraphCol,
               maxRotation: 90,
               minRotation: 40,
               callback: function(label) {
@@ -121,6 +141,14 @@ const configL = {
 
           },
     },
+    legend: {
+      labels: {
+          fontColor: 'white'
+      }
+    },
+    legend: {
+      color: labelGraphCol
+    }
   },
 };//config grafu
 
@@ -161,12 +189,14 @@ const dataB = {
     {
       label: "Passed",
       backgroundColor: ["#3e95cd"],
-      data: [0]
+      data: [0],
+      color:labelGraphCol
     },
     {
       label: "Failed",
       backgroundColor: ["#c45850"],
-      data: [0]
+      data: [0],
+      color:labelGraphCol
     }
   ]
 };
@@ -182,15 +212,27 @@ const configB = {
       }
     },
     responsive: true,
+    scales:{
+      y:{
+        ticks:{
+          color:labelGraphCol
+        }
+      },
+      x:{
+        ticks:{
+          color:labelGraphCol
+        }
+      }
+    },
     plugins: {
       legend: {
         position: 'right',
       },
-      title: {
-        display: true,
-        text: 'Chart.js Horizontal Bar Chart'
+      datalabels: {
+          color: 'white'
       }
-    }
+    },
+    color:"white"
   },
 };
 
@@ -216,12 +258,20 @@ const configP = {
   options: {
     plugins: {
       legend: {
-        position: 'right',
-        title:{
-            display:true,
-            text:'Legend'
+        position: 'bottom',
+        display:true,
+        color: labelGraphCol,
+        fontColor: labelGraphCol,
+        labels:{
+          color: labelGraphCol,
+        },
+        onHover: function(event, chartElement) {
+          document.body.style.cursor = 'pointer';
+        },
+        onLeave: function(event, chartElement) {
+          document.body.style.cursor = 'default';
         }
-      }
+      }, 
     },
     scale: {
       ticks: {
@@ -254,10 +304,18 @@ const configD = {
   options: {
     plugins: {
       legend: {
-        position: 'right',
-        title:{
-            display:true,
-            text:'Legend'
+        position: 'bottom',
+        display:true,
+        color: labelGraphCol,
+        fontColor: labelGraphCol,
+        labels:{
+          color: labelGraphCol,
+        },
+        onHover: function(event, chartElement) {
+          document.body.style.cursor = 'pointer';
+        },
+        onLeave: function(event, chartElement) {
+          document.body.style.cursor = 'default';
         }
       }
     }
@@ -466,6 +524,7 @@ function dataForGraphsT(dtf = 0, dtt=Date.now(), step = "s", firsLoad = true, au
               borderColor: element.color,
               backgroundColor: 'black',
               data:[],
+              color:labelGraphCol,
               fill: false,
               borderWidth: 2,
               spanGaps: true,

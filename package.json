@@ -1,6 +1,6 @@
 {
   "name": "Network-monitor",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "GUI for api app",
   "main": "main.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "provider": "github",
     "releaseType": "release",
     "private": true,
-    "prerelease": false    
+    "prerelease": false
   },
   "build": {
     "appId": "com.MCNetworkMonitor.app",
@@ -44,6 +44,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "chartjs-plugin-zoom": "^1.2.1",
     "electron-updater": "^5.3.0",
     "https": "^1.0.0",

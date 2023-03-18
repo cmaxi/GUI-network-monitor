@@ -1,11 +1,12 @@
     body{
         text-align: center;
-        background-color: darkgrey;
+        background-color: rgb(56, 54, 68);
+        color: #ffffff;
     }
     
     
     h1, h2 {
-        color: rgb(63, 95, 63);
+        color: rgb(81, 120, 81);
     }
 
     svg{
@@ -16,7 +17,7 @@
         height: 150px;
     }
     #graf{
-        background-color: rgb(118, 241, 255);
+        background-color: rgb(51, 51, 51);
         text-align: center;
     }
     #gRespM{
@@ -29,10 +30,9 @@
     #gResp{
       width: 1100px;
       overflow: hidden;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-
+      text-align: center;
+      display: flex;
+      justify-content: center;
     }
     #gRespCH1, #gRespCH2{
         width: 600px;
@@ -67,14 +67,12 @@
         padding: 6px;
         margin: 3px;
     }
-    .main_T th {
-        background: rgb(209, 209, 209);
-    }
+
     td{
         padding-right: 5px;
     }
     th {
-        background: rgb(255, 255, 255);
+        background: rgb(56, 54, 68);
         position: sticky;
         top: 0; /* Don't forget this, required for the stickiness */
         
@@ -150,7 +148,8 @@
         z-index: 1;
         top: 0;
         left: 0;
-        background-color: rgb(147, 146, 146);
+        background-color: rgb(46, 41, 82);
+        color: white;
         overflow-x: hidden;
         transition: 0.5s;
         padding-top: 60px;
@@ -160,13 +159,13 @@
         padding: 8px 8px 8px 32px;
         text-decoration: none;
         font-size: 25px;
-        color: #000000;
+        color: #ffffff;
         display: block;
         transition: 0.3s;
       }
       
       .sidenav a:hover {
-        color: #f1f1f1;
+        color: #7f7e7e;
       }
       .sidenav .closebtn {
         position: absolute;
@@ -180,7 +179,7 @@
       
       .dropdown-container {
         display: none;
-        background-color: rgb(147, 146, 146);
+        background-color: rgb(46, 41, 82);
         padding-left: 8px;
       }
 
@@ -189,7 +188,7 @@
         padding: 6px 8px 6px 16px;
         text-decoration: none;
         font-size: 20px;
-        color: #000000;
+        color: #ffffff;
         display: block;
         border: none;
         background: none;
@@ -230,7 +229,7 @@
     height: 50px;
 }
 .tabRow:hover{
-    background-color: rgb(177, 173, 173);
+    background-color: rgb(157, 153, 153);
 }
 
 th{cursor: pointer;}
@@ -241,8 +240,8 @@ th{cursor: pointer;}
   text-align: right;
   top: 0;
   right: 0;
-  background-color: darkgrey;
   width: 900px;
+  background-color: rgba(56, 54, 68, 1);
 }
 
 #menu {
@@ -253,13 +252,19 @@ th{cursor: pointer;}
   height: 0;
   overflow: hidden;
   transition: height 0.1s ease;
-  background-color: rgba(167, 167, 167, 0.95);
+  background-color: rgba(56, 54, 68, 0.95);
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   z-index: 10;
 }
 
 #menu.visible {
   height: 95%; /* Nastavit výšku menu podle potřeby */
+}
+
+#menu > div{
+  margin-top: 10%;
+  background-color: rgb(56, 54, 68);
+  padding: 5%;
 }
 
 
@@ -332,7 +337,7 @@ th{cursor: pointer;}
     height: 0;
     overflow: hidden;
     transition: height 0.1s ease;
-    background-color: rgba(167, 167, 167, 0.95);
+    background-color: rgba(56, 54, 68, 0.95);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     z-index: 10;
   }

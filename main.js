@@ -175,6 +175,7 @@ function postHttp(http_address, sendval, action){//funkce pro http requesty POST
       post_log = ["Not connected network error", ""]
     }
     else{
+      
       post_log = [action + " " + error.response.data, error.response.status]
     }
     mainWindow.webContents.send("fromMainServerDown")
@@ -406,10 +407,6 @@ app.whenReady().then(() => {
     postHttp(httpReqestAddr.httpDell,reqVar, "Delete")
   })
   
-  ipcMain.handle("requestClearAllDatabase", ()=>{
-    postHttp(httpReqestAddr.httpDellAll, "", "Delete all")
-
-  })
   ipcMain.handle("requestUpdateTask", async (event, reqVar)=>{
     postHttp(httpReqestAddr.httpUpdate,reqVar,"Update")
   })

@@ -51,11 +51,11 @@
           <br>
           <br>
           <a>Change IP if server not on host/your pc else leave empty!</a>
-          <br>
-          <br>
-          <input type="button" value="Log In" class="log" id="validateLogIn">
+          <br><br>
+          <button type="button" value="Log In" class="log" id="validateLogIn">Connect</button>
         </form>
       </div>
+      <br>
       <p id="version">Version is </p>
     </div>
     <div id="spacer"></div>
@@ -71,7 +71,7 @@
       <button id="menuButton">Ad new task</button><br>
       
       <div id="menu" class="hidden">
-        <button id="hide-menu-btn">Cancel</button><br>
+        
         <div class='child'>
           <table class="main_T">
             <tr>
@@ -100,7 +100,7 @@
           </table>
             <button type = "button" id = "upsave">Update Add task</button>
             <button type = "button" id = "runing">Pause/Start task</button>
-            <button type="button" id="dellall_html">dell all results on server</button>
+            <button id="hide-menu-btn">Cancel</button>
           </div>
       </div>
         <div id="taskTableN"  class="taskTableN">
@@ -117,8 +117,8 @@
                     <th id="sortx" class="tabH">Period</span></th>
                     <th id="sort6" class="tabH">Coordinates</span></th>
                     <th id="sort7" class="tabH">Worker</span></th>
-                    <th id="sort8" class="tabH">Runing</span></th>
-                    <th id="sort9" class="tabH">Hide in graph</span></th>
+                    <th id="sort8" class="tabH">Status</span></th>
+                    <th id="sort9" class="tabH">Graph visible</span></th>
                     <th id="sortx" class="tabH">Dellete</th>
                   </tr>
                 </thead>
@@ -219,8 +219,9 @@
       <script src="./node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
       <script src="./node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
       <script src="./node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
+      <script src="./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"></script>
       <script src="./podpr/graphs.js"></script>
-  
+      
       <script src="./node_modules/leaflet/dist/leaflet.js"></script>
       <script src="./podpr/maps.js"></script>
   

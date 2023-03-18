@@ -78,7 +78,7 @@ contextBridge.exposeInMainWorld("api", {
                 "requestServerUp" - message server is online and runing
                 "requestHideTask" - request -hide task in graphs
         */
-        let validChannels = ["requestLoadAll","requestAddTask","requestDelTask","requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp", "requestHideTask"];
+        let validChannels = ["requestLoadAll","requestAddTask", "requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp", "requestHideTask"];
         console.log("%c  -" + channel + " html request send", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
 
