@@ -1,3 +1,10 @@
+const dev = true;
+if (dev){
+  document.getElementById("username").value = "aa"
+  document.getElementById("password").value = "aa";
+  document.getElementById("ipAddress").value = "https://192.168.1.110:8000";
+}
+
 //hide swap:
 const graph = document.getElementById('graf')
 const jsonpar = document.getElementById('jsonpar')
@@ -9,21 +16,44 @@ const graph1 = document.getElementById('gResp1')
 const graph2 = document.getElementById('gResp')
 const spacer = document.getElementById('spacer')
 
-const windows = [graph, jsonpar, maps, login, graph0, graph1, graph2, spacer]  //div sectors by id
-
-function sh(sh){
+const windows = [login, jsonpar, graph0, graph1, graph2, maps, spacer, graph]  //div sectors by id
+var prevCh = 0
+function swapPage(sh){
   for (let i = 0; i < windows.length; i++) { 
     windows[i].style.display = "none";
   }
   windows[sh].style.display = "block";
-  if (sh>=4 || sh<=6 && sh!=1 && sh!=2 && sh!=3)
+  if (sh!=0 && sh!=1 && sh!=5)
   {
-    windows[0].style.display = "block";
+    windows[7].style.display = "block";
   }
+  const dp = document.querySelectorAll('.swapPage')[prevCh];
+  dp.style.color = "white"
+  dp.addEventListener('mouseover', mouseOverHandler(dp));
+  dp.addEventListener('mouseout', mouseOutHandler(dp));
+
+  const dps = document.querySelectorAll('.swapPageS')[prevCh];
+  dps.style.color = "white"
+  dps.addEventListener('mouseover', mouseOverHandler(dp));
+  dps.addEventListener('mouseout', mouseOutHandler(dp));
+
+  prevCh = sh
+  document.querySelectorAll('.swapPage')[sh].style.color = "red"
+  document.querySelectorAll('.swapPageS')[sh].style.color = "red"
+
+  function mouseOverHandler(prev) {
+    prev.style.color = "#7f7e7e";
+  }
+  
+  function mouseOutHandler(prev) {
+    prev.style.color = '';
+  }
+
 }
 
-sh(3)
 
+
+swapPage(0)
 
 const menuO = document.getElementById('openNav') 
 menuO.addEventListener('click', async () => {
@@ -35,33 +65,25 @@ menuC.addEventListener('click', async () => {
   document.getElementById("mySidenav").style.width = "0px";
 })
 
-document.querySelectorAll('.swapPage').forEach(item =>{
+document.querySelectorAll('.swapPage').forEach(item => {
   item.addEventListener('click', event => {
-    sh(parseInt(item.id[1]))
+   
+    swapPage(parseInt(item.id[1]));
     document.getElementById("mySidenav").style.width = "0px";
     map.invalidateSize();//překreslení mapy pro korektní zobrazení
     
-  })
-})
-
-
-var dropdown = document.getElementsByClassName("dropdown-btn");
-var i;
-
-for (i = 0; i < dropdown.length; i++) {
-  dropdown[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var dropdownContent = this.nextElementSibling;
-    if (dropdownContent.style.display === "block") {
-      dropdownContent.style.display = "none";
-    } else {
-      dropdownContent.style.display = "block";
-    }
   });
-}
+});
 
-
-
+document.querySelectorAll('.swapPageS').forEach(item => {
+  item.addEventListener('click', event => {
+   
+    swapPage(parseInt(item.id[1]));
+    document.getElementById("mySidenav").style.width = "0px";
+    map.invalidateSize();//překreslení mapy pro korektní zobrazení
+    
+  });
+});
 
 
 
@@ -72,6 +94,7 @@ b11.addEventListener('click', async () => {
   var password = document.getElementById("password").value;
   var ipAddress = document.getElementById("ipAddress").value;
 
+
     window.api.httpRequest("requestServerUp", [username, password, ipAddress])
     window.api.receive("fromMainSuccessfulLogin", (data) => {//ošetření jestli server běží a uživ je přihlášen?
       if(data==true){
@@ -79,13 +102,9 @@ b11.addEventListener('click', async () => {
         
         load_server_json()// load table data
         loadTableData()//graphs reload
-        afterLoad()//map data reload
-        
-        rr={}
+        updateMapPoints()//map data reload
 
-
-
-        sh(1)
+        swapPage(1)
       }
       else if(data=="ECONNREFUSED"){
         if (!confirm(data+"\n OK: for reconect\nCancel: For close app")){
@@ -108,7 +127,7 @@ window.api.receive_cmd("fromMainRequestLog",(data)=>{
   console.log("%c"+data[0] +" "+ data[1],data[1]!=200?'color:red':'color:cyan')
   if (data[1]==401){
     alert("Time out!");
-    sh(3)
+    swapPage(3)
   }
 })
 

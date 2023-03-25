@@ -12,24 +12,31 @@
     <link rel="stylesheet" href="style/style.css" />
   </head>
   <body>
+    
+    <div class="sidebarr">
+      <a href="#" class="closebtn" id="openNav">&#9776;</a>
+      <a href="#" id="s0" class="swapPageS">L</a>
+      <a href="#" id="s1" class="swapPageS">D</a> 
+      <a></a>
+      <a href="#" id="s2" class="swapPageS">G</a>
+      <a href="#" id="s3" class="swapPageS">G</a>
+      <a href="#" id="s4" class="swapPageS">G</a>
+      <a></a>
+      <a href="#" id="s5" class="swapPageS">M</a>
+    </div>
 
     <div id="mySidenav" class="sidenav">
       <a href="#" class="closebtn" id="closebtn">&times;</a>
-     <a href="#" id="s3" class="swapPage">Login</a>
-     <a href="#" id="s1" class="swapPage">Data update</a> 
-     <button class="dropdown-btn">Graphs 
-        <i class="fa fa-caret-down">></i>
-      </button>
-      <div class="dropdown-container">
-        <a href="#" id="s4" class="swapPage">Graph responses</a>
-        <a href="#" id="s5" class="swapPage">Graph errors</a>
-        <a href="#" id="s6" class="swapPage">Graph average</a>
-      </div>
-      
+      <a href="#" id="s0" class="swapPage">Login</a>
+      <a href="#" id="s1" class="swapPage">Data update</a> 
       <a></a>
-      <a href="#" id="s2" class="swapPage">Map</a>
+      <a href="#" id="s2" class="swapPage">Graph responses</a>
+      <a href="#" id="s3" class="swapPage">Graph errors</a>
+      <a href="#" id="s4" class="swapPage">Graph average</a>
+      <a></a>
+      <a href="#" id="s5" class="swapPage">Map</a>
     </div>
-    <span id="openNav">&#9776;</span>
+    
 
 
 
@@ -41,13 +48,13 @@
       <div id="loginForm">
         <form class="logF">
           <label for="username" class="log">Username:</label>
-          <input type="text" id="username" class="log" placeholder="username" value="aa">
+          <input type="text" id="username" class="log" placeholder="username">
           <br>
           <label for="password" class="log">Password:</label>
-          <input type="password" id="password" class="log" placeholder="password" value="aa">
+          <input type="password" id="password" class="log" placeholder="password">
           <br>
           <label for="ipAddress" class="log">IP:</label>
-          <input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log" value="https://192.168.1.110:8000"><!--https://192.168.1.110:8000-->
+          <input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log"><!--https://192.168.1.110:8000-->
           <br>
           <br>
           <a>Change IP if server not on host/your pc else leave empty!</a>
@@ -67,8 +74,6 @@
     <!--json handle -->
 
     <div id="jsonpar">
-
-      <button id="menuButton">Ad new task</button><br>
       
       <div id="menu" class="hidden">
         
@@ -91,8 +96,8 @@
                 <td><input type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required></td>
                 <td><input type = "text" id = "s_worker" placeholder="worker"required>
                 <td>
-                  <input type = "text" id = "s_latitude" pattern="^[0-9.]{1,30}$" placeholder="Latitude"><br><br>
-                  <input type = "text" id = "s_longitude" pattern="^[0-9.]{1,30}$" placeholder="Longitude">
+                  <input type = "text" id = "s_latitude" pattern="-?\d{1,2}(\.\d{1,4})?|90(\.0{1,4})?" placeholder="Latitude"><br><br>
+                  <input type = "text" id = "s_longitude" pattern="-?(?:\d{1,2}|1[0-7]\d)(?:\.\d+)?|180(?:\.0+)?" placeholder="Longitude">
                 </td>
 
               </form>
@@ -104,7 +109,7 @@
           </div>
       </div>
         <div id="taskTableN"  class="taskTableN">
-          <div id="cc"><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$"><button id = "loadnewserv">Find</button></div>
+          <div id="cc"><button id="menuButton">Ad new task</button><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$"><button id = "loadnewserv">Find</button></div>
             <div class="taskTable">
               <table id="myTable">
                 <thead>
@@ -154,13 +159,12 @@
         <input type = "number" id = "lenMax">
       </div>
       <b id="timer"></b>
-      <button id="menuButton-G"><img src="pics/Settings.png" height="20px"></button>
-      <button type="button" id="load_d">Reload all data.</button>
-      <br>
-      <label for="start-time">Start Time:</label>
+      <button type="button" id="load_d">Auto</button>
+
+      <label for="start-time">Since:</label>
       <input type="datetime-local" id="start-time" name="start-time">
 
-      <label for="end-time">End Time:</label>
+      <label for="end-time">To:</label>
       <input type="datetime-local" id="end-time" name="end-time">
       <label for="end-time">Step size: </label>
       <select id="myDropdownM">
@@ -171,37 +175,34 @@
         <option value="M">M</option>
         <option value="Y">Y</option>
       </select>
-      <button type="button" id="loadFromTo">Load data in interval.</button>
+      <button type="button" id="loadFromTo">Load</button>
+      <button id="menuButton-G"><img src="pics/Settings.png" height="20px"></button>
       
 
-      <div id="gResp0">
-        <canvas id="myChart"></canvas>
+      <div id="gResp0" class="gRespp">
+        <canvas id="myChart" ></canvas>
         <button type="button" id="left_m">Shift to Left</button>
         <button type="button" id="resetZoom">Reset zoom</button>
         <button type="button" id="right_m">Shift to Right</button>
-        
       </div>
-        <div id="gResp1">
-          <h1>Error graph</h1>
-          <canvas id="myBarChart"></canvas>
-        </div>
-        <div id="gResp">
-          <div id="gRespM">
-            <div id="gRespCH1">
-              <h1>Average responses</h1>
-              <canvas id="myPolarChart"></canvas>
-            </div>
-            <div id="gRespCH2">
-              <h1>Count of measured values</h1>
-              <canvas id="myDoughnutChart"></canvas>
-            </div>
+      <div id="gResp1" class="gRespp">
+        <canvas id="myBarChart" ></canvas>
+      </div>
+      <div id="gResp" class="gRespp">
+        <div id="gRespM">
+          <div id="gRespCH1">
+            <canvas id="myPolarChart"></canvas>
+          </div>
+          <div id="gRespCH2">
+            <canvas id="myDoughnutChart"></canvas>
           </div>
         </div>
+      </div>
     </div>
 
     <!-- mapa -->
     <div id="maps">
-      
+      <button id="btes">tttt</button>
       <div id="mapM">
         <div id="map"></div>
       </div>
@@ -219,7 +220,6 @@
       <script src="./node_modules/chart.js/dist/chart.js"></script>  <!--načte knihovnu chart.js -->
       <script src="./node_modules/chart.js/dist/chart.min.js"></script>  <!--načte knihovnu chart.js -->
       <script src="./node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>  <!--načte knihovnu chart.js -->
-      <script src="./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"></script>
       <script src="./podpr/graphs.js"></script>
       
       <script src="./node_modules/leaflet/dist/leaflet.js"></script>

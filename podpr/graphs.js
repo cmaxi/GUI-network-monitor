@@ -74,7 +74,8 @@ const configL = {
       },
       title: {
         display: true,
-        text: 'CHart.js'
+        text: 'Responses',
+        color: labelGraphCol
       },
       zoom:{
         zoom:{
@@ -230,7 +231,12 @@ const configB = {
       },
       datalabels: {
           color: 'white'
-      }
+      },
+      title: {
+        display: true,
+        text: 'Error graphs',
+        color: labelGraphCol
+      },
     },
     color:"white"
   },
@@ -271,7 +277,12 @@ const configP = {
         onLeave: function(event, chartElement) {
           document.body.style.cursor = 'default';
         }
-      }, 
+      },
+      title: {
+        display: true,
+        text: 'Average responses',
+        color: labelGraphCol
+      },
     },
     scale: {
       ticks: {
@@ -317,7 +328,12 @@ const configD = {
         onLeave: function(event, chartElement) {
           document.body.style.cursor = 'default';
         }
-      }
+      },
+      title: {
+        display: true,
+        text: 'Counts of measured values',
+        color: labelGraphCol
+      },
     }
   }
 };

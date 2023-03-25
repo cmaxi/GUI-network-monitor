@@ -19,23 +19,26 @@
     #graf{
         background-color: rgb(51, 51, 51);
         text-align: center;
+        height: 90%;
+    }
+    .gRespp{
+      width: 90%;
     }
     #gRespM{
-      width: 1010px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-left: 60px;
+      width: 90%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left: 60px;
     }
     #gResp{
-      width: 1100px;
       overflow: hidden;
       text-align: center;
       display: flex;
       justify-content: center;
     }
     #gRespCH1, #gRespCH2{
-        width: 600px;
+        width: 50%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -56,7 +59,6 @@
     button{
         cursor: pointer;
         text-align: center;
-        height: 40px;
         margin: 5px;
         padding: 3px;
     }
@@ -118,28 +120,25 @@
       text-align: center;
     }
     #map { 
-        height: 700px;
-        width: 80%;
+        height: 95%;
+        width: 90%;
         position: fixed;
-        top: 50;
-        left: 50;
-        bottom: 50;
-        right: 50;
+        top: 10px;
+        left: 45px;
+        bottom: 5px;
+        right: 5px;
+    }
+
+    #btes{
+      position: fixed;
+      bottom: 0;
+      left: 0px;
     }
 
 
 
 
 
-    #openNav{
-        padding-left: 10px;
-        float: left;
-        font-size: 30px;
-        cursor: pointer;
-    }
-    #openNav:hover{
-      color: aliceblue;
-    }
 
     .sidenav {
         height: 100%;
@@ -151,8 +150,9 @@
         background-color: rgb(46, 41, 82);
         color: white;
         overflow-x: hidden;
-        transition: 0.5s;
+        transition: 0.1s;
         padding-top: 60px;
+        overflow-y: scroll;
       }
       
       .sidenav a {
@@ -167,24 +167,17 @@
       .sidenav a:hover {
         color: #7f7e7e;
       }
-      .sidenav .closebtn {
+
+      .closebtn {
         position: absolute;
-        width: 220px;
+        width: 20px;
         top: 0;
-        right: 0px;
-        font-size: 36px;
-        margin-left: 0px;
-        padding-left: 20px;
-      }
-      
-      .dropdown-container {
-        display: none;
-        background-color: rgb(46, 41, 82);
-        padding-left: 8px;
+        font-size: 100px;
+        margin-left: 0;
+        padding-left: 0;
       }
 
-
-      .sidenav a, .dropdown-btn {
+      .sidenav a {
         padding: 6px 8px 6px 16px;
         text-decoration: none;
         font-size: 20px;
@@ -198,17 +191,14 @@
         outline: none;
       }
 
-      .fa-caret-down {
-        float: right;
-        padding-right: 8px;
-      }
+
 
 
 
 /*table*/
 .taskTableN{
   overflow: auto;
-  height: 700px;
+  height: 600px;
   width: 900px;
   text-align: center;
   display: inline-block;
@@ -217,7 +207,7 @@
 
 .taskTable{
     overflow: auto;
-    height: 660px;
+    height: 80%;
     width: 880px;
     text-align: center;
     padding-left: 5px;
@@ -244,6 +234,13 @@ th{cursor: pointer;}
   background-color: rgba(56, 54, 68, 1);
 }
 
+
+
+#righ {
+  text-align: right;
+}
+
+
 #menu {
   position: fixed;
   top: 0;
@@ -252,13 +249,13 @@ th{cursor: pointer;}
   height: 0;
   overflow: hidden;
   transition: height 0.1s ease;
-  background-color: rgba(56, 54, 68, 0.95);
+  background-color: rgba(56, 54, 68, 1);
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   z-index: 10;
 }
 
 #menu.visible {
-  height: 95%; /* Nastavit výšku menu podle potřeby */
+  height: 100%; /* Nastavit výšku menu podle potřeby */
 }
 
 #menu > div{
@@ -337,13 +334,13 @@ th{cursor: pointer;}
     height: 0;
     overflow: hidden;
     transition: height 0.1s ease;
-    background-color: rgba(56, 54, 68, 0.95);
+    background-color: rgba(56, 54, 68, 1);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     z-index: 10;
   }
   
   #menu-G.visible-G {
-    height: 95%; /* Nastavit výšku menu podle potřeby */
+    height: 100%; /* Nastavit výšku menu podle potřeby */
   }
 
   .overlay-G {
@@ -354,4 +351,79 @@ th{cursor: pointer;}
     height: 100%;
     z-index: 5;
     background-color: rgba(0, 0, 0, 0.6);
+  }
+
+
+
+
+
+
+
+
+
+
+  .sidebarr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    background-color: rgb(46, 41, 82);
+    color: white;
+    padding-top: 60px;
+    z-index: 1;
+  }
+  
+  .sidebarr ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .sidebarr li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .sidebarr li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .sidebarr li a:hover {
+    background-color: #ddd;
+  }
+
+  .sidebarr a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #ffffff;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .sidebarr a:hover {
+    color: #7f7e7e;
+  }
+
+  .sidebarr a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #ffffff;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+  }
+
+
+  #graf, #jsonpar, #map{
+    margin-left: 45px;
   }

@@ -1,10 +1,4 @@
-
-
 var tasks_raw_data
-
-
-
-
 
 function load_server_json(){
     send = { params: {worker:"default"}}
@@ -19,7 +13,6 @@ function load_server_json(){
         refreshTable(tasks_raw_data)
       });
   }
-
 
 
 //texts
@@ -57,7 +50,6 @@ function loadSpecs(name){
   }
 }
 loadnewserv.addEventListener('click', async () => { //load server from list
-    
     if (!loadSpecs(old_name_server.value)){
         txt = "Server: \"" + old_name_server.value +"\" not found"
         alert(txt)
@@ -65,14 +57,12 @@ loadnewserv.addEventListener('click', async () => { //load server from list
     else{
       old_name_server.value = ""
     }
-
-
   })
 
 function correctData(count){//validity check
   i = 0
   validity = true
-  while (i<count){//kontrola nutno pro průchod skrze všechna pole co mají být kontrolována
+  while (i<=count){//kontrola nutno pro průchod skrze všechna pole co mají být kontrolována
     if (!form_for_server_upadddel[i].checkValidity()) {
       form_for_server_upadddel[i].reportValidity()
       validity = false
@@ -84,7 +74,7 @@ function correctData(count){//validity check
 
 update.addEventListener('click', async () => {  //update/save 
 
-  if (correctData(5)){
+  if (correctData(6)){
 
     l_na = []
     l_ad = []
@@ -124,15 +114,11 @@ update.addEventListener('click', async () => {  //update/save
       if(will_update_byName){
         send.params.oldAddress = tasks_raw_data[l_na.indexOf(nn)].address
         send.params.runing = tasks_raw_data[l_na.indexOf(nn)].runing
-        //tasks_raw_data[l_na.indexOf(nn)] = strll
-        window.api.httpRequest("requestUpdateTask",send)
-        
+        window.api.httpRequest("requestUpdateTask",send)   
       }
       else if(will_update_byAddress){
         send.params.oldAddress = tasks_raw_data[l_ad.indexOf(addr)].address
         send.params.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
-        //strll.runing = tasks_raw_data[l_ad.indexOf(addr)].runing
-        //tasks_raw_data[l_ad.indexOf(addr)] = strll
         window.api.httpRequest("requestUpdateTask",send)
       }
       else
@@ -140,17 +126,16 @@ update.addEventListener('click', async () => {  //update/save
         send.params.runing = true
         window.api.httpRequest("requestAddTask",send)
       }
-      clear()
-      load_server_json()
-      
+      clear();
+      load_server_json();
+      hideSettMenu();
     } 
     else {
       console.log("You canceled!");
     }
-    
   }
-  hideSettMenu()
-  loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+  loadAllDataNew(); //v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+  updateMapPoints(); //v maps.js obnoví body v mapě
 })
 function dellAdress(Dname){
 
@@ -170,8 +155,6 @@ function dellAdress(Dname){
         txt = "delete: " + Dname
         found = true
         if (confirm(txt) == true) {
-          //tasks_raw_data.splice(i,1)
-          //window.api.send("toMainJsonSave", JSON.stringify(tasks_raw_data))
           send = l_ad[l_na.indexOf(Dname)]
           window.api.httpRequest("requestDelTask",{params:{'address':send}})
           clear()
@@ -186,7 +169,8 @@ function dellAdress(Dname){
     if(found == false){
       alert(txt)
     }
-    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+    loadAllDataNew();//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+    updateMapPoints(); //v maps.js obnoví body v mapě
 }
 
 function clear(){
@@ -197,7 +181,6 @@ function clear(){
   s_long.value = ""
   s_lat.value = ""
 }
-//,,,
 
 function pausStart(name){
   found = false
@@ -220,7 +203,7 @@ function pausStart(name){
     if (!found){
       alert("Not found")
     }
-    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+    loadAllDataNew();//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
 }
 
 function hideTask(name){
@@ -244,7 +227,8 @@ function hideTask(name){
     if (!found){
       alert("Not found")
     }
-    loadAllDataNew()//v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+    loadAllDataNew(); //v graphs.js obnoví změny aby byli při překliknutí ihned viditelné
+    updateMapPoints(); //v maps.js obnoví body v mapě
 }
 
 
@@ -256,36 +240,10 @@ paus.addEventListener('click', async () => {
 })
 
 
-
-
-
-
-
-
-
-
-
 window.api.receive_cmd("fromMainhowHideSwitch", () => {
   console.log(tasks_raw_data)
   window.api.send("toMainJsonSave",tasks_raw_data)
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 document.querySelectorAll('.tabH').forEach(item => {
@@ -294,10 +252,7 @@ document.querySelectorAll('.tabH').forEach(item => {
       sortTable(item.id[4])
     }
   })
-  
 })
-
-
 
 
 document.querySelectorAll('.dropdown').forEach(item => {
@@ -320,7 +275,6 @@ document.querySelectorAll('.dropdown').forEach(item => {
 })
 
 
-
 var contextMenu = document.getElementById("context-menu");
 
 // Hide context menu on click outside
@@ -331,7 +285,6 @@ contextMenu.classList.remove("show-context-menu");
 document.addEventListener('scroll', function(event) {
   contextMenu.classList.remove("show-context-menu");
 });
-
 
 
 // sort table by ithem
@@ -371,7 +324,6 @@ function sortTable(n) {
       }
     }
   }
-  // aktualizovat proměnnou prevClickedHeader při kliknutí na sloupec
   
   if (prevClickedHeader) {
     prevClickedHeader.innerHTML = prevClickedHeader.innerHTML.replace(/[↑↓]/g, "");
@@ -410,7 +362,7 @@ function appendTableData(data){
       var updateCell = document.createElement("td");
       const buttonU = document.createElement("button");
       var img = document.createElement("img");
-      img.src = "pics/Update.png";  // Zde nastavte cestu k vaší ikoně
+      img.src = "pics/Update.png";
       img.height = 20;
       buttonU.appendChild(img);
       buttonU.addEventListener("click", function() {
@@ -451,7 +403,7 @@ function appendTableData(data){
       var pauseCell = document.createElement("td");
       const buttonP = document.createElement("button");
       var img = document.createElement("img");
-      img.src = rowData["runing"]==true?"pics/Pause.png":"pics/Start.png";  // Zde nastavte cestu k vaší ikoně
+      img.src = rowData["runing"]==true?"pics/Pause.png":"pics/Start.png";
       img.height = 20;
       buttonP.appendChild(img);
       buttonP.addEventListener("click", function() {
@@ -465,7 +417,7 @@ function appendTableData(data){
       var hideCell = document.createElement("td");
       const buttonH = document.createElement("button");
       var img = document.createElement("img");
-      img.src = rowData["hide"]==false?"pics/Show.png":"pics/Hide.png";  // Zde nastavte cestu k vaší ikoně
+      img.src = rowData["hide"]==false?"pics/Show.png":"pics/Hide.png";
       img.height = 20;
       buttonH.appendChild(img);
       buttonH.addEventListener("click", function() {
@@ -538,4 +490,3 @@ function showMenu(){
   menu.classList.toggle('visible');
   document.body.classList.add('overlay');
 }
-

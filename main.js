@@ -5,6 +5,7 @@ const axios = require('axios').default;
 const https = require('https');
 const { autoUpdater, AppUpdater } = require("electron-updater");
 
+let dev = true
 let mainWindow
 
 var httpReqestAddr
@@ -21,7 +22,12 @@ autoUpdater.autoInstallOnAppQuit = true;
 /*--------------------------------------------- functions for main process -----------------------------------------------------*/ 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 1200, height: 900,
+    width: 1280,
+    height: 720,
+    resizable: true,
+    minWidth: 960,
+    minHeight: 540,
+
     webPreferences: {
       nodeIntegration: false,
       contextIsolation : true,
@@ -114,7 +120,7 @@ function createWindow () {
   
 
   //vývojářské nástroje
-  if(process.env.NODE_ENV !== 'production'){
+  if(dev){
     menu.push({
       label: 'Developer Tools',
       submenu:[
@@ -131,7 +137,7 @@ function createWindow () {
   }
   Menu.setApplicationMenu(Menu.buildFromTemplate(menu))//nastavení položek v menu
   mainWindow.loadFile('index.html')         //načte html soubor
-  if(process.env.NODE_ENV != "development"){
+  if(dev){
     mainWindow.webContents.openDevTools()   //otevře vývojářské nástroje při spuštění
   }
 }
@@ -353,6 +359,13 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  mainWindow.on('resize', () => {
+    const [width, height] = mainWindow.getSize();
+    if (height !== Math.round(width * 9 / 16)) {
+      mainWindow.setSize(width, Math.round(width * 9 / 16));
+    }
+  });
 
   //autoUpdater.checkForUpdates();
   console.log(app.getVersion())
