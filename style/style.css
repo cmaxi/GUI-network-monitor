@@ -396,3 +396,11 @@ th{cursor: pointer;}
   .sidebarr .closebtn{
     width: 35px;
   }
+  .icons {
+    padding-right: 10px;
+  }
+  hr{
+    margin: 5px;
+    border: 2px solid #005223;
+    border-radius: 2px;
+  }

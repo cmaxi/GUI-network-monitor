@@ -10,6 +10,7 @@ function load_server_json(){
           return
         }
         tasks_raw_data=data
+        console.log(tasks_raw_data)
         refreshTable(tasks_raw_data)
       });
   }
@@ -490,3 +491,252 @@ function showMenu(){
   menu.classList.toggle('visible');
   document.body.classList.add('overlay');
 }
+
+
+window.api.send("toMainSettings")//načítá nastavení a všechna data
+window.api.receive("fromMainSettings", (sett) => {
+  dev = sett.dev//set if app is in dev mode
+  if (dev){
+    tasks_raw_dataDD = [
+      {
+          "longitude": -80,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "google.com",
+          "color": "#b6c309",
+          "name": "GOG",
+          "latitude": 30,
+          "hide": false,
+          "frequency": "8m",
+          "id": 5
+      },
+      {
+          "longitude": -80,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "palaceskateboards.com",
+          "color": "#fb00ff",
+          "name": "Palace",
+          "latitude": -30,
+          "hide": false,
+          "frequency": "8m",
+          "id": 7
+      },
+      {
+          "longitude": 80,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "supremenewyork.com",
+          "color": "#940000",
+          "name": "Supreme",
+          "latitude": 30,
+          "hide": false,
+          "frequency": "8m",
+          "id": 8
+      },
+      {
+          "longitude": 160,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "www.kos.cvut.cz",
+          "color": "#000000",
+          "name": "www.kos.cvut.cz",
+          "latitude": 60,
+          "hide": false,
+          "frequency": "8m",
+          "id": 9
+      },
+      {
+          "longitude": 80,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "www.chartjs.org",
+          "color": "#cd4747",
+          "name": "chart",
+          "latitude": -30,
+          "hide": false,
+          "frequency": "7m",
+          "id": 10
+      },
+      {
+          "longitude": 160,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "www.epochconverter.com",
+          "color": "#ab00ad",
+          "name": "epoch time",
+          "latitude": -60,
+          "hide": false,
+          "frequency": "8m",
+          "id": 11
+      },
+      {
+          "longitude": 10,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "www.alaskaair.com",
+          "color": "#2bff00",
+          "name": "alaska",
+          "latitude": 10,
+          "hide": false,
+          "frequency": "7m",
+          "id": 12
+      },
+      {
+          "longitude": 10,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "www.australia.gov.au",
+          "color": "#ff5900",
+          "name": "au",
+          "latitude": 10,
+          "hide": false,
+          "frequency": "7m",
+          "id": 13
+      },
+      {
+          "longitude": 0,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "jetbrains.com",
+          "color": "#0300b3",
+          "name": "jetbrains",
+          "latitude": 30,
+          "hide": false,
+          "frequency": "5m",
+          "id": 14
+      },
+      {
+          "longitude": 0,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "www.seznam.cz",
+          "color": "#e60000",
+          "name": "seznam",
+          "latitude": 0,
+          "hide": false,
+          "frequency": "5m",
+          "id": 15
+      },
+      {
+          "longitude": -160,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "facebook.com",
+          "color": "#0011ff",
+          "name": "FB",
+          "latitude": 60,
+          "hide": false,
+          "frequency": "9m",
+          "id": 16
+      },
+      {
+          "longitude": -160,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "novinky.cz",
+          "color": "#4b398e",
+          "name": "novinky",
+          "latitude": -60,
+          "hide": false,
+          "frequency": "10m",
+          "id": 17
+      },
+      {
+          "longitude": 30,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "youtube.com",
+          "color": "#c70000",
+          "name": "YT",
+          "latitude": 0,
+          "hide": false,
+          "frequency": "5m",
+          "id": 18
+      },
+      {
+          "longitude": 20,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "1.1.1.1",
+          "color": "#00abb8",
+          "name": "Cloudflare",
+          "latitude": 10,
+          "hide": false,
+          "frequency": "6m",
+          "id": 19
+      },
+      {
+          "longitude": -90,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "8.8.8.8",
+          "color": "#b802c5",
+          "name": "google-public-dns",
+          "latitude": 45,
+          "hide": false,
+          "frequency": "6m",
+          "id": 20
+      },
+      {
+          "longitude": -170,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "8.8.4.4",
+          "color": "#000000",
+          "name": "google-public-dnsB",
+          "latitude": -80,
+          "hide": false,
+          "frequency": "8m",
+          "id": 22
+      },
+      {
+          "longitude": 5,
+          "worker": "default",
+          "runing": true,
+          "task": "ping",
+          "last_run": 0,
+          "address": "www.nytimes.com",
+          "color": "#8583aa",
+          "name": "NYT",
+          "latitude": 0,
+          "hide": false,
+          "frequency": "8m",
+          "id": 23
+      }
+  ]
+    refreshTable(tasks_raw_dataDD)
+  }
+})

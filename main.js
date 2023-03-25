@@ -5,7 +5,7 @@ const axios = require('axios').default;
 const https = require('https');
 const { autoUpdater, AppUpdater } = require("electron-updater");
 
-let dev = true
+var dev = true//dev if true open dev mode and auto fill forms
 let mainWindow
 
 var httpReqestAddr
@@ -18,6 +18,7 @@ var config
 //Basic flags
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
+
 
 /*--------------------------------------------- functions for main process -----------------------------------------------------*/ 
 function createWindow () {
@@ -151,7 +152,6 @@ fs.readFile(path.join(__dirname, 'settings.json'), (err, jsonString) => {
   httpReqestAddr = sett.httpReq
   graphsSet = sett.graphs  
 
-
   const agent = new https.Agent({
     cert: cert,
     key: key,
@@ -162,8 +162,6 @@ fs.readFile(path.join(__dirname, 'settings.json'), (err, jsonString) => {
     httpsAgent: agent,
     baseURL: httpReqestAddr.http
   })
-  
-
 })
 
 function postHttp(http_address, sendval, action){//funkce pro http requesty POST
@@ -376,7 +374,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.on("toMainSettings", (event, args) => {
-    
+      graphsSet.dev = dev
       mainWindow.webContents.send("fromMainSettings", graphsSet);//posílá nastavení pro podprogramy
   })
 

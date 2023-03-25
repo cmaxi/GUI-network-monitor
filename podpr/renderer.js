@@ -1,9 +1,12 @@
-const dev = true;
-if (dev){
-  document.getElementById("username").value = "aa"
-  document.getElementById("password").value = "aa";
-  document.getElementById("ipAddress").value = "https://192.168.1.110:8000";
-}
+window.api.send("toMainSettings")//načítá nastavení a všechna data
+window.api.receive("fromMainSettings", (sett) => {
+  if (sett.dev){
+    document.getElementById("username").value = "aa"
+    document.getElementById("password").value = "aa";
+    document.getElementById("ipAddress").value = "https://192.168.1.110:8000";
+  }
+})
+
 
 //hide swap:
 const graph = document.getElementById('graf')

@@ -1,6 +1,6 @@
 {
   "name": "Network-monitor",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "GUI for api app",
   "main": "main.js",
   "scripts": {
@@ -34,6 +34,15 @@
     "productName": "Network Monitor app",
     "directories": {
       "output": "dist"
+    },
+    "win": {
+      "icon": "ic/win.ico"
+    },
+    "mac": {
+      "icon": "ic/mac.icns"
+    },
+    "linux": {
+      "icon": "ic/linux.png"
     }
   },
   "author": "Martin Cé",
