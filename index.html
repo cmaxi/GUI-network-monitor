@@ -45,8 +45,6 @@
 
     <!--login -->
     <div id="login"> 
-
-
       <div id="loginForm">
         <form class="logF">
           <label for="username" class="log">Username:</label>
@@ -58,13 +56,11 @@
           <label for="ipAddress" class="log">IP:</label>
           <input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log"><!--https://192.168.1.110:8000-->
           <br>
-          <br>
           <a>Change IP if server not on host/your pc else leave empty!</a>
-          <br><br>
+          <br>
           <button type="button" value="Log In" class="log" id="validateLogIn">Connect</button>
         </form>
       </div>
-      <br>
       <p id="version">Version is </p>
     </div>
     <div id="spacer"></div>
@@ -80,35 +76,21 @@
       <div id="menu" class="hidden">
         
         <div class='child'>
-          <table class="main_T">
-            <tr>
-              <th>Name / New name</th>
-              <th>Address</th> 
-              <th>Color</th>
-              <th>Period</th>
-              <th>Worker</th>
-              <th>Coordinates</th>
-              <th></th>
-            </tr>
-            <tr>
-                <form id="sform">
-                <td><input type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required></td>
-                <td><input type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1/www.example.com" required></td> 
-                <td><input type = "color" id = "s_color" required></td>
-                <td><input type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required></td>
-                <td><input type = "text" id = "s_worker" placeholder="worker"required>
-                <td>
-                  <input type = "text" id = "s_latitude" pattern="-?\d{1,2}(\.\d{1,4})?|90(\.0{1,4})?" placeholder="Latitude"><br><br>
-                  <input type = "text" id = "s_longitude" pattern="-?(?:\d{1,2}|1[0-7]\d)(?:\.\d+)?|180(?:\.0+)?" placeholder="Longitude">
-                </td>
+          <form id="sform">
+            <input class = "inptask" type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Name" /><br><br>
+            <input class = "inptask" type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1/www.example.com" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Address" /> <br><br>
+            <input class = "inptask" type = "color" id = "s_color" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Color in graph" /><br><br>
+            <input class = "inptask" type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Period" /><br><br>
+            <input class = "inptask" type = "text" id = "s_worker" placeholder="worker"required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Worker" /><br><br>
+            <input class = "inptask" type = "text" id = "s_latitude" pattern="-?\d{1,2}(\.\d{1,4})?|90(\.0{1,4})?" placeholder="Latitude"><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Latitude" /><br><br>
+            <input class = "inptask" type = "text" id = "s_longitude" pattern="-?(?:\d{1,2}|1[0-7]\d)(?:\.\d+)?|180(?:\.0+)?" placeholder="Longitude"><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Longitude" /><br><br>
+            
 
-              </form>
-            </tr>
-          </table>
-            <button type = "button" id = "upsave">Update Add task</button>
-            <button type = "button" id = "runing">Pause/Start task</button>
-            <button id="hide-menu-btn">Cancel</button>
-          </div>
+          </form>
+          <button type = "button" id = "upsave">Update Add task</button>
+          <button type = "button" id = "runing">Pause/Start task</button>
+          <button id="hide-menu-btn">Cancel</button>
+        </div>
       </div>
         <div id="taskTableN"  class="taskTableN">
           <div id="cc"><button id="menuButton">Ad new task</button><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$"><button id = "loadnewserv">Find</button></div>

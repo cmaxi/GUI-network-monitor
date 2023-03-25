@@ -65,6 +65,8 @@ const configL = {
         fontColor:labelGraphCol,
         labels:{
           color: labelGraphCol,
+          usePointStyle: true,
+          pointStyle: 'circle'
         },
         onHover: function(event, chartElement) {
           document.body.style.cursor = 'pointer';
@@ -241,6 +243,10 @@ const configB = {
     plugins: {
       legend: {
         position: 'right',
+        labels: {
+          usePointStyle: true, 
+          pointStyle: 'circle' 
+        }
       },
       datalabels: {
           color: 'white'
@@ -283,6 +289,8 @@ const configP = {
         fontColor: labelGraphCol,
         labels:{
           color: labelGraphCol,
+          usePointStyle: true,
+          pointStyle: 'circle'
         },
         onHover: function(event, chartElement) {
           document.body.style.cursor = 'pointer';
@@ -334,6 +342,8 @@ const configD = {
         fontColor: labelGraphCol,
         labels:{
           color: labelGraphCol,
+          usePointStyle: true,
+          pointStyle: 'circle' 
         },
         onHover: function(event, chartElement) {
           document.body.style.cursor = 'pointer';

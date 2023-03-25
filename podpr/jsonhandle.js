@@ -365,12 +365,11 @@ function appendTableData(data){
       var img = document.createElement("img");
       img.src = "pics/Update.png";
       img.height = 20;
-      buttonU.appendChild(img);
-      buttonU.addEventListener("click", function() {
+      img.addEventListener("click", function() {
         const pozice = parseInt(row.id.replace(/\D/g, ''));
         loadSpecs(tasks_raw_data[pozice].name)
       });
-      updateCell.appendChild(buttonU);
+      updateCell.appendChild(img);
       row.appendChild(updateCell)
 
       var idCell = document.createElement("td");
@@ -386,10 +385,16 @@ function appendTableData(data){
       generate(row ,addressCell, rowData["address"], index)
 
       var colorCell = document.createElement("td");
-      colorCell.style.backgroundColor = rowData["color"];
       colorCell.setAttribute("id", "row" + index);
+      var colorCircle = document.createElement("div");
+      colorCircle.style.backgroundColor = rowData["color"];
+      colorCircle.style.borderRadius = "50%"; // nastaví kruhové zaoblení
+      colorCircle.style.width = "20px"; // nastaví šířku kruhu
+      colorCircle.style.height = "20px"; // nastaví výšku kruhu
+      colorCircle.style.margin = "auto"; // nastaví zarovnání do středu
+      colorCell.appendChild(colorCircle);
       row.appendChild(colorCell);
-
+      
       var periodCell = document.createElement("td");
       generate(row, periodCell, rowData["frequency"], index)
 
@@ -405,28 +410,24 @@ function appendTableData(data){
       const buttonP = document.createElement("button");
       var img = document.createElement("img");
       img.src = rowData["runing"]==true?"pics/Pause.png":"pics/Start.png";
-      img.height = 20;
-      buttonP.appendChild(img);
-      buttonP.addEventListener("click", function() {
+      img.height = 25;
+      img.addEventListener("click", function() {
         pausStart(tasks_raw_data[index].name)
       });
-      pauseCell.appendChild(buttonP);
+      pauseCell.appendChild(img);
       row.appendChild(pauseCell)
-      //pauseCell.style.backgroundColor = rowData["runing"]==false?"red":"green";
 
 
       var hideCell = document.createElement("td");
       const buttonH = document.createElement("button");
       var img = document.createElement("img");
       img.src = rowData["hide"]==false?"pics/Show.png":"pics/Hide.png";
-      img.height = 20;
-      buttonH.appendChild(img);
-      buttonH.addEventListener("click", function() {
+      img.height = 35;
+      img.addEventListener("click", function() {
         hideTask(tasks_raw_data[index].name)
       });
-      hideCell.appendChild(buttonH);
+      hideCell.appendChild(img);
       row.appendChild(hideCell)
-      //hideCell.style.backgroundColor = rowData["hide"]==true?"gray":"white";
 
 
       var dellCell = document.createElement("td");
@@ -434,11 +435,10 @@ function appendTableData(data){
       var img = document.createElement("img");
       img.src = "pics/Trash.png";  // Zde nastavte cestu k vaší ikoně
       img.height = 20;
-      buttonD.appendChild(img);
-      buttonD.addEventListener("click", function() {
+      img.addEventListener("click", function() {
         dellAdress(tasks_raw_data[index].name)
       });
-      dellCell.appendChild(buttonD);
+      dellCell.appendChild(img);
       row.appendChild(dellCell)
 
       tableA.appendChild(row);
@@ -501,7 +501,7 @@ window.api.receive("fromMainSettings", (sett) => {
       {
           "longitude": -80,
           "worker": "default",
-          "runing": true,
+          "runing": false,
           "task": "ping",
           "last_run": 0,
           "address": "google.com",
@@ -522,21 +522,21 @@ window.api.receive("fromMainSettings", (sett) => {
           "color": "#fb00ff",
           "name": "Palace",
           "latitude": -30,
-          "hide": false,
+          "hide": true,
           "frequency": "8m",
           "id": 7
       },
       {
           "longitude": 80,
           "worker": "default",
-          "runing": true,
+          "runing": false,
           "task": "ping",
           "last_run": 0,
           "address": "supremenewyork.com",
           "color": "#940000",
           "name": "Supreme",
           "latitude": 30,
-          "hide": false,
+          "hide": true,
           "frequency": "8m",
           "id": 8
       },

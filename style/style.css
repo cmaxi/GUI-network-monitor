@@ -25,14 +25,15 @@
         height: 90%;
     }
     .gRespp{
-      width: 90%;
+      text-align: center;
+      padding-left: 4%;
+      padding-right: 4%;
     }
     #gRespM{
-      width: 90%;
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-left: 60px;
     }
     #gResp{
       overflow: hidden;
@@ -47,15 +48,7 @@
         align-items: center;
     }
     #spacer{
-        height: 300px;
-    }
-    .parent {
-        text-align: center;
-      }
-    .child {
-        padding-left: 5px;
-        display: inline-block;
-        vertical-align: text-top;
+        height: 1000px;
     }
 
 
@@ -91,10 +84,8 @@
     }
     
 
-
-
     #loginForm{
-      height: 500px;
+      height: 450px;
       text-align: center;
       justify-content: center;
       align-items: center;
@@ -104,8 +95,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: #48308d;
-      padding: 20px;
+      background-color: rgb(46, 41, 82);
+      padding: 10px;
       border-radius: 20px;
     }
     .log{
@@ -211,7 +202,7 @@ th{cursor: pointer;}
 }
 
 #menu > div{
-  margin-top: 10%;
+  margin-top: 5%;
   background-color: rgb(56, 54, 68);
   padding: 5%;
 }
@@ -404,3 +395,11 @@ th{cursor: pointer;}
     border: 2px solid #005223;
     border-radius: 2px;
   }
+
+  img{
+    cursor: pointer;
+  }
+  .inptask {
+    width: 150px;
+  }
+
