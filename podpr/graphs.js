@@ -1,4 +1,5 @@
 const labelGraphCol = "white";
+const gridLinesCol = "#888787";
 
 //menu settings
 const menuButtonG = document.getElementById('menuButton-G');
@@ -100,6 +101,9 @@ const configL = {
                 color:labelGraphCol,
               },
               min: -1.5,
+              grid: {
+                color: gridLinesCol
+              }
           },
           x:{
             title:{
@@ -115,6 +119,9 @@ const configL = {
                 let realLabel = this.getLabelForValue(label)
                 return realLabel[0];
               }
+            },
+            grid: {
+              color: gridLinesCol
             }
           },
           xAxis2: {
@@ -135,9 +142,9 @@ const configL = {
                 }
               }
             },
-            
             grid: {
               drawOnChartArea: false, // only want the grid lines for one axis to show up
+              color: gridLinesCol
             }
 
           },
@@ -217,11 +224,17 @@ const configB = {
       y:{
         ticks:{
           color:labelGraphCol
+        },
+        grid: {
+          color: gridLinesCol
         }
       },
       x:{
         ticks:{
           color:labelGraphCol
+        },
+        grid: {
+          color: gridLinesCol
         }
       }
     },

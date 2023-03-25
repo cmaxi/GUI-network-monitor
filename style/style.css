@@ -4,7 +4,10 @@
         color: #ffffff;
     }
     
-    
+    #graf, #jsonpar, #map{
+      margin-left: 45px;
+    }
+
     h1, h2 {
         color: rgb(81, 120, 81);
     }
@@ -101,6 +104,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-color: #48308d;
+      padding: 20px;
+      border-radius: 20px;
     }
     .log{
       height: 30px;
@@ -139,75 +145,21 @@
 
 
 
-
-    .sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: rgb(46, 41, 82);
-        color: white;
-        overflow-x: hidden;
-        transition: 0.1s;
-        padding-top: 60px;
-        overflow-y: scroll;
-      }
-      
-      .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #ffffff;
-        display: block;
-        transition: 0.3s;
-      }
-      
-      .sidenav a:hover {
-        color: #7f7e7e;
-      }
-
-      .closebtn {
-        position: absolute;
-        width: 20px;
-        top: 0;
-        font-size: 100px;
-        margin-left: 0;
-        padding-left: 0;
-      }
-
-      .sidenav a {
-        padding: 6px 8px 6px 16px;
-        text-decoration: none;
-        font-size: 20px;
-        color: #ffffff;
-        display: block;
-        border: none;
-        background: none;
-        width: 100%;
-        text-align: left;
-        cursor: pointer;
-        outline: none;
-      }
-
-
-
-
-
 /*table*/
 .taskTableN{
   overflow: auto;
-  height: 600px;
+  height: 500px;
   width: 900px;
   text-align: center;
   display: inline-block;
   position: relative;
+  border: 2px solid #d2d2d2;
+  border-radius: 20px;
 }
 
 .taskTable{
     overflow: auto;
-    height: 80%;
+    height: 90%;
     width: 880px;
     text-align: center;
     padding-left: 5px;
@@ -359,6 +311,41 @@ th{cursor: pointer;}
 
 
 
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(46, 41, 82);
+    color: white;
+    overflow-x: hidden;
+    transition: 0.1s;
+    padding-top: 60px;
+    overflow-y: scroll;
+  }
+  
+  
+  .sidenav a:hover {
+    color: #7f7e7e;
+    background-color: #f4f4f4;
+  }
+
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #ffffff;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+  }
 
 
 
@@ -374,56 +361,38 @@ th{cursor: pointer;}
     z-index: 1;
   }
   
-  .sidebarr ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .sidebarr li {
-    margin: 0;
-    padding: 0;
-  }
-  
-  .sidebarr li a {
-    display: block;
-    padding: 10px;
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .sidebarr li a:hover {
-    background-color: #ddd;
-  }
-
-  .sidebarr a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #ffffff;
-    display: block;
-    transition: 0.3s;
-  }
-  
   .sidebarr a:hover {
     color: #7f7e7e;
+    background-color: #d2d2d2;
   }
 
   .sidebarr a {
-    padding: 6px 8px 6px 16px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 15px;
     text-decoration: none;
     font-size: 20px;
     color: #ffffff;
     display: block;
     border: none;
     background: none;
-    width: 100%;
     text-align: left;
     cursor: pointer;
     outline: none;
+    transition: 0.3s;
   }
 
 
-  #graf, #jsonpar, #map{
-    margin-left: 45px;
+
+  .closebtn {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    margin-left: 0;
+    padding-left: 0;
+    background-color: "";
+  }
+
+  .sidebarr .closebtn{
+    width: 35px;
   }

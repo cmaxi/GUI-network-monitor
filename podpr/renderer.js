@@ -28,25 +28,27 @@ function swapPage(sh){
     windows[7].style.display = "block";
   }
   const dp = document.querySelectorAll('.swapPage')[prevCh];
-  dp.style.color = "white"
+  dp.style.backgroundColor = ""
   dp.addEventListener('mouseover', mouseOverHandler(dp));
   dp.addEventListener('mouseout', mouseOutHandler(dp));
 
   const dps = document.querySelectorAll('.swapPageS')[prevCh];
-  dps.style.color = "white"
-  dps.addEventListener('mouseover', mouseOverHandler(dp));
-  dps.addEventListener('mouseout', mouseOutHandler(dp));
+  dps.style.backgroundColor = "white"
+  dps.addEventListener('mouseover', mouseOverHandler(dps));
+  dps.addEventListener('mouseout', mouseOutHandler(dps));
 
   prevCh = sh
-  document.querySelectorAll('.swapPage')[sh].style.color = "red"
-  document.querySelectorAll('.swapPageS')[sh].style.color = "red"
+  document.querySelectorAll('.swapPage')[sh].style.backgroundColor = "#7c0000"
+  document.querySelectorAll('.swapPageS')[sh].style.backgroundColor = "#7c0000"
 
   function mouseOverHandler(prev) {
     prev.style.color = "#7f7e7e";
+    prev.style.backgroundColor = "#7f7e7e";
   }
   
   function mouseOutHandler(prev) {
     prev.style.color = '';
+    prev.style.backgroundColor = "";
   }
 
 }
@@ -119,15 +121,13 @@ b11.addEventListener('click', async () => {
 
 })
 
-
-
 //logs from main
 
 window.api.receive_cmd("fromMainRequestLog",(data)=>{
   console.log("%c"+data[0] +" "+ data[1],data[1]!=200?'color:red':'color:cyan')
   if (data[1]==401){
+    swapPage(0);
     alert("Time out!");
-    swapPage(3)
   }
 })
 
