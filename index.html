@@ -39,29 +39,31 @@
       <a href="#" id="s5" class="swapPage"><img class="icons" src="pics/Map.png" height="20px"> Map</a>
     </div>
     
-
+    <div id="hider"></div>
 
 
 
     <!--login -->
     <div id="login"> 
+      <h2>Login and conect</h2>
       <div id="loginForm">
+        
         <form class="logF">
-          <label for="username" class="log">Username:</label>
-          <input type="text" id="username" class="log" placeholder="username">
-          <br>
-          <label for="password" class="log">Password:</label>
-          <input type="password" id="password" class="log" placeholder="password">
-          <br>
-          <label for="ipAddress" class="log">IP:</label>
-          <input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log"><!--https://192.168.1.110:8000-->
-          <br>
-          <a>Change IP if server not on host/your pc else leave empty!</a>
+          
+          <p class="topLog"><input type="text" id="username" class="log" placeholder="Username"><img src="pics/Info.png"  height="20px"  title="Username" /></p>
+
+          <p><input type="password" id="password" class="log" placeholder="Password"><img src="pics/Info.png"  height="20px"  title="Password" /></p>
+
+          <p  class="botomLog"><input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log"><img src="pics/Info.png"  height="20px"  title="Address" /></p>
+
+          <p>Change IP if server not on host/your pc else leave empty!</p>
           <br>
           <button type="button" value="Log In" class="log" id="validateLogIn">Connect</button>
+          <p id="version">Version is </p>
         </form>
+        
       </div>
-      <p id="version">Version is </p>
+      
     </div>
     <div id="spacer"></div>
 
@@ -77,16 +79,15 @@
         
         <div class='child'>
           <form id="sform">
-            <input class = "inptask" type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Name" /><br><br>
-            <input class = "inptask" type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1/www.example.com" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Address" /> <br><br>
-            <input class = "inptask" type = "color" id = "s_color" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Color in graph" /><br><br>
-            <input class = "inptask" type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Period" /><br><br>
-            <input class = "inptask" type = "text" id = "s_worker" placeholder="worker"required><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Worker" /><br><br>
-            <input class = "inptask" type = "text" id = "s_latitude" pattern="-?\d{1,2}(\.\d{1,4})?|90(\.0{1,4})?" placeholder="Latitude"><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Latitude" /><br><br>
-            <input class = "inptask" type = "text" id = "s_longitude" pattern="-?(?:\d{1,2}|1[0-7]\d)(?:\.\d+)?|180(?:\.0+)?" placeholder="Longitude"><img src="pics/Info.png"  height="20px" alt="Popis obrázku" title="Longitude" /><br><br>
-            
-
+            <p><input class = "inptask" type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required><img src="pics/Info.png"  height="20px"  title="Name to graph and for table" /></p>
+            <p><input class = "inptask" type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1 or www.example.com" required><img src="pics/Info.png"  height="20px"  title="Address of server vhich will be checked" /></p>
+            <p><input class = "inptask" type = "color" id = "s_color" required><img src="pics/Info.png"  height="20px"  title="Color in graph" /></p>
+            <p><input class = "inptask" type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required><img src="pics/Info.png"  height="20px"  title="Period for checking" /></p>
+            <p><input class = "inptask" type = "text" id = "s_worker" placeholder="worker"required><img src="pics/Info.png"  height="20px"  title="Worker" /></p>
+            <p><input class = "inptask" type = "text" id = "s_latitude" pattern="-?\d{1,2}(\.\d{1,4})?|90(\.0{1,4})?" placeholder="Latitude"><img src="pics/Info.png"  height="20px"  title="Latitude of server" /></p>
+            <p><input class = "inptask" type = "text" id = "s_longitude" pattern="-?(?:\d{1,2}|1[0-7]\d)(?:\.\d+)?|180(?:\.0+)?" placeholder="Longitude"><img src="pics/Info.png"  height="20px"  title="Longitude of server" /></p>
           </form>
+          <br>
           <button type = "button" id = "upsave">Update Add task</button>
           <button type = "button" id = "runing">Pause/Start task</button>
           <button id="hide-menu-btn">Cancel</button>
@@ -133,14 +134,18 @@
     <div id="graf">
       
       <div id="menu-G" class="hidden-G">
-        <button id="hide-menu-btn-G">Cancel</button><br>
+        <br>
         <b>Set reload time [s]:</b>
-        <input type = "number" id = "timerMax">
-        <b>Reload is runing:</b>
-        <input type="checkbox" id="myCheckbox" checked="true">
+        <input type = "number" id = "timerMax"><img src="pics/Info.png"  height="20px"  title="Minimal value is 20s" />
+        <br>
+        <b>Auto reload data:</b>
+        <input type="checkbox" id="myCheckbox" checked="true"><img src="pics/Info.png"  height="20px"  title="Checked for auto reload otherwise auto reload off" />
         <br>
         <b>Set graf area length:</b>
-        <input type = "number" id = "lenMax">
+        <input type = "number" id = "lenMax"><img src="pics/Info.png"  height="20px"  title="Minimal is 3 values" />
+        <br>
+        <button id="hide-menu-btn-G">Cancel</button>
+        <button id="confirmNewsettGraph">Confirm</button><br>
       </div>
       <b id="timer"></b>
       <button type="button" id="load_d">Auto</button>
@@ -160,7 +165,7 @@
         <option value="Y">Y</option>
       </select>
       <button type="button" id="loadFromTo">Load</button>
-      <button id="menuButton-G"><img src="pics/Settings.png" height="20px"></button>
+      <img id="menuButton-G" src="pics/Settings.png" height="20px">
       
 
       <div id="gResp0" class="gRespp">
@@ -186,7 +191,6 @@
 
     <!-- mapa -->
     <div id="maps">
-      <button id="btes">tttt</button>
       <div id="mapM">
         <div id="map"></div>
       </div>

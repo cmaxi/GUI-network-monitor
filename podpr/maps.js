@@ -56,7 +56,6 @@ function updateMapPoints(){
   })
 }
 
-document.getElementById('btes').addEventListener('click', updateMapPoints);
 
 var popup = L.popup();
 //počáteční zoom je na 3

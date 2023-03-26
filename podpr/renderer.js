@@ -4,6 +4,7 @@ window.api.receive("fromMainSettings", (sett) => {
     document.getElementById("username").value = "aa"
     document.getElementById("password").value = "aa";
     document.getElementById("ipAddress").value = "https://192.168.1.110:8000";
+    document.getElementById("hider").style.width = "0px";
   }
 })
 
@@ -22,6 +23,11 @@ const spacer = document.getElementById('spacer')
 const windows = [login, jsonpar, graph0, graph1, graph2, maps, spacer, graph]  //div sectors by id
 var prevCh = 0
 function swapPage(sh){
+
+  if (sh!=0){
+    document.getElementById("hider").style.width = "0px";
+  }
+
   for (let i = 0; i < windows.length; i++) { 
     windows[i].style.display = "none";
   }
@@ -130,10 +136,15 @@ window.api.receive_cmd("fromMainRequestLog",(data)=>{
   console.log("%c"+data[0] +" "+ data[1],data[1]!=200?'color:red':'color:cyan')
   if (data[1]==401){
     swapPage(0);
+    document.getElementById("hider").style.width = "50px";
     alert("Time out!");
   }
 })
 
+const hider = document.getElementById('hider')
+hider.addEventListener("click", async () => {
+  alert("Not logged in! \nOr not conected.");
+})
 
 const version = document.getElementById('version')
 document.addEventListener("DOMContentLoaded", function(){
