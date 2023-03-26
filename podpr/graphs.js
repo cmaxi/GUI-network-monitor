@@ -1,6 +1,7 @@
 const labelGraphCol = "white";
 const gridLinesCol = "#888787";
-
+const input = document.getElementById('timerMax')
+const input2 = document.getElementById('lenMax')
 
 window.api.receive("fromMainServerDown", (data) => {
   myCheckbox.checked=false
@@ -483,25 +484,36 @@ function timeConvT(time, roundingUnit){
 }
 
 const twoDaysAgo = new Date();
-timestapm2dayago = twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+timestapm2dayago = twoDaysAgo.setDate(twoDaysAgo.getDate() - 1);
+var statusBar = document.getElementById("progress");
+function progress(progressStatus){
+  document.getElementById("myBar").style.width = progressStatus + "%";
+}
 
-function dataForGraphsT(dtf = timestapm2dayago, dtt=Date.now(), step = "s", firsLoad = true, auto = true){//write to line graph and get data for other graphs setting it to json from first graph
-  var chartData = [], labels = [], newWal = true, i = 0
+
+
+function dataForGraphsT(dtf = 0, dtt=Date.now(), step = "s", firsLoad = true, auto = true){//write to line graph and get data for other graphs setting it to json from first graph
+  var chartData = [], labels = [], newWal = true, i = 0, stts = 0
   ttt = Date.now()
+  statusBar.style.height = "17%"
+  progress(stts+=10);
   console.log((Date.now() - ttt), ttt = Date.now())
   if (firsLoad){lastLoadedTime = 0}
   window.api.httpRequest("requestLoadAll", {params:{'time_from':dtf,'time_to':dtt}})//načítá data od posledního času a přepisuje (TODO) časy
   window.api.receive("fromMainRequestLoadAll", (allRespInterv) => {
+    progress(stts+=10)
     if (allRespInterv == "errorFlag")
     {
       console.log("errorFla")
       myCheckbox.checked=false
+      statusBar.style.height = "0px"
       return
     }
     console.log((Date.now() - ttt), ttt = Date.now())
     window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
     window.api.receive("fromMainRequestTaskProperties", (taskSpecs) => {
       console.log((Date.now() - ttt), ttt = Date.now())
+      var stepts = 50/taskSpecs.length
       taskSpecs.filter(element => element.hide == false).forEach(element => {
             
             chartData.push({
@@ -520,10 +532,11 @@ function dataForGraphsT(dtf = timestapm2dayago, dtt=Date.now(), step = "s", firs
               spanGaps: true,
               tension: 0.1,
             })
+            progress(stts+=stepts)
         });
 
         if (auto){var tprev = lastLoadedTimeAuto}else{var tprev = {"YMD":"", "hms":""}}
-        
+        var stepts = 30/allRespInterv.data.length
         allRespInterv.data.forEach(da => {
           //kl = chartData.findIndex(function(item, i){return item.address == da.address})
             lastLoadedTime = da.time
@@ -578,6 +591,7 @@ function dataForGraphsT(dtf = timestapm2dayago, dtt=Date.now(), step = "s", firs
                 }
               });
             }
+            progress(stts+=stepts)
         });
 
         chartData.forEach(element => {
@@ -591,6 +605,10 @@ function dataForGraphsT(dtf = timestapm2dayago, dtt=Date.now(), step = "s", firs
         console.log(firsLoad, chartData, labels, auto);   
         setAndUpdateT(firsLoad, chartData, labels, auto);
         console.log((Date.now() - ttt), ttt = Date.now())
+        progress(100)
+        setTimeout(function() {
+          statusBar.style.height = "0px"
+        }, 700);
     })
   })
   
@@ -826,8 +844,7 @@ hideMenuBtnG.addEventListener('click', () => {
 
 const confirmNewval = document.getElementById('confirmNewsettGraph');
 confirmNewval.addEventListener('click', () => {
-  const input = document.getElementById('timerMax')
-  const input2 = document.getElementById('lenMax')
+  console.log(input, "to je input")
   if (input.value < 20) {
     alert(input.value + " is too low for refresh");
   } else if (input2.value < 2) {

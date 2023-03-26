@@ -424,3 +424,33 @@ th{cursor: pointer;}
     height: 30px;
   }
 
+
+
+  #progress{
+    position: fixed;
+    top: 40%;
+    left: 35%;
+    width: 30%;
+    height: 0px;
+    overflow: hidden;
+    background-color: rgba(45, 42, 79, 1);
+    box-shadow: 0 10px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+    border-radius: 20px;
+  }
+
+  #myProgress {
+    margin: 5%;
+    border-radius: 20px;
+    width: 90%;
+    background-color: rgb(76, 72, 108);
+    
+  }
+  
+  #myBar {
+    width: 1%;
+    height: 30px;
+    background-color: #04AA6D;
+    border-radius: 20px;
+  }
+
