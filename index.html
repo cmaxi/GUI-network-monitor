@@ -40,26 +40,26 @@
     </div>
     
     <div id="hider"></div>
-
+    
 
 
     <!--login -->
     <div id="login"> 
-      <h2>Login and conect</h2>
+      <br>
       <div id="loginForm">
         
         <form class="logF">
-          
-          <p class="topLog"><input type="text" id="username" class="log" placeholder="Username"><img src="pics/Info.png"  height="20px"  title="Username" /></p>
+          <h2>Login and conect</h2>
+          <p class="topLog"><input type="text" id="username" class="log" placeholder="Username"><img src="pics/Info.png"  class="infoSign"  title="Username" /></p>
 
-          <p><input type="password" id="password" class="log" placeholder="Password"><img src="pics/Info.png"  height="20px"  title="Password" /></p>
+          <p><input type="password" id="password" class="log" placeholder="Password"><img src="pics/Info.png"  class="infoSign"  title="Password" /></p>
 
-          <p  class="botomLog"><input id="ipAddress" placeholder="https://x.x.x.x:8000" class="log"><img src="pics/Info.png"  height="20px"  title="Address" /></p>
+          <p  class="botomLog"><input id="ipAddress" placeholder="Address" class="log"><img src="pics/Info.png"  class="infoSign"  title="https://x.x.x.x:8000" /></p>
 
           <p>Change IP if server not on host/your pc else leave empty!</p>
           <br>
-          <button type="button" value="Log In" class="log" id="validateLogIn">Connect</button>
-          <p id="version">Version is </p>
+          <button type="button" value="Log In" class="log" id="validateLogIn" height="40px">Connect</button>
+          <p id="version">Version is</p>
         </form>
         
       </div>
@@ -74,28 +74,38 @@
     <!--json handle -->
 
     <div id="jsonpar">
+      <div id="boxTransparent"></div>
       
-      <div id="menu" class="hidden">
-        
-        <div class='child'>
-          <form id="sform">
-            <p><input class = "inptask" type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required><img src="pics/Info.png"  height="20px"  title="Name to graph and for table" /></p>
-            <p><input class = "inptask" type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="1.1.1.1 or www.example.com" required><img src="pics/Info.png"  height="20px"  title="Address of server vhich will be checked" /></p>
-            <p><input class = "inptask" type = "color" id = "s_color" required><img src="pics/Info.png"  height="20px"  title="Color in graph" /></p>
-            <p><input class = "inptask" type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="24h 59m 59s" required><img src="pics/Info.png"  height="20px"  title="Period for checking" /></p>
-            <p><input class = "inptask" type = "text" id = "s_worker" placeholder="worker"required><img src="pics/Info.png"  height="20px"  title="Worker" /></p>
-            <p><input class = "inptask" type = "text" id = "s_latitude" pattern="-?\d{1,2}(\.\d{1,4})?|90(\.0{1,4})?" placeholder="Latitude"><img src="pics/Info.png"  height="20px"  title="Latitude of server" /></p>
-            <p><input class = "inptask" type = "text" id = "s_longitude" pattern="-?(?:\d{1,2}|1[0-7]\d)(?:\.\d+)?|180(?:\.0+)?" placeholder="Longitude"><img src="pics/Info.png"  height="20px"  title="Longitude of server" /></p>
-          </form>
-          <br>
-          <button type = "button" id = "upsave">Update Add task</button>
-          <button type = "button" id = "runing">Pause/Start task</button>
-          <button id="hide-menu-btn">Cancel</button>
-        </div>
-      </div>
         <div id="taskTableN"  class="taskTableN">
-          <div id="cc"><button id="menuButton">Ad new task</button><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$"><button id = "loadnewserv">Find</button></div>
+          <div id="cc">
+            <div class="left-div"><img id="menuButton" class="iconsIn" src="pics/Add.png" title="Add new task"></div>
+            <div class="right-div"><input type = "text" id = "s_old_name" pattern="^[A-Za-z0-9_\s]{1,30}$" placeholder="Search"><img id = "loadnewserv" class="iconsIn" src="pics/Find.png" title="Find"></div>  
+          </div>
             <div class="taskTable">
+              <div id="menu">
+                <div id="menudiv">
+                  <div id="cc2"> 
+                    <div class="left-div2">
+                      <h2>Add/Update</h2>
+                    </div>
+                    <div class="right-div2">
+                      <div class="fullRight" id="hide-menu-btn">&times;</div>
+                    </div>
+                  </div>
+                 
+                  <form id="sform">
+                    <p><input class = "inptask" type = "text" id = "s_name" pattern="^[A-Za-z0-9_\s.-]{1,30}$" placeholder="Name" required><img src="pics/Info.png"  class="infoSign"  title="Name to graph and for table" /></p>
+                    <p><input class = "inptask" type = "text" id = "s_ip" minlength="3" maxlength="30" size="20" placeholder="Address of server" required><img src="pics/Info.png"  class="infoSign"  title="1.1.1.1 or www.example.com" /></p>
+                    <p><input class = "inptask" type = "color" id = "s_color" required><img src="pics/Info.png"  class="infoSign"  title="Color in graph" /></p>
+                    <p><input class = "inptask" type = "text" id = "s_period" pattern="(^[1-9]|[1-5][0-9])s$|(^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m (^[1-9]|[1-5][0-9])s$|(^[1-9]|1[0-9]|2[0-4])h (^[1-9]|[1-5][0-9])m$|(^[1-9]|1[0-9]|2[0-4])h$|(^[1-9]|1[0-9]|2[0-4])m$" placeholder="Set period for checking" required><img src="pics/Info.png"  class="infoSign"  title="24h, 59m, 59s" /></p>
+                    <p><input class = "inptask" type = "text" id = "s_worker" placeholder="worker"required><img src="pics/Info.png"  class="infoSign"  title="Worker" /></p>
+                    <p><input class = "inptask" type = "text" id = "s_latitude" pattern="-?\d{1,2}(\.\d{1,4})?|90(\.0{1,4})?" placeholder="Latitude"><img src="pics/Info.png"  class="infoSign"  title="Latitude of server location -90 to 90" /></p>
+                    <p><input class = "inptask" type = "text" id = "s_longitude" pattern="-?(?:\d{1,2}|1[0-7]\d)(?:\.\d+)?|180(?:\.0+)?" placeholder="Longitude"><img src="pics/Info.png"  class="infoSign"  title="Longitude of server location -180 to 180" /></p>
+                  </form>
+                  <button type = "button" id = "upsave" >Update Add task</button>
+                  <button type = "button" id = "runing">Pause/Start task</button>
+                </div>
+              </div>
               <table id="myTable">
                 <thead>
                   <tr>
@@ -138,46 +148,60 @@
         </div>
         <p>Downloading data from server</p>
       </div>
+
       <div id="menu-G" class="hidden-G">
+        <div id="hide-menu-btn-G" class="fullRight">&times;</div>
         <br>
         <b>Set reload time [s]:</b>
-        <input type = "number" id = "timerMax"><img src="pics/Info.png"  height="20px"  title="Minimal value is 20s" />
+        <input type = "number" id = "timerMax"><img src="pics/Info.png"  class="infoSign"  title="Minimal value is 20s" />
         <br>
         <b>Auto reload data:</b>
-        <input type="checkbox" id="myCheckbox" checked="true"><img src="pics/Info.png"  height="20px"  title="Checked for auto reload otherwise auto reload off" />
+        <input type="checkbox" id="myCheckbox" checked="true"><img src="pics/Info.png"  class="infoSign"  title="Checked for auto reload otherwise auto reload off" />
         <br>
         <b>Set graf area length:</b>
-        <input type = "number" id = "lenMax"><img src="pics/Info.png"  height="20px"  title="Minimal is 3 values" />
+        <input type = "number" id = "lenMax"><img src="pics/Info.png"  class="infoSign"  title="Minimal is 3 values" />
         <br>
-        <button id="hide-menu-btn-G">Cancel</button>
         <button id="confirmNewsettGraph">Confirm</button><br>
       </div>
-      <b id="timer"></b>
-      <button type="button" id="load_d">Auto</button>
 
-      <label for="start-time">Since:</label>
-      <input type="datetime-local" id="start-time" name="start-time">
+      <div id="cc">
+        <div class="left-div1">
+          <b id="timer"></b>
+          <img id="load_d" class="iconsIn" src="pics/Reload.png" title="Reload real time loading">
+        </div>
+        <div class="center-div1">
+          <label for="start-time">Since:</label>
+          <input type="datetime-local" id="start-time" name="start-time">
 
-      <label for="end-time">To:</label>
-      <input type="datetime-local" id="end-time" name="end-time">
-      <label for="end-time">Step size: </label>
-      <select id="myDropdownM">
-        <option value="h">h</option>
-        <option value="m">m</option>
-        <option value="s">s</option>
-        <option value="D">D</option>
-        <option value="M">M</option>
-        <option value="Y">Y</option>
-      </select>
-      <button type="button" id="loadFromTo">Load</button>
-      <img id="menuButton-G" src="pics/Settings.png" height="20px">
+          <label for="end-time">To:</label>
+          <input type="datetime-local" id="end-time" name="end-time">
+          <label for="end-time">Step size: </label>
+          <select id="myDropdownM">
+            <option value="h">h</option>
+            <option value="m">m</option>
+            <option value="s">s</option>
+            <option value="D">D</option>
+            <option value="M">M</option>
+            <option value="Y">Y</option>
+          </select>
+          <img id="loadFromTo" class="iconsIn" src="pics/Downlioad.png" title="Download data in boundaries">
+        </div>
+        <div class="right-div1">
+        
+          <img id="menuButton-G" class="iconsIn" src="pics/Settings.png" title="Sett graphs">
+        </div>  
+      </div>
+
+      
+
+      
       
 
       <div id="gResp0" class="gRespp">
         <canvas id="myChart" ></canvas>
-        <button type="button" id="left_m">Shift to Left</button>
-        <button type="button" id="resetZoom">Reset zoom</button>
-        <button type="button" id="right_m">Shift to Right</button>
+        <img id="left_m" class="iconsIn" src="pics/left.png">
+        <img id="resetZoom" class="iconsIn" src="pics/Resetzoom.png">
+        <img id="right_m" class="iconsIn" src="pics/right.png">
       </div>
       <div id="gResp1" class="gRespp">
         <canvas id="myBarChart" ></canvas>

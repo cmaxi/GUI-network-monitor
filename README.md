@@ -24,10 +24,8 @@ npm start
 
 ```bash
 # Run the builder for app
-npm run dist
 
-npm run build:win
-npm run build:mac
-npm run build:linux
+npm run distWA
+npm run distL
 
 ```

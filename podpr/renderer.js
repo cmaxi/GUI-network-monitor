@@ -47,8 +47,8 @@ function swapPage(sh){
   dps.addEventListener('mouseout', mouseOutHandler(dps));
 
   prevCh = sh
-  document.querySelectorAll('.swapPage')[sh].style.backgroundColor = "#7c0000"
-  document.querySelectorAll('.swapPageS')[sh].style.backgroundColor = "#7c0000"
+  document.querySelectorAll('.swapPage')[sh].style.backgroundColor = "#383644"
+  document.querySelectorAll('.swapPageS')[sh].style.backgroundColor = "#383644"
 
   function mouseOverHandler(prev) {
     prev.style.color = "#7f7e7e";
@@ -138,6 +138,12 @@ window.api.receive_cmd("fromMainRequestLog",(data)=>{
     swapPage(0);
     document.getElementById("hider").style.width = "50px";
     alert("Time out!");
+  }
+  else if (data[1]!=200)
+  {
+    swapPage(0);
+    document.getElementById("hider").style.width = "50px";
+    alert("Not connected network error!");
   }
 })
 

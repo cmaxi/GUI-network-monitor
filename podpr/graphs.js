@@ -384,7 +384,7 @@ function autoReload(){
     setInterval(function(){ // renew every sec
       myCheckbox.checked==true?--t:""
       if (t==2){
-        timer.innerText = "Time to refresh: " + t + " s"
+        timer.innerText = "Refresh: " + t + " s"
         if (myBarChart.data.labels.length>1){
           dataForGraphsT(lastLoadedTime+1, undefined, "s", false, true)
         }else{
@@ -397,7 +397,7 @@ function autoReload(){
         
         t=refreshTime
       }else{
-        timer.innerText = "Time to refresh: " + t + " s"
+        timer.innerText = "Refresh: " + t + " s"
       }
     }, 1000);//1000
 }
@@ -834,7 +834,7 @@ menuButtonG.addEventListener('click', (event) => {
   menuG.style.top = `${clickY}px`;
   menuG.style.left = `${clickX}px`;
 
-  menuG.style.height = "150px";
+  menuG.style.height = "190px";
 });
 
 const hideMenuBtnG = document.getElementById('hide-menu-btn-G');

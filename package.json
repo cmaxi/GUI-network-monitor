@@ -6,8 +6,8 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "electron-builder",
-    "snap": "electron-builder --linux snap"
+    "distWA": "electron-builder",
+    "distL": "electron-builder --linux snap"
   },
   "keywords": [
     "Electron",

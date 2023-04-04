@@ -374,37 +374,44 @@ function appendTableData(data){
 
       var idCell = document.createElement("td");
       n = (index+1 >= 10 ? '0' : '00') + (index+1)
+      idCell.style.fontSize = "14px";
       
 
       generate(row ,idCell, n, index)
 
       var nameCell = document.createElement("td");
+      nameCell.style.fontSize = "14px";
+      nameCell.style.width = "180px";
       generate(row ,nameCell, rowData["name"], index)
 
       var addressCell = document.createElement("td");
+      addressCell.style.fontSize = "14px";
       generate(row ,addressCell, rowData["address"], index)
 
       var colorCell = document.createElement("td");
       colorCell.setAttribute("id", "row" + index);
       var colorCircle = document.createElement("div");
       colorCircle.style.backgroundColor = rowData["color"];
-      colorCircle.style.borderRadius = "50%"; // nastaví kruhové zaoblení
-      colorCircle.style.width = "20px"; // nastaví šířku kruhu
-      colorCircle.style.height = "20px"; // nastaví výšku kruhu
-      colorCircle.style.margin = "auto"; // nastaví zarovnání do středu
+      colorCircle.style.borderRadius = "50%";
+      colorCircle.style.width = "20px";
+      colorCircle.style.height = "20px";
+      colorCircle.style.margin = "auto";
       colorCell.appendChild(colorCircle);
       row.appendChild(colorCell);
       
       var periodCell = document.createElement("td");
+      periodCell.style.fontSize = "14px";
       generate(row, periodCell, rowData["frequency"], index)
 
-      var periodCell = document.createElement("td");
-      periodCell.innerHTML = "Lat: " + rowData["latitude"]+"<br>Lon: " + rowData["longitude"];
-      periodCell.setAttribute("id", "row" + index);
-      row.appendChild(periodCell);
+      var coords = document.createElement("td");
+      coords.innerHTML = "Lat: " + rowData["latitude"]+"<br>Lon: " + rowData["longitude"];
+      coords.setAttribute("id", "row" + index);
+      coords.style.fontSize = "14px";
+      row.appendChild(coords);
 
-      var periodCell = document.createElement("td");
-      generate(row, periodCell, rowData["worker"], index)
+      var worker = document.createElement("td");
+      worker.style.fontSize = "14px";
+      generate(row, worker, rowData["worker"], index)
 
       var pauseCell = document.createElement("td");
       const buttonP = document.createElement("button");
@@ -480,17 +487,24 @@ const hideMenuBtn = document.getElementById('hide-menu-btn');
 hideMenuBtn.addEventListener('click', () => {
   hideSettMenu()
 });
-
+const menuAdd = document.getElementById("menu")
 function hideSettMenu(){
-  menu.classList.toggle('visible');
-  document.body.classList.remove('overlay');
+  menuAdd.style.height = "0px"
+  document.getElementById("boxTransparent").style.height = "0%"
   clear()
 }
 
 function showMenu(){
-  menu.classList.toggle('visible');
-  document.body.classList.add('overlay');
+  menuAdd.style.height = "470px"
+
+  document.getElementById("boxTransparent").style.height = "100%"
+  //menu.classList.toggle('visible');
 }
+
+document.getElementById("boxTransparent").addEventListener("click", function(event) {
+  menuAdd.style.height = "0px";
+  document.getElementById("boxTransparent").style.height = "0px";
+});
 
 
 window.api.send("toMainSettings")//načítá nastavení a všechna data

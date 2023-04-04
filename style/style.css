@@ -2,6 +2,7 @@
         text-align: center;
         background-color: rgb(56, 54, 68);
         color: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
     }
     
     #graf, #jsonpar, #map{
@@ -11,6 +12,7 @@
     h1, h2 {
         color: rgb(255, 255, 255);
         margin-bottom: 0px;
+        margin-top: 1px;
     }
 
     svg{
@@ -21,7 +23,6 @@
         height: 150px;
     }
     #graf{
-        background-color: rgb(51, 51, 51);
         text-align: center;
         height: 90%;
     }
@@ -56,8 +57,16 @@
     button{
         cursor: pointer;
         text-align: center;
-        margin: 5px;
-        padding: 3px;
+        margin: 10px;
+        padding: 5px;
+        padding-left: 8px;
+        padding-right: 8px;
+        background-color: rgb(56, 54, 68);
+        color: white;
+        border: 1px solid;
+        border-color:  rgb(56, 54, 68);
+        border-radius: 7px;
+        box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.2);
     }
 
     
@@ -86,6 +95,7 @@
     
 
     #loginForm{
+      margin-top: 4px;
       height: 450px;
       text-align: center;
       justify-content: center;
@@ -102,9 +112,9 @@
       width: 390px;
     }
     .log{
-      height: 30px;
+      height: 40px;
       width: 180px;
-      margin: 5px;
+      margin: 3px;
     }
 
     .logF p{
@@ -112,15 +122,15 @@
     }
 
     .topLog{
-      border-top: 3px solid rgb(255, 255, 255);
-      padding-top: 10px;
-      border-radius: 2px;
+      border-top: 1px solid rgb(255, 255, 255);
+      padding-top: 7px;
+      border-radius: 60px;
 
     }
     .botomLog{
-      border-bottom: 3px solid rgb(255, 255, 255);
-      padding-bottom: 10px;
-      border-radius: 2px;
+      border-bottom: 1px solid rgb(255, 255, 255);
+      padding-bottom: 7px;
+      border-radius: 60px;
     }
 
 
@@ -166,12 +176,12 @@
 
 .taskTable{
     overflow: auto;
-    height: 90%;
+    height: 89%;
     width: 880px;
     text-align: center;
     padding-left: 5px;
     display: inline-block;
-    padding-top: 30px;
+    padding-top: 0px;
 }
 .tabRow{
     border-bottom: 1px solid black;
@@ -185,61 +195,118 @@ th{cursor: pointer;}
 
 
 #cc {
-  position: absolute;
-  text-align: right;
-  top: 0;
-  right: 5px;
-  width: 900px;
+  width: 100%;
+  text-align: center;
   background-color: rgba(56, 54, 68, 1);
 }
-#menuButton{
-  margin-right: 600px;
+
+.left-div, .right-div {
+  display: inline-block;
+  width: 49%;
+  margin: 5px 0%;
 }
-
-
-#righ {
+.left-div{
+  text-align: left;
+}
+.right-div{
   text-align: right;
 }
 
+.left-div1, .right-div1, .center-div1 {
+  display: inline-block;
+  margin: 0px 0%;
+}
+.left-div1{
+  width: 18%;
+  text-align: left;
+}
+
+.center-div1{
+  width: 70%;
+}
+
+.right-div1{
+  width: 5%;
+  text-align: right;
+}
+
+.left-div2, .right-div2 {
+  display: inline-block;
+  width: 49%;
+  margin: 5px 0%;
+}
+
+#cc2 {
+  width: 100%;
+  text-align: center;
+}
+
+.left-div2{
+  width: 80%;
+  text-align: center;
+}
+.right-div2{
+  width: 10%;
+  text-align: center;
+}
+
+#load_d{
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px; 
+  height: 20px;
+}
+
+.iconsIn{
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px; 
+  height: 27px;
+  padding: 5px;
+}
+
+.infoSign{
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+}
+
+.fullRight{
+  padding-top: 10px;
+  text-align: right;
+  width: 90%;
+  cursor: pointer;
+  font-size: 30px;
+}
+.fullRight:hover {
+  color: #7f7e7e;
+}
 
 #menu {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  top: 20px;
+  width: 350px;
   height: 0;
   overflow: hidden;
-  transition: height 0.1s ease;
-  background-color: rgba(56, 54, 68, 1);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   z-index: 10;
+  margin-left: 275px;
+
+  background-color: rgba(45, 42, 79, 1);
+  box-shadow: 0 10px 10px rgba(0,0,0,0.2);
+  border-radius: 20px;
 }
 
-#menu.visible {
-  height: 100%; /* Nastavit výšku menu podle potřeby */
-}
-
-#menu > div{
-  margin-top: 2%;
-  background-color: rgb(56, 54, 68);
-  padding: 5%;
-}
-
-
-
-
-.overlay {
+#boxTransparent{
   position: fixed;
-  top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  height: 0;
+  overflow: hidden;
   z-index: 5;
-  background-color: rgba(0, 0, 0, 0.6);
+
+  width: 100%;
+  height: 0%;
 }
-
-
-
 
 
 /* context menu */
@@ -301,7 +368,6 @@ th{cursor: pointer;}
     border-radius: 20px;
   }
   
-
 
 
   .sidenav {
@@ -405,6 +471,7 @@ th{cursor: pointer;}
   .icons {
     padding-right: 10px;
   }
+  
   hr{
     margin: 5px;
     border: 2px solid #005223;
