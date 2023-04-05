@@ -492,16 +492,13 @@ if (process.platform === 'darwin') {
 
 // Zobrazí dialog s informací o aktualizaci
 autoUpdater.on('update-available', (info) => {
-  const isMac = process.platform === 'darwin'
   dialog.showMessageBox({
     type: 'info',
     title: 'Update available',
     message: isMac?"A new version of ${app.getName()} is available. From: https://github.com/Guestas/GUI-network-monitor/releases/":`A new version of ${app.getName()} is available. Do you want to download and install it now?`,
     buttons: isMac?['OK']:['Yes', 'No']
   }).then(box=>{
-    if (box.response === 0 && !isMac) {
-      autoUpdater.downloadUpdate();
-    }
+    autoUpdater.downloadUpdate();
   });
 });
 
