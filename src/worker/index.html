@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Page 2</title>
+</head>
+<body>
+	<h1>Page 2</h1>
+	<form action="/submitPage2" method="POST">
+		<label for="input2">Input 2:</label>
+		<input type="text" id="input2" name="input2"><br><br>
+		<button type="submit">Submit</button>
+	</form>
+
+	<button onclick="goBack()">Back</button>
+
+	<script>
+		function goBack() {
+		  window.history.back();
+		}
+	  </script>
+
+<script src="./workerRender.js"></script>
+
+</body>
+</html>

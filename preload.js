@@ -19,7 +19,7 @@ contextBridge.exposeInMainWorld("api", {
                 
         */
         // whitelist channels
-        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings", "toMainServerDown", "toMainServerUp", "toMainUpdateMessage"];
+        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings", "toMainServerDown", "toMainServerUp", "toMainUpdateMessage", "accessFromWorker", "getWorkers"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
             console.log("%c  -" + channel +  " send", 'color:green')//transfer log
@@ -39,7 +39,7 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainServerDown" - message server is online and runing
 
         */
-        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown", "fromMainUpdateMessage"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown", "fromMainUpdateMessage", "accessFromWorker", "getWorkers"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 

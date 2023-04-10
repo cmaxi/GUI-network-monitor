@@ -4,8 +4,9 @@ var fs = require('fs')
 const axios = require('axios').default;
 const https = require('https');
 const { autoUpdater, AppUpdater } = require("electron-updater");
+var accessFromWorker = false;
 
-var dev = false//dev if true open dev mode and auto fill forms
+var dev = false //dev if true open dev mode and auto fill forms
 let mainWindow
 
 var httpReqestAddr
@@ -18,7 +19,6 @@ var config
 //Basic flags
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
-
 
 /*--------------------------------------------- functions for main process -----------------------------------------------------*/ 
 function createWindow () {
@@ -60,6 +60,7 @@ function createWindow () {
         submenu: [
           { label: 'Load file', click: () => handleFileOpen() },
           { label: 'Save', click: () => mainWindow.webContents.send("fromMainhowHideSwitch") },
+          { label: 'Worker configuration', id: 'workerMenu', click: function() {mainWindow.loadFile('src/worker/index.html'); accessFromWorker=true}, enabled: false},
         ]
       },
       // { role: 'editMenu' }
@@ -136,8 +137,10 @@ function createWindow () {
       ]
     });
   }
+
   Menu.setApplicationMenu(Menu.buildFromTemplate(menu))//nastavení položek v menu
-  mainWindow.loadFile('index.html')         //načte html soubor
+  mainWindow.loadFile('index.html') //načte html soubor
+  worker(mainWindow);       
   if(dev){
     mainWindow.webContents.openDevTools()   //otevře vývojářské nástroje při spuštění
   }
@@ -317,6 +320,8 @@ function getAccessToken(username, password, addr) {
         'Accept': 'application/json'
       }
     };
+    loggedIn = true;
+    Menu.getApplicationMenu().getMenuItemById("workerMenu").enabled = true; 
     mainWindow.webContents.send("fromMainSuccessfulLogin", true)
     post_log = ["Login " + response.statusText, response.status]
   })
@@ -349,8 +354,6 @@ async function saving(textForSave){
 }
 
 
-
-
 //načítání aplikace a poté spuštění funkcí které si volá render proces
 app.whenReady().then(() => {
   createWindow()  //otevře okno
@@ -376,7 +379,17 @@ app.whenReady().then(() => {
   ipcMain.on("toMainSettings", (event, args) => {
       graphsSet.dev = dev
       mainWindow.webContents.send("fromMainSettings", graphsSet);//posílá nastavení pro podprogramy
+    })
+
+  ipcMain.on("accessFromWorker", (event, args) => {
+      mainWindow.webContents.send("accessFromWorker", accessFromWorker);
   })
+
+
+  ipcMain.on("changeAccessFromWorker", (event, value) => {
+    accessFromWorker = value;
+})
+
 
   ipcMain.on("toMainServerDown", (event, args) => {
     app.quit()

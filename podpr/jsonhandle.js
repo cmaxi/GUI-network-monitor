@@ -1,7 +1,7 @@
 var tasks_raw_data
 
 function load_server_json(){
-    send = { params: {worker:"default"}}
+    send = { params: {worker:"1"}}
     window.api.httpRequest("requestTasksProperties",send)
       window.api.receive("fromMainRequestTaskProperties", (data) => {
         if (data == "errorFlag")

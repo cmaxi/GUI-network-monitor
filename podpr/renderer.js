@@ -1,3 +1,13 @@
+
+window.api.send("accessFromWorker")
+
+window.api.receive("accessFromWorker", (sett) => {
+  if(sett == true){
+    swapPage(1)
+    window.api.send("changeAccessFromWorker", 'false')
+  }
+})
+
 window.api.send("toMainSettings")//načítá nastavení a všechna data
 window.api.receive("fromMainSettings", (sett) => {
   if (sett.dev){
@@ -9,6 +19,7 @@ window.api.receive("fromMainSettings", (sett) => {
 })
 
 
+//setLockedLogin(true);
 //hide swap:
 const graph = document.getElementById('graf')
 const jsonpar = document.getElementById('jsonpar')
@@ -114,7 +125,6 @@ b11.addEventListener('click', async () => {
         load_server_json()// load table data
         loadTableData()//graphs reload
         updateMapPoints()//map data reload
-
         swapPage(1)
       }
       else if(data=="ECONNREFUSED"){
@@ -144,6 +154,13 @@ window.api.receive_cmd("fromMainRequestLog",(data)=>{
     swapPage(0);
     document.getElementById("hider").style.width = "50px";
     alert("Not connected network error!");
+  }
+})
+
+window.api.receive_cmd("fromMainRequestLog",(data)=>{
+  if (data[1]==401){
+    swapPage(0);
+    alert("Time out!");
   }
 })
 

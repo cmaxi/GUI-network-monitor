@@ -1,15 +1,15 @@
 {
     "httpReq":{
         "http":"https://127.0.0.1:8000",
-        "httpLoad":"/getAllResponses",
-        "httpAdd":"/createTask",
-        "httpDell":"/deleteTask",
-        "httpDellAll":"/deleteAllResponses",
-        "httpUpdate":"/updateTask",
-        "httpPause":"/pauseTask",
-        "httpTasks":"/getWorkerTasks",
-        "httpResponseSum":"/getResponseSummary",
-        "httpHide":"/hideTask"
+        "httpLoad":"/response/getAll",
+        "httpAdd":"/task/create",
+        "httpDell":"/task/delete",
+        "httpDellAll":"/response/deleteAll",
+        "httpUpdate":"/task/update",
+        "httpPause":"/task/pause",
+        "httpTasks":"/task/WorkersTask",
+        "httpResponseSum":"/response/getSummary",
+        "httpHide":"/task/hide"
     },
     "graphs":{
         "graphValueCount":600,
