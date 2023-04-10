@@ -510,7 +510,7 @@ function dataForGraphsT(dtf = 0, dtt=Date.now(), step = "s", firsLoad = true, au
       return
     }
     console.log((Date.now() - ttt), ttt = Date.now())
-    window.api.httpRequest("requestTasksProperties",{ params: {worker:"default"}})
+    window.api.httpRequest("requestTasksProperties",{ params: {worker:"1"}})
     window.api.receive("fromMainRequestTaskProperties", (taskSpecs) => {
       console.log((Date.now() - ttt), ttt = Date.now())
       var stepts = 50/taskSpecs.length
