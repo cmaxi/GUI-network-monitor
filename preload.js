@@ -19,7 +19,7 @@ contextBridge.exposeInMainWorld("api", {
                 
         */
         // whitelist channels
-        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings", "toMainServerDown", "toMainServerUp", "toMainUpdateMessage", "accessFromWorker", "getWorkers"];
+        let validChannels = ["toMainJsonLoad","toMainJsonSave", "toMainSettings", "toMainServerDown", "toMainServerUp", "toMainUpdateMessage", "accessFromWorker", "requestGetTask", "requestAssociateTask", "fromRequestAssociateTask"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
             console.log("%c  -" + channel +  " send", 'color:green')//transfer log
@@ -39,7 +39,7 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainServerDown" - message server is online and runing
 
         */
-        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown", "fromMainUpdateMessage", "accessFromWorker", "getWorkers"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown", "fromMainUpdateMessage", "accessFromWorker", "fromRequestGetTask", "fromRequestGetActiveTasks", "fromRequestAssociateTask"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
@@ -56,7 +56,7 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainUpdateMessage" - message about version of app
         */
         // whitelist channels
-        let validChannels = ["fromMainhowHideSwitch", "fromMainRequestLog", "fromMainUpdateMessage"];
+        let validChannels = ["fromMainhowHideSwitch", "fromMainRequestLog", "fromMainUpdateMessage", "fromRequestAssociateTask"];
         console.log("%c  -" + channel + " recieve_cmd", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             ipcRenderer.on(channel, (event, ...args) => func(...args));
@@ -78,7 +78,7 @@ contextBridge.exposeInMainWorld("api", {
                 "requestServerUp" - message server is online and runing
                 "requestHideTask" - request -hide task in graphs
         */
-        let validChannels = ["requestLoadAll","requestAddTask", "requestDelTask", "requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp", "requestHideTask"];
+        let validChannels = ["requestLoadAll","requestAddTask", "requestDelTask", "requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp", "requestHideTask", "requestGetTask", "requestGetActiveTasks", "requestAssociateTask", "fromRequestAssociateTask", "requestDeleteAssociateTask"];
         console.log("%c  -" + channel + " html request send", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
 

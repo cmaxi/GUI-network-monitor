@@ -9,7 +9,12 @@
         "httpPause":"/task/pause",
         "httpTasks":"/task/WorkersTask",
         "httpResponseSum":"/response/getSummary",
-        "httpHide":"/task/hide"
+        "httpHide":"/task/hide",
+        "httpGetTasks":"/task/getTasks",
+        "httpGetActiveTasks":"/task/getActiveTasks",
+        "httpPostAssociate": "/task/associate",
+        "httpPostDeleteAssociate": "/task/associateDelete"
+
     },
     "graphs":{
         "graphValueCount":600,

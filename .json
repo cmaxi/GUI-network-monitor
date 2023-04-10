@@ -1,0 +1,15 @@
+[
+  {
+    "latitude": 100.15,
+    "id": 1,
+    "color": "1",
+    "hide": false,
+    "frequency": "20s",
+    "longitude": 20.1,
+    "address": "8.8.8.8",
+    "name": "test",
+    "runing": true,
+    "task": "ping",
+    "last_run": 0
+  }
+]
