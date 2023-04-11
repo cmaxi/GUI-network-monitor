@@ -6,7 +6,7 @@ const https = require('https');
 const { autoUpdater, AppUpdater } = require("electron-updater");
 var accessFromWorker = false;
 
-var dev = true //dev if true open dev mode and auto fill forms
+var dev = false //dev if true open dev mode and auto fill forms
 let mainWindow
 
 var httpReqestAddr
@@ -456,6 +456,10 @@ app.whenReady().then(() => {
   })
   ipcMain.handle("requestDeleteAssociateTask", async (event, reqVar) => {
     postHttp(httpReqestAddr.httpPostDeleteAssociate, reqVar, "delete associate task")
+  })
+
+  ipcMain.handle("requestGetWorker", async (event, reqVar) => {
+    getHttp(httpReqestAddr.httpGetWorker, "fromRequestGetWorker", reqVar, "get workers ID")
   })
 
 

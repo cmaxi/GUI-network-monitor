@@ -39,7 +39,7 @@ contextBridge.exposeInMainWorld("api", {
                 "fromMainServerDown" - message server is online and runing
 
         */
-        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown", "fromMainUpdateMessage", "accessFromWorker", "fromRequestGetTask", "fromRequestGetActiveTasks", "fromRequestAssociateTask"];
+        let validChannels = ["fromMainJsonLoad","fromMainRequestLoadAll", "fromMainRequestTaskProperties","fromMainRequestTaskAverage", "fromMainRequestLoadFromTime", "fromMainSettings", "fromMainSuccessfulLogin", "fromMainServerDown", "fromMainUpdateMessage", "accessFromWorker", "fromRequestGetTask", "fromRequestGetActiveTasks", "fromRequestAssociateTask","fromRequestGetWorker"];
         console.log("%c  -" + channel + " recieve", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
@@ -78,7 +78,7 @@ contextBridge.exposeInMainWorld("api", {
                 "requestServerUp" - message server is online and runing
                 "requestHideTask" - request -hide task in graphs
         */
-        let validChannels = ["requestLoadAll","requestAddTask", "requestDelTask", "requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp", "requestHideTask", "requestGetTask", "requestGetActiveTasks", "requestAssociateTask", "fromRequestAssociateTask", "requestDeleteAssociateTask"];
+        let validChannels = ["requestLoadAll","requestAddTask", "requestDelTask", "requestClearAllDatabase","requestUpdateTask","requestPauseStartTask","requestTasksProperties","requestTasksAverage", "requestLoadAllFromTime", "requestServerUp", "requestHideTask", "requestGetTask", "requestGetActiveTasks", "requestAssociateTask", "fromRequestAssociateTask", "requestDeleteAssociateTask", "requestGetWorker"];
         console.log("%c  -" + channel + " html request send", 'color:green')  //transfer log
         if (validChannels.includes(channel)) {
 

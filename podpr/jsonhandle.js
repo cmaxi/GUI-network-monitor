@@ -15,6 +15,12 @@ function load_server_json(){
       });
   }
 
+  window.api.receive("accessFromWorker", (sett) => {
+    if(sett == true){
+      load_server_json()
+    }
+  })
+
 
 //texts
 const old_name_server = document.getElementById('s_old_name')

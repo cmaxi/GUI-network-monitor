@@ -10,18 +10,20 @@ var app = new Vue({
   },
   methods: {
     async loadTasks() {
-      send = { params: { worker: "1" } }
-      await window.api.httpRequest("requestGetTask", send)
+      //send = { params: { worker: "1" } }
+      send = {}
+      await window.api.httpRequest("requestGetWorker", send)
 
-      await window.api.receive("fromRequestGetTask", (workers) => {
+      await window.api.receive("fromRequestGetWorker", (workers) => {
+        console.log(workers)
         this.workers = workers;
       });
     },
     async loadWorkers() {
       send = { params: { worker: "1" } }
-      await window.api.httpRequest("requestTasksProperties", send)
+      await window.api.httpRequest("requestGetTask", send)
 
-      await window.api.receive("fromMainRequestTaskProperties", (tasks) => {
+      await window.api.receive("fromRequestGetTask", (tasks) => {
         this.tasks = tasks;
       });
     },
@@ -36,9 +38,9 @@ var app = new Vue({
 
     },
     async toggleTask(taskId, event) {
+      send = { params: {"taskId": taskId, "workerId": this.form.worker} }
       if (event.target.checked) {
         //insert
-        send = { params: {"taskId": taskId, "workerId": this.form.worker} }
         
         window.api.httpRequest("requestAssociateTask",send)
         //await window.api.httpRequest("requestAssociateTask", send)

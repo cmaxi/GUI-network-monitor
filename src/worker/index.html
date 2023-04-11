@@ -10,17 +10,18 @@
 <body>
 
 	<div id="app">
+		<div style="margin-top: 20px; margin-left: 20px;"><button type="button" class="btn btn-primary" onclick="goBack()">Back</button></div>
 
 		
 		
 		<div class="container">
-			<h1>Nastavení</h1>
+			<h1 class="d-flex justify-content-center">Worker settings</h1>
 
 			<div class="row mb-5">
 
 				<div class="col-md-6">
 					<select class="form-control" v-model="form.worker">
-						<option v-for="worker in this.workers">{{ worker.id }}</option>
+						<option v-for="worker in this.workers">{{ worker.id}}</option>
 					  </select>
 					  
 				</div>
@@ -39,7 +40,7 @@
 					<th scope="col">Name</th>
 					<th scope="col">Adress</th>
 					<th scope="col">Period</th>
-					<th scope="col">Status</th>
+					<th scope="col">Running</th>
 				  </tr>
 				</thead>
 				<tbody>
@@ -49,8 +50,8 @@
 					</td>
 					<td>{{task.name}}</td>
 					<td>{{task.address}}</td>
-					<td>{{task.period}}</td>
-					<td>{{task.status}}</td>
+					<td>{{task.frequency}}</td>
+					<td>{{task.runing}}</td>
 				  </tr>
 				</tbody>
 			  </table>
@@ -62,6 +63,13 @@
 	</div>
 
 <script src="./workerRender.js"></script>
+
+<script>
+function goBack(){
+	window.history.back();
+}
+
+</script>
 
 </body>
 </html>

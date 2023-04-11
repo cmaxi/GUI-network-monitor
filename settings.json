@@ -13,7 +13,8 @@
         "httpGetTasks":"/task/getTasks",
         "httpGetActiveTasks":"/task/getActiveTasks",
         "httpPostAssociate": "/task/associate",
-        "httpPostDeleteAssociate": "/task/associateDelete"
+        "httpPostDeleteAssociate": "/task/associateDelete",
+        "httpGetWorker": "/workers"
 
     },
     "graphs":{
